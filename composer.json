@@ -11,5 +11,8 @@
             "email": "sofija.dokmanovic@logeecom.com"
         }
     ],
-    "require": {}
+    "require": {
+        "illuminate/database": "^11.20",
+        "vlucas/phpdotenv": "^5.6"
+    }
 }
