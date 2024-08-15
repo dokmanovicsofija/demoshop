@@ -1,0 +1,15 @@
+{
+    "name": "sofija/demoshop",
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Sofija Dokmanovic",
+            "email": "sofija.dokmanovic@logeecom.com"
+        }
+    ],
+    "require": {}
+}
