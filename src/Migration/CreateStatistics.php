@@ -6,10 +6,20 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+/**
+ * Class CreateStatistics
+ *
+ * This migration creates the `statistics` table in the database.
+ * The `statistics` table is used to store various statistics related to the application, such as the number of views on the homepage.
+ */
 class CreateStatistics extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * This method is responsible for creating the `statistics` table.
+     * The table includes an auto-incrementing primary key (`id`), a field to track the number of views on the homepage (`home_view_count`),
+     * and timestamp fields for `created_at` and `updated_at`.
      *
      * @return void
      */
@@ -24,6 +34,8 @@ class CreateStatistics extends Migration
 
     /**
      * Reverse the migrations.
+     *
+     * This method drops the `statistics` table if it exists, effectively reversing the migration.
      *
      * @return void
      */
