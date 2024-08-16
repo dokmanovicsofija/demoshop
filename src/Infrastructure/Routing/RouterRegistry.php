@@ -27,11 +27,11 @@ class RouterRegistry
     public static function registerRoutes(): void
     {
         Router::getInstance()->addRoute(
-            new Route('GET', '/admin', LoginController::class, 'showLoginForm')
+            new Route('GET', '/admin', LoginController::class, 'index')
         );
 
         Router::getInstance()->addRoute(
-            new Route('POST', '/admin', LoginController::class, 'processLogin')
+            new Route('POST', '/admin', LoginController::class, 'login')
         );
     }
 }

@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Infrastructure\Utility\PathHelper;
 use Migration\CreateAdmins;
 use Migration\CreateProducts;
 use Migration\CreateCategories;
@@ -11,7 +12,7 @@ use Dotenv\Dotenv;
 /**
  * Load environment variables from the .env file.
  */
-$dotenv = Dotenv::createUnsafeImmutable(__DIR__ . '/../');
+$dotenv = Dotenv::createUnsafeImmutable(PathHelper::env());
 $dotenv->load();
 
 /**

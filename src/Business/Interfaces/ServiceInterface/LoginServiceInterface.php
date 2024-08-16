@@ -19,7 +19,7 @@ interface LoginServiceInterface
      * @param string $username The username of the admin attempting to log in.
      * @param string $password The password of the admin attempting to log in.
      * @param bool $keepLoggedIn A flag indicating whether the admin should remain logged in across sessions.
-     * @return array An associative array containing a success flag and a message.
+     * @return bool
      */
-    public function authenticate(string $username, string $password, bool $keepLoggedIn): array;
+    public function authenticate(string $username, string $password, bool $keepLoggedIn): bool;
 }

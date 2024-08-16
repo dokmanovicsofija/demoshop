@@ -2,6 +2,7 @@
 
 namespace Business\Services;
 
+use Business\Exceptions\AuthenticationException;
 use Business\Interfaces\RepositoryInterface\LoginRepositoryInterface;
 use Business\Interfaces\ServiceInterface\LoginServiceInterface;
 use Infrastructure\SessionManager;
@@ -32,9 +33,10 @@ class LoginService implements LoginServiceInterface
      * @param string $username The username of the admin attempting to log in.
      * @param string $password The password of the admin attempting to log in.
      * @param bool $keepLoggedIn A flag indicating whether the admin should remain logged in across sessions.
-     * @return array An associative array containing a success flag and a message.
+     * @return bool
+     * @throws AuthenticationException
      */
-    public function authenticate(string $username, string $password, bool $keepLoggedIn): array
+    public function authenticate(string $username, string $password, bool $keepLoggedIn): bool
     {
         $admin = $this->adminRepository->findByUsername($username);
 
@@ -46,10 +48,9 @@ class LoginService implements LoginServiceInterface
             if ($keepLoggedIn) {
                 $sessionManager->setCookie('admin', $admin->getId(), time() + (86400 * 30), "/", "", true, true);
             }
-
-            return ['success' => true, 'message' => ''];
+            return true;
         } else {
-            return ['success' => false, 'message' => 'Invalid username or password'];
+            throw new AuthenticationException("Invalid username or password");
         }
     }
 }

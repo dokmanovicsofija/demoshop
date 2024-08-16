@@ -2,10 +2,12 @@
 
 namespace Presentation\Controller\FrontController;
 
+use Business\Exceptions\AuthenticationException;
 use Business\Interfaces\ServiceInterface\LoginServiceInterface;
 use Infrastructure\Request\HttpRequest;
 use Infrastructure\Response\HtmlResponse;
 use Infrastructure\SessionManager;
+use Infrastructure\Utility\PathHelper;
 
 /**
  * Class LoginController
@@ -32,13 +34,13 @@ class LoginController
      *
      * @return HtmlResponse The response containing either the login form or the dashboard view.
      */
-    public function showLoginForm(): HtmlResponse
+    public function index(): HtmlResponse
     {
         if (SessionManager::getInstance()->getCookie('admin')) {
-            return HtmlResponse::fromView(__DIR__ . '/../../Views/dashboard.php');
+            return HtmlResponse::fromView(PathHelper::view('dashboard.php'));
         }
 
-        return HtmlResponse::fromView(__DIR__ . '/../../Views/login.php');
+        return HtmlResponse::fromView(PathHelper::view('login.php'));
     }
 
     /**
@@ -52,19 +54,19 @@ class LoginController
      * @param HttpRequest $request The HTTP request containing the login data.
      * @return HtmlResponse The response containing either the dashboard or the login form with an error message.
      */
-    public function processLogin(HttpRequest $request): HtmlResponse
+    public function login(HttpRequest $request): HtmlResponse
     {
         $username = $request->post('username');
         $password = $request->post('password');
         $keepLoggedIn = $request->post('keepLoggedIn') === 'on';
 
-        $result = $this->loginService->authenticate($username, $password, $keepLoggedIn);
-
-        if ($result['success']) {
-            return HtmlResponse::fromView(__DIR__ . '/../../Views/dashboard.php', []);
-        } else {
-            return HtmlResponse::fromView(__DIR__ . '/../../Views/login.php', [
-                'errorMessage' => $result['message']]);
+        try {
+            $this->loginService->authenticate($username, $password, $keepLoggedIn);
+            return HtmlResponse::fromView(PathHelper::view('dashboard.php'));
+        } catch (AuthenticationException $e) {
+            return HtmlResponse::fromView(PathHelper::view('login.php'), [
+                'errorMessage' => $e->getMessage()
+            ]);
         }
     }
 }
