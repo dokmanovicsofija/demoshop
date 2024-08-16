@@ -5,7 +5,6 @@ namespace Infrastructure\Routing;
 use Exception;
 use Infrastructure\Request\HttpRequest;
 use Infrastructure\Response\AbstractHttpResponse;
-use Infrastructure\Response\HtmlResponse;
 use Infrastructure\ServiceRegistry;
 use Infrastructure\Singleton;
 
@@ -47,9 +46,9 @@ class Router extends Singleton
      * route is found, it creates an instance of the associated controller and calls the specified action method.
      * If no matching route is found, it throws an Exception.
      *
-     * @return void
+     * @param HttpRequest $request
+     * @return AbstractHttpResponse
      * @throws Exception If no matching route is found.
-     *
      */
     public function matchRoute(HttpRequest $request): AbstractHttpResponse
     {

@@ -4,13 +4,34 @@ namespace Data\SQLRepositories;
 
 use Business\Domain\DomainAdmin;
 use Business\Interfaces\RepositoryInterface\LoginRepositoryInterface;
-use Illuminate\Database\Capsule\Manager as Capsule;
+use Data\Entities\Admin;
 
+//use Illuminate\Database\Capsule\Manager as Capsule;
+
+/**
+ * Class LoginRepository
+ *
+ * This class implements the LoginRepositoryInterface and provides methods to interact with the admin data stored in the database.
+ * It uses Eloquent ORM to perform database operations.
+ */
 class LoginRepository implements LoginRepositoryInterface
 {
+    /**
+     * Find an admin by their username.
+     *
+     * This method retrieves the admin data from the database based on the provided username.
+     * If an admin with the specified username is found, it returns a DomainAdmin object.
+     * Otherwise, it returns null.
+     *
+     * @param string $username The username of the admin to be retrieved.
+     * @return DomainAdmin|null Returns a DomainAdmin object if the admin is found, or null if not.
+     */
     public function findByUsername(string $username): ?DomainAdmin
     {
-        $adminData = Capsule::table('admins')->where('username', $username)->first();
+
+        $adminData = Admin::where('username', $username)->first();
+
+//        $adminData = Capsule::table('admins')->where('username', $username)->first();
 
         if ($adminData) {
             return new DomainAdmin(
@@ -22,18 +43,5 @@ class LoginRepository implements LoginRepositoryInterface
         }
 
         return null;
-    }
-
-    public function create(string $username, string $hashedPassword): DomainAdmin
-    {
-        $adminId = Capsule::table('admins')->insertGetId([
-            'username' => $username,
-            'password' => $hashedPassword,
-            'token' => null,
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s')
-        ]);
-
-        return new DomainAdmin($adminId, $username, $hashedPassword);
     }
 }

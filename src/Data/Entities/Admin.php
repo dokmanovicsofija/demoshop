@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Persistence\Entities;
+namespace Data\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,6 +19,8 @@ class Admin extends Model
 
     /**
      * @var array The attributes that are mass assignable.
+     * This defines which fields can be mass assigned, i.e., when you create or update a record
+     * using methods like `create` or `update`, only these fields will be considered.
      */
     protected $fillable = [
         'username', 'password', 'token',
@@ -26,6 +28,8 @@ class Admin extends Model
 
     /**
      * @var bool Indicates if the model should be timestamped.
+     * If set to true, Eloquent will automatically manage `created_at` and `updated_at` fields.
+     * If your table doesn't have these fields, set this to false.
      */
     public $timestamps = true;
 }

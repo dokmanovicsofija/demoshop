@@ -2,9 +2,24 @@
 
 namespace Business\Interfaces\ServiceInterface;
 
-use Business\Domain\DomainAdmin;
-
+/**
+ * Interface LoginServiceInterface
+ *
+ * Defines the contract for the login service, which handles the authentication process for admin users.
+ */
 interface LoginServiceInterface
 {
-public function authenticate(string $username, string $password, bool $keepLoggedIn): array;
+    /**
+     * Authenticate an admin user.
+     *
+     * This method verifies the provided username and password against the stored credentials.
+     * If the authentication is successful, a session is started and the user's ID is stored.
+     * Optionally, a "keep me logged in" feature is supported by setting a cookie.
+     *
+     * @param string $username The username of the admin attempting to log in.
+     * @param string $password The password of the admin attempting to log in.
+     * @param bool $keepLoggedIn A flag indicating whether the admin should remain logged in across sessions.
+     * @return array An associative array containing a success flag and a message.
+     */
+    public function authenticate(string $username, string $password, bool $keepLoggedIn): array;
 }

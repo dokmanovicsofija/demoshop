@@ -2,6 +2,8 @@
 
 namespace Infrastructure;
 
+use Infrastructure\Utility\GlobalWrapper;
+
 /**
  * Class SessionManager
  *
@@ -30,7 +32,7 @@ class SessionManager extends Singleton
      */
     public function get(string $key)
     {
-        return $_SESSION[$key] ?? null;
+        return GlobalWrapper::getSessionValue($key);
     }
 
     /**
@@ -41,7 +43,7 @@ class SessionManager extends Singleton
      */
     public function set(string $key, $value): void
     {
-        $_SESSION[$key] = $value;
+        GlobalWrapper::setSessionValue($key, $value);
     }
 
     /**
@@ -51,7 +53,7 @@ class SessionManager extends Singleton
      */
     public function unset(string $key): void
     {
-        unset($_SESSION[$key]);
+        GlobalWrapper::unsetSessionValue($key);
     }
 
     /**
@@ -59,7 +61,7 @@ class SessionManager extends Singleton
      */
     public function destroy(): void
     {
-        session_destroy();
+        GlobalWrapper::destroySession();
         self::$instances[static::class] = null;
     }
 
@@ -73,7 +75,7 @@ class SessionManager extends Singleton
      */
     public function setCookie(string $name, string $value, int $expiry = 0, string $path = '/'): void
     {
-        setcookie($name, $value, time() + $expiry, $path);
+        GlobalWrapper::setCookie($name, $value, $expiry, $path);
     }
 
     /**
@@ -84,7 +86,7 @@ class SessionManager extends Singleton
      */
     public function getCookie(string $name): mixed
     {
-        return $_COOKIE[$name] ?? null;
+        return GlobalWrapper::getCookie($name);
     }
 
     /**
@@ -95,6 +97,6 @@ class SessionManager extends Singleton
      */
     public function unsetCookie(string $name, string $path = '/'): void
     {
-        setcookie($name, '', time() - 3600, $path);
+        GlobalWrapper::unsetCookie($name, $path);
     }
 }
