@@ -2,9 +2,16 @@
 
 namespace Infrastructure;
 
+use Business\Interfaces\RepositoryInterface\LoginRepositoryInterface;
+use Business\Interfaces\ServiceInterface\LoginServiceInterface;
+use Business\Services\LoginService;
+use Data\SQLRepositories\LoginRepository;
+use Dotenv\Dotenv;
 use Exception;
 use Infrastructure\Routing\Router;
 use Infrastructure\Routing\RouterRegistry;
+use Presentation\Controller\FrontController\LoginController;
+use Illuminate\Database\Capsule\Manager as Capsule;
 
 /**
  * Class Bootstrap
@@ -24,10 +31,34 @@ class Bootstrap
      */
     public static function initialize(): void
     {
+        $dotenv = Dotenv::createUnsafeImmutable(__DIR__ . '/../../');
+        $dotenv->load();
+
+        self::setupDatabase();
         self::registerRepos();
         self::registerServices();
         self::registerControllers();
         self::registerRoutes();
+    }
+
+    protected static function setupDatabase(): void
+    {
+        $capsule = new Capsule;
+
+        $capsule->addConnection([
+            'driver'    => getenv('DB_CONNECTION'),
+            'host'      => getenv('DB_HOST'),
+            'database'  => getenv('DB_DATABASE'),
+            'username'  => getenv('DB_USERNAME'),
+            'password'  => getenv('DB_PASSWORD'),
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
+        ]);
+
+        $capsule->setAsGlobal();
+
+        $capsule->bootEloquent();
     }
 
     /**
@@ -40,6 +71,7 @@ class Bootstrap
      */
     protected static function registerRepos(): void
     {
+        ServiceRegistry::register(LoginRepositoryInterface::class, new LoginRepository());
     }
 
     /**
@@ -49,10 +81,14 @@ class Bootstrap
      * It ensures that all services are available via the service registry.
      *
      * @return void
+     * @throws Exception
      */
     protected static function registerServices(): void
     {
         ServiceRegistry::getInstance()->register(Router::class, Router::getInstance());
+        ServiceRegistry::register(LoginServiceInterface::class, new LoginService(
+            ServiceRegistry::get(LoginRepositoryInterface::class),
+        ));
     }
 
     /**
@@ -62,9 +98,13 @@ class Bootstrap
      * It ensures that controllers are properly initialized and available via the service registry.
      *
      * @return void
+     * @throws Exception
      */
     protected static function registerControllers(): void
     {
+        ServiceRegistry::register(LoginController::class, new LoginController(
+            ServiceRegistry::get(LoginServiceInterface::class)
+        ));
     }
 
     /**
