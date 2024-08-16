@@ -81,8 +81,16 @@ try {
     echo "Enter the admin username: ";
     $username = trim(fgets(STDIN));
 
-    echo "Enter the admin password: ";
-    $password = trim(fgets(STDIN));
+    do {
+        echo "Enter the admin password: ";
+        $password = trim(fgets(STDIN));
+
+        $isValidPassword = validatePassword($password);
+
+        if (!$isValidPassword) {
+            echo "Password must contain at least 8 characters, 1 upper letter, 1 lower letter, a number, and a special character." . PHP_EOL;
+        }
+    } while (!$isValidPassword);
 
     // Check if the admin already exists
     $adminExists = Capsule::table('admins')->where('username', $username)->exists();
@@ -103,4 +111,15 @@ try {
 
 } catch (\Exception $e) {
     echo 'An error occurred: ' . $e->getMessage() . PHP_EOL;
+}
+
+/**
+ * Validate the password according to the specified criteria.
+ *
+ * @param string $password
+ * @return bool
+ */
+function validatePassword(string $password): bool
+{
+    return preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/', $password);
 }
