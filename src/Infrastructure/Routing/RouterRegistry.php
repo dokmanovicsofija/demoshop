@@ -4,7 +4,7 @@ namespace Infrastructure\Routing;
 
 use Exception;
 use Infrastructure\ServiceRegistry;
-use Presentation\Controller\AdminController\LoginController;
+use Presentation\Controller\FrontController\LoginController;
 
 /**
  * Class RouterRegistry
@@ -26,8 +26,12 @@ class RouterRegistry
      */
     public static function registerRoutes(): void
     {
-        $router = ServiceRegistry::get(Router::class);
+        Router::getInstance()->addRoute(
+            new Route('GET', '/admin', LoginController::class, 'showLoginForm')
+        );
 
-        $router->addRoute(new Route('GET', '/test', LoginController::class, 'showTestMessage'));
+        Router::getInstance()->addRoute(
+            new Route('POST', '/admin', LoginController::class, 'processLogin')
+        );
     }
 }

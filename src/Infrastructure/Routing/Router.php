@@ -3,6 +3,10 @@
 namespace Infrastructure\Routing;
 
 use Exception;
+use Infrastructure\Request\HttpRequest;
+use Infrastructure\Response\AbstractHttpResponse;
+use Infrastructure\Response\HtmlResponse;
+use Infrastructure\ServiceRegistry;
 use Infrastructure\Singleton;
 
 /**
@@ -47,7 +51,7 @@ class Router extends Singleton
      * @throws Exception If no matching route is found.
      *
      */
-    public function matchRoute(): void
+    public function matchRoute(HttpRequest $request): AbstractHttpResponse
     {
         $method = $_SERVER['REQUEST_METHOD'];
         $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -58,9 +62,10 @@ class Router extends Singleton
                 if (preg_match('#^' . $pattern . '$#', $url, $matches)) {
                     $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
 
-                    $controller = new ($route->getController());
-                    call_user_func_array([$controller, $route->getAction()], $params);
-                    return;
+                    $controllerClass = $route->getController();
+                    $controller = ServiceRegistry::getInstance()->get($controllerClass);
+                    $request = new HttpRequest();
+                    return call_user_func_array([$controller, $route->getAction()], array_merge([$request], $params));
                 }
             }
         }
