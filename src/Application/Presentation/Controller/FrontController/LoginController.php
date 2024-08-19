@@ -28,7 +28,7 @@ class LoginController
 
     public function test(HttpRequest $request): HtmlResponse
     {
-        return new HtmlResponse(200, [], 'Admin route test successful. You are authorized.');
+        return HtmlResponse::fromView(PathHelper::view('dashboard.php'));
     }
 
     /**
