@@ -2,6 +2,7 @@
 
 namespace Infrastructure\Routing;
 
+use Middleware\AdminMiddleware;
 use Exception;
 use Infrastructure\ServiceRegistry;
 use Presentation\Controller\FrontController\LoginController;
@@ -32,6 +33,11 @@ class RouterRegistry
 
         Router::getInstance()->addRoute(
             new Route('POST', '/admin', LoginController::class, 'login')
+        );
+
+        Router::getInstance()->addRoute(
+            (new Route('GET', '/admin/test', LoginController::class, 'test'))
+                ->addMiddleware(new AdminMiddleware())
         );
     }
 }

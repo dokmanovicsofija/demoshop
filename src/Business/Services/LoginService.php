@@ -42,11 +42,12 @@ class LoginService implements LoginServiceInterface
 
         if ($admin && password_verify($password, $admin->getPassword())) {
 
-            $sessionManager = SessionManager::getInstance();
-            $sessionManager->set('admin', $admin->getId());
+            SessionManager::getInstance()->set('admin', $admin->getId());
 
             if ($keepLoggedIn) {
-                $sessionManager->setCookie('admin', $admin->getId(), time() + (86400 * 30), "/", "", true, true);
+                SessionManager::getInstance()->setCookie(session_name(), session_id(), time() + (86400 * 30), "/", "", true, true);
+            } else {
+                SessionManager::getInstance()->setCookie(session_name(), session_id(), 0, "/", "", true, true);
             }
             return true;
         } else {

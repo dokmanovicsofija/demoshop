@@ -64,7 +64,18 @@ class Router extends Singleton
                     $controllerClass = $route->getController();
                     $controller = ServiceRegistry::getInstance()->get($controllerClass);
                     $request = new HttpRequest();
-                    return call_user_func_array([$controller, $route->getAction()], array_merge([$request], $params));
+
+                    $handler = function ($request) use ($controller, $route, $params) {
+                        return call_user_func_array([$controller, $route->getAction()], array_merge([$request], $params));
+                    };
+
+                    foreach (array_reverse($route->getMiddlewares()) as $middleware) {
+                        $handler = function ($request) use ($middleware, $handler) {
+                            return $middleware->handle($request, $handler);
+                        };
+                    }
+
+                    return $handler($request);
                 }
             }
         }

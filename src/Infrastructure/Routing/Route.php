@@ -2,6 +2,8 @@
 
 namespace Infrastructure\Routing;
 
+use Middleware\MiddlewareInterface;
+
 /**
  * Class Route
  *
@@ -10,7 +12,7 @@ namespace Infrastructure\Routing;
  *
  * This class is marked as `readonly`, meaning that its properties cannot be modified after instantiation.
  */
-readonly class Route
+class Route
 {
     /**
      * Route constructor.
@@ -21,12 +23,14 @@ readonly class Route
      * @param string $url The URL pattern for the route.
      * @param string $controller The fully qualified class name of the controller that handles this route.
      * @param string $action The method in the controller that should be called for this route.
-     */
+     * @param array $middlewares The middlewares associated with this route.
+ */
     public function __construct(
         private string $method,
         private string $url,
         private string $controller,
-        private string $action
+        private string $action,
+        private array $middlewares = []
     )
     {
     }
@@ -69,5 +73,27 @@ readonly class Route
     public function getAction(): string
     {
         return $this->action;
+    }
+
+    /**
+     * Get the middlewares for the route.
+     *
+     * @return array The middlewares associated with this route.
+     */
+    public function getMiddlewares(): array
+    {
+        return $this->middlewares;
+    }
+
+    /**
+     * Add a middleware to the route.
+     *
+     * @param MiddlewareInterface $middleware
+     * @return $this
+     */
+    public function addMiddleware(MiddlewareInterface $middleware): self
+    {
+        $this->middlewares[] = $middleware;
+        return $this;
     }
 }
