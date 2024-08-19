@@ -2,8 +2,8 @@
 
 use Cassandra\Exception\UnauthorizedException;
 use Infrastructure\Bootstrap;
-use Infrastructure\Routing\Router;
 use Infrastructure\Request\HttpRequest;
+use Infrastructure\Utility\Routing\Router;
 
 require_once __DIR__ . '/vendor/autoload.php';
 

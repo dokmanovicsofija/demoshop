@@ -18,7 +18,7 @@ class PathHelper
      */
     public static function view(string $viewName): string
     {
-        return __DIR__ . '/../../Presentation/Views/' . $viewName;
+        return __DIR__ . '/../../Application/Presentation/Views/' . $viewName;
     }
 
     /**

@@ -2,16 +2,17 @@
 
 namespace Infrastructure;
 
-use Business\Interfaces\RepositoryInterface\LoginRepositoryInterface;
-use Business\Interfaces\ServiceInterface\LoginServiceInterface;
-use Business\Services\LoginService;
-use Data\SQLRepositories\LoginRepository;
+use Application\Business\Interfaces\RepositoryInterface\LoginRepositoryInterface;
+use Application\Business\Interfaces\ServiceInterface\LoginServiceInterface;
+use Application\Business\Services\LoginService;
+use Application\Data\SQLRepositories\LoginRepository;
+use Application\Presentation\Controller\FrontController\LoginController;
 use Dotenv\Dotenv;
 use Exception;
-use Infrastructure\Routing\Router;
-use Infrastructure\Routing\RouterRegistry;
-use Presentation\Controller\FrontController\LoginController;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Infrastructure\Utility\Routing\Router;
+use Infrastructure\Utility\Routing\RouterRegistry;
+use Infrastructure\Utility\ServiceRegistry;
 
 /**
  * Class Bootstrap
