@@ -2,16 +2,25 @@
 
 namespace Infrastructure;
 
+use Application\Business\Interfaces\RepositoryInterface\CategoryRepositoryInterface;
 use Application\Business\Interfaces\RepositoryInterface\LoginRepositoryInterface;
+use Application\Business\Interfaces\RepositoryInterface\ProductRepositoryInterface;
+use Application\Business\Interfaces\RepositoryInterface\StatisticsRepositoryInterface;
+use Application\Business\Interfaces\ServiceInterface\CategoryServiceInterface;
 use Application\Business\Interfaces\ServiceInterface\LoginServiceInterface;
+use Application\Business\Interfaces\ServiceInterface\ProductServiceInterface;
+use Application\Business\Interfaces\ServiceInterface\StatisticsServiceInterface;
+use Application\Business\Services\CategoryService;
+use Application\Business\Services\ProductService;
+use Application\Business\Services\StatisticsService;
 use Application\Business\Services\LoginService;
+use Application\Data\SQLRepositories\CategoryRepository;
 use Application\Data\SQLRepositories\LoginRepository;
+use Application\Data\SQLRepositories\ProductRepository;
+use Application\Data\SQLRepositories\StatisticsRepository;
 use Application\Presentation\Controller\FrontController\LoginController;
-use Dotenv\Dotenv;
 use Exception;
-use Illuminate\Database\Capsule\Manager as Capsule;
 use Infrastructure\Utility\Routing\Router;
-use Infrastructure\Utility\Routing\RouterRegistry;
 use Infrastructure\Utility\ServiceRegistry;
 
 /**
@@ -26,40 +35,15 @@ class Bootstrap
      * Initializes the application by registering all necessary components.
      *
      * This method orchestrates the initialization process by calling methods that register repositories, services,
-     * controllers, and routes. It should be called at the start of the application.
+     * controllers. It should be called at the start of the application.
      *
      * @throws Exception If there is an issue during the initialization process.
      */
     public static function initialize(): void
     {
-        $dotenv = Dotenv::createUnsafeImmutable(__DIR__ . '/../../');
-        $dotenv->load();
-
-        self::setupDatabase();
         self::registerRepos();
         self::registerServices();
         self::registerControllers();
-        self::registerRoutes();
-    }
-
-    protected static function setupDatabase(): void
-    {
-        $capsule = new Capsule;
-
-        $capsule->addConnection([
-            'driver'    => getenv('DB_CONNECTION'),
-            'host'      => getenv('DB_HOST'),
-            'database'  => getenv('DB_DATABASE'),
-            'username'  => getenv('DB_USERNAME'),
-            'password'  => getenv('DB_PASSWORD'),
-            'charset'   => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix'    => '',
-        ]);
-
-        $capsule->setAsGlobal();
-
-        $capsule->bootEloquent();
     }
 
     /**
@@ -73,6 +57,9 @@ class Bootstrap
     protected static function registerRepos(): void
     {
         ServiceRegistry::register(LoginRepositoryInterface::class, new LoginRepository());
+        ServiceRegistry::register(ProductRepositoryInterface::class, new ProductRepository());
+        ServiceRegistry::register(CategoryRepositoryInterface::class, new CategoryRepository());
+        ServiceRegistry::register(StatisticsRepositoryInterface::class, new StatisticsRepository());
     }
 
     /**
@@ -90,6 +77,15 @@ class Bootstrap
         ServiceRegistry::register(LoginServiceInterface::class, new LoginService(
             ServiceRegistry::get(LoginRepositoryInterface::class),
         ));
+        ServiceRegistry::register(ProductServiceInterface::class, new ProductService(
+            ServiceRegistry::get(ProductRepositoryInterface::class),
+        ));
+        ServiceRegistry::register(CategoryServiceInterface::class, new CategoryService(
+            ServiceRegistry::get(CategoryRepositoryInterface::class),
+        ));
+        ServiceRegistry::register(StatisticsServiceInterface::class, new StatisticsService(
+            ServiceRegistry::get(StatisticsRepositoryInterface::class),
+        ));
     }
 
     /**
@@ -106,20 +102,5 @@ class Bootstrap
         ServiceRegistry::register(LoginController::class, new LoginController(
             ServiceRegistry::get(LoginServiceInterface::class)
         ));
-    }
-
-    /**
-     * Registers all routes with the router.
-     *
-     * This method is responsible for registering all application routes with the router.
-     * It should be implemented to define how different URL paths are handled by the application.
-     *
-     * @return void
-     * @throws Exception If there is an issue during route registration.
-     *
-     */
-    protected static function registerRoutes(): void
-    {
-        RouterRegistry::registerRoutes();
     }
 }
