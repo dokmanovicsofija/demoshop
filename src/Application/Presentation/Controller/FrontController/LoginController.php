@@ -41,6 +41,7 @@ class LoginController
      */
     public function index(): HtmlResponse
     {
+//        if (SessionManager::getInstance()->get('admin')) {
         if (SessionManager::getInstance()->getCookie('admin')) {
             return HtmlResponse::fromView(PathHelper::view('dashboard.php'));
         }

@@ -24,13 +24,13 @@ class Route
      * @param string $controller The fully qualified class name of the controller that handles this route.
      * @param string $action The method in the controller that should be called for this route.
      * @param array $middlewares The middlewares associated with this route.
- */
+     */
     public function __construct(
         private string $method,
         private string $url,
         private string $controller,
         private string $action,
-        private array $middlewares = []
+        private array  $middlewares = []
     )
     {
     }
@@ -76,24 +76,24 @@ class Route
     }
 
     /**
-     * Get the middlewares for the route.
+     * Add middleware to the route.
      *
-     * @return array The middlewares associated with this route.
-     */
-    public function getMiddlewares(): array
-    {
-        return $this->middlewares;
-    }
-
-    /**
-     * Add a middleware to the route.
-     *
-     * @param MiddlewareInterface $middleware
+     * @param MiddlewareInterface $middleware The middleware to add.
      * @return $this
      */
     public function addMiddleware(MiddlewareInterface $middleware): self
     {
         $this->middlewares[] = $middleware;
         return $this;
+    }
+
+    /**
+     * Get the list of middleware associated with the route.
+     *
+     * @return MiddlewareInterface[]
+     */
+    public function getMiddlewares(): array
+    {
+        return $this->middlewares;
     }
 }
