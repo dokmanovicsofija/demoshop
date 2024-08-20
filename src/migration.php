@@ -110,6 +110,8 @@ try {
         echo "Admin '$username' has been successfully created." . PHP_EOL;
     }
 
+
+
 } catch (\Exception $e) {
     echo 'An error occurred: ' . $e->getMessage() . PHP_EOL;
 }
