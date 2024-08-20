@@ -31,17 +31,15 @@ class LoginRepository implements LoginRepositoryInterface
 
         $adminData = Admin::where('username', $username)->first();
 
-//        $adminData = Capsule::table('admins')->where('username', $username)->first();
-
-        if ($adminData) {
-            return new DomainAdmin(
-                $adminData->id,
-                $adminData->username,
-                $adminData->password,
-                $adminData->token
-            );
+        if (!$adminData) {
+            return null;
         }
 
-        return null;
+        return new DomainAdmin(
+            $adminData->id,
+            $adminData->username,
+            $adminData->password,
+            $adminData->token
+        );
     }
 }

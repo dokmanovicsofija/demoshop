@@ -26,7 +26,7 @@ class LoginController
     {
     }
 
-    public function test(HttpRequest $request): HtmlResponse
+    public function dashboard(HttpRequest $request): HtmlResponse
     {
         return HtmlResponse::fromView(PathHelper::view('dashboard.php'));
     }
@@ -41,8 +41,7 @@ class LoginController
      */
     public function index(): HtmlResponse
     {
-//        if (SessionManager::getInstance()->get('admin')) {
-        if (SessionManager::getInstance()->getCookie('admin')) {
+        if (SessionManager::getInstance()->get('admin')) {
             return HtmlResponse::fromView(PathHelper::view('dashboard.php'));
         }
 

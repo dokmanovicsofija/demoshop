@@ -46,6 +46,9 @@ class LoginService implements LoginServiceInterface
 
             if ($keepLoggedIn) {
                 SessionManager::getInstance()->setCookie(session_name(), session_id(), time() + (86400 * 30), "/", "", false, true);
+            } else {
+                SessionManager::getInstance()->setCookie(session_name(), session_id(), 0, "/", "", false, true);
+
             }
 
             return true;

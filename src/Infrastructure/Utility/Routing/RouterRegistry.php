@@ -35,7 +35,7 @@ class RouterRegistry
         );
 
         Router::getInstance()->addRoute(
-            (new Route('GET', '/admin/test', LoginController::class, 'index'))
+            (new Route('GET', '/admin/dashboard', LoginController::class, 'dashboard'))
                 ->addMiddleware(new AdminMiddleware())
         );
     }
