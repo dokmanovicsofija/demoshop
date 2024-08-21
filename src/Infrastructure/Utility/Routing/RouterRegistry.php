@@ -40,10 +40,15 @@ class RouterRegistry
                 ->addMiddleware(new AdminMiddleware())
         );
 
-//        Router::getInstance()->addRoute(
-//            new Route('GET', '/admin/dashboard',
-//                DashboardController::class, 'getDashboardStats')
-//        );
+        //Dashboard routes
+        Router::getInstance()->addRoute(
+            new Route('GET', '/getDashboardStats',
+                DashboardController::class, 'getDashboardStats')
+        );
 
+        Router::getInstance()->addRoute(
+        new Route('GET', '/admin/dashboard',
+            LoginController::class, 'index')
+    );
     }
 }

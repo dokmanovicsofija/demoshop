@@ -1,8 +1,11 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const contentDiv = document.getElementById('content');
-    const menuItems = document.querySelectorAll('.sideMenu ul li');
+class Dashboard {
+    constructor() {
+        // Reference to the main content div where the dashboard will be rendered
+        this.contentDiv = document.getElementById('content');
+    }
 
-    function createHTMLElement(tag, attributes = {}, textContent = '') {
+    // Creates and returns an HTML element with specified attributes and optional text content
+    createHTMLElement(tag, attributes = {}, textContent = '') {
         const element = document.createElement(tag);
         Object.keys(attributes).forEach(key => element.setAttribute(key, attributes[key]));
         if (textContent) {
@@ -11,76 +14,40 @@ document.addEventListener('DOMContentLoaded', () => {
         return element;
     }
 
-    function renderDashboard() {
-        contentDiv.innerHTML = '';
+    // Renders the dashboard by fetching statistics and displaying them in a grid layout
+    render() {
+        this.contentDiv.innerHTML = '';
 
-        const gridContainer = createHTMLElement('div', {class: 'dashboard-grid'});
+        Ajax.get('/getDashboardStats')
+            .then(data => {
+                console.log(data);
+                const gridContainer = this.createHTMLElement('div', {class: 'dashboard-grid'});
 
-        const stats = [
-            {label: 'Products count:', value: '120', id: 'productCount'},
-            {label: 'Categories count:', value: '15', id: 'categoryCount'},
-            {label: 'Home page opening count:', value: '50', id: 'homepageCount'},
-            {label: 'Most often viewed product:', value: 'prod 1', id: 'mostViewedProduct'},
-            {label: 'Number of prod1 views:', value: '32', id: 'productViews'}
-        ];
+                const stats = [
+                    {label: 'Products count:', value: data.productCount, id: 'productCount'},
+                    {label: 'Categories count:', value: data.categoryCount, id: 'categoryCount'},
+                    {label: 'Home page opening count:', value: data.homePageViewCount, id: 'homePageViewCount'},
+                    {label: 'Most often viewed product:', value: data.mostViewedProduct, id: 'mostViewedProduct'},
+                    {label: 'Number of prod1 views:', value: data.mostViewedProductCount, id: 'mostViewedProductCount'}
+                ];
 
-        stats.forEach(stat => {
-            const statWrapper = createHTMLElement('div', {class: 'stat-item'});
-            const statLabel = createHTMLElement('label', {for: stat.id}, stat.label);
-            const statInput = createHTMLElement('input', {
-                type: 'text',
-                id: stat.id,
-                value: stat.value,
-                readonly: true
-            });
+                stats.forEach(stat => {
+                    const statWrapper = this.createHTMLElement('div', {class: 'stat-item'});
+                    const statLabel = this.createHTMLElement('label', {for: stat.id}, stat.label);
+                    const statInput = this.createHTMLElement('input', {
+                        type: 'text',
+                        id: stat.id,
+                        value: stat.value,
+                        readonly: true
+                    });
 
-            statWrapper.appendChild(statLabel);
-            statWrapper.appendChild(statInput);
-            gridContainer.appendChild(statWrapper);
-        });
+                    statWrapper.appendChild(statLabel);
+                    statWrapper.appendChild(statInput);
+                    gridContainer.appendChild(statWrapper);
+                });
 
-        contentDiv.appendChild(gridContainer);
+                this.contentDiv.appendChild(gridContainer);
+            })
+            .catch(error => console.error('Error loading dashboard stats:', error));
     }
-
-    function renderProducts() {
-        contentDiv.innerHTML = '';
-        const heading = createHTMLElement('h2', {}, 'Products Section');
-        const message = createHTMLElement('p', {}, 'No data available.');
-        contentDiv.appendChild(heading);
-        contentDiv.appendChild(message);
-    }
-
-    function renderCategories() {
-        contentDiv.innerHTML = '';
-        const heading = createHTMLElement('h2', {}, 'Product Categories Section');
-        const message = createHTMLElement('p', {}, 'No data available.');
-        contentDiv.appendChild(heading);
-        contentDiv.appendChild(message);
-    }
-
-    renderDashboard();
-
-    menuItems.forEach(item => {
-        item.addEventListener('click', function () {
-            menuItems.forEach(i => i.classList.remove('active'));
-            this.classList.add('active');
-
-            const sectionId = this.getAttribute('data-section');
-
-            switch (sectionId) {
-                case 'dashboard':
-                    renderDashboard();
-                    break;
-                case 'products':
-                    renderProducts();
-                    break;
-                case 'categories':
-                    renderCategories();
-                    break;
-                default:
-                    renderDashboard();
-                    break;
-            }
-        });
-    });
-});
+}
