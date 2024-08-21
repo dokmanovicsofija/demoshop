@@ -6,6 +6,7 @@ use Application\Business\Exceptions\AuthenticationException;
 use Application\Business\Interfaces\ServiceInterface\LoginServiceInterface;
 use Infrastructure\Request\HttpRequest;
 use Infrastructure\Response\HtmlResponse;
+use Infrastructure\Utility\GlobalWrapper;
 use Infrastructure\Utility\PathHelper;
 use Infrastructure\Utility\SessionManager;
 
@@ -26,7 +27,7 @@ class LoginController
     {
     }
 
-    public function dashboard(HttpRequest $request): HtmlResponse
+    public function test(HttpRequest $request): HtmlResponse
     {
         return HtmlResponse::fromView(PathHelper::view('dashboard.php'));
     }
@@ -41,7 +42,7 @@ class LoginController
      */
     public function index(): HtmlResponse
     {
-        if (SessionManager::getInstance()->get('admin')) {
+        if ($this->checkAccess()) {
             return HtmlResponse::fromView(PathHelper::view('dashboard.php'));
         }
 
@@ -73,5 +74,26 @@ class LoginController
                 'errorMessage' => $e->getMessage()
             ]);
         }
+    }
+
+    /**
+     * Checks if the user has access based on the 'keepLoggedIn' cookie.
+     *
+     * This method uses the `GlobalWrapper` class to access the 'keepLoggedIn' cookie.
+     * If the value of this cookie is set to 'true', the user is considered logged in
+     * and access is granted. Otherwise, access is denied.
+     *
+     * @return bool Returns true if the user selected 'keep me logged in', otherwise returns false.
+     */
+
+    public function checkAccess(): bool
+    {
+        $keepLoggedIn = GlobalWrapper::getCookie('keepLoggedIn') ?? 'false';
+
+        if ($keepLoggedIn === 'true') {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Infrastructure\Utility\Routing;
 
+use Application\Presentation\Controller\AdminController\DashboardController;
 use Application\Presentation\Controller\FrontController\LoginController;
 use Exception;
 use Infrastructure\Middleware\AdminMiddleware;
@@ -35,8 +36,14 @@ class RouterRegistry
         );
 
         Router::getInstance()->addRoute(
-            (new Route('GET', '/admin/dashboard', LoginController::class, 'dashboard'))
+            (new Route('GET', '/admin/test', LoginController::class, 'test'))
                 ->addMiddleware(new AdminMiddleware())
         );
+
+//        Router::getInstance()->addRoute(
+//            new Route('GET', '/admin/dashboard',
+//                DashboardController::class, 'getDashboardStats')
+//        );
+
     }
 }

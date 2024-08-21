@@ -11,9 +11,10 @@ class AdminMiddleware extends AbstractMiddleware
 {
     public function handle(HttpRequest $request): void
     {
-        $userId = SessionManager::getInstance()->get('admin');
+//        $userId = SessionManager::getInstance()->get('admin');
+        $keepLoggedIn = $_COOKIE['keepLoggedIn'] ?? 'false';
 
-        if (!$userId) {
+        if ($keepLoggedIn !== 'true') {
 //            $response = new RedirectResponse('/admin');
 //            $response->send();
 //            exit;

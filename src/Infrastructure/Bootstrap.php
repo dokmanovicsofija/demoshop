@@ -18,6 +18,7 @@ use Application\Data\SQLRepositories\CategoryRepository;
 use Application\Data\SQLRepositories\LoginRepository;
 use Application\Data\SQLRepositories\ProductRepository;
 use Application\Data\SQLRepositories\StatisticsRepository;
+use Application\Presentation\Controller\AdminController\DashboardController;
 use Application\Presentation\Controller\FrontController\LoginController;
 use Exception;
 use Infrastructure\Utility\Routing\Router;
@@ -101,6 +102,11 @@ class Bootstrap
     {
         ServiceRegistry::register(LoginController::class, new LoginController(
             ServiceRegistry::get(LoginServiceInterface::class)
+        ));
+        ServiceRegistry::getInstance()->register(DashboardController::class, new DashboardController(
+            ServiceRegistry::getInstance()->get(ProductServiceInterface::class),
+            ServiceRegistry::getInstance()->get(CategoryServiceInterface::class),
+            ServiceRegistry::getInstance()->get(StatisticsServiceInterface::class)
         ));
     }
 }
