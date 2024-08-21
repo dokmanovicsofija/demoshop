@@ -60,5 +60,9 @@ class RouterRegistry
             new Route('GET', '/admin/categories',
                 LoginController::class, 'index')
         );
+
+        Router::getInstance()->addRoute(
+            new Route('POST', '/addCategory', CategoryController::class, 'addCategory')
+        );
     }
 }

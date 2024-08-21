@@ -37,6 +37,11 @@ class Categories {
         }, 'Add root category');
         categoriesTree.appendChild(addRootCategoryButton);
 
+        addRootCategoryButton.addEventListener('click', () => {
+            categoryDetails.style.display = 'none'; // Hide category details
+            this.showCreateCategoryForm();
+        });
+
         Ajax.get('/getCategories')
             .then(data => {
                 console.log('Received data:', data);
@@ -49,6 +54,92 @@ class Categories {
                 this.addEventListeners();
             })
             .catch(error => console.error('Error fetching categories:', error));
+    }
+
+    showCreateCategoryForm() {
+        const existingForm = document.getElementById('create-category-form');
+        if (existingForm) {
+            existingForm.remove();
+        }
+
+        const formContainer = this.createHTMLElement('div', {id: 'create-category-form', class: 'category-form'});
+
+        const titleLabel = this.createHTMLElement('label', {}, 'Title:');
+        const titleInput = this.createHTMLElement('input', {type: 'text', id: 'new-category-title'});
+
+        const parentLabel = this.createHTMLElement('label', {}, 'Parent category:');
+        const parentSelect = this.createHTMLElement('select', {id: 'new-category-parent'});
+
+        const rootOption = this.createHTMLElement('option', {value: 'root'}, 'Root');
+        parentSelect.appendChild(rootOption);
+
+        const codeLabel = this.createHTMLElement('label', {}, 'Code:');
+        const codeInput = this.createHTMLElement('input', {type: 'text', id: 'new-category-code'});
+
+        const descriptionLabel = this.createHTMLElement('label', {}, 'Description:');
+        const descriptionTextarea = this.createHTMLElement('textarea', {id: 'new-category-description'});
+
+        const okButton = this.createHTMLElement('button', {id: 'save-category'}, 'OK');
+        const cancelButton = this.createHTMLElement('button', {id: 'cancel-category'}, 'Cancel');
+
+        okButton.addEventListener('click', () => {
+            this.saveNewCategory({
+                title: titleInput.value,
+                parent: parentSelect.value === 'root' ? null : parentSelect.value,
+                code: codeInput.value,
+                description: descriptionTextarea.value,
+            });
+            this.showCategoryDetails();
+        });
+
+        cancelButton.addEventListener('click', () => {
+            this.cancelCreateCategoryForm();
+            this.showCategoryDetails();
+        });
+
+        formContainer.appendChild(titleLabel);
+        formContainer.appendChild(titleInput);
+        formContainer.appendChild(parentLabel);
+        formContainer.appendChild(parentSelect);
+        formContainer.appendChild(codeLabel);
+        formContainer.appendChild(codeInput);
+        formContainer.appendChild(descriptionLabel);
+        formContainer.appendChild(descriptionTextarea);
+        formContainer.appendChild(okButton);
+        formContainer.appendChild(cancelButton);
+
+        this.contentDiv.appendChild(formContainer);
+    }
+
+    saveNewCategory(categoryData) {
+        Ajax.post('/addCategory', categoryData)
+            .then(response => {
+                console.log('Original response:', response);
+                if (response.error) {
+                    alert(response.error);
+                    return;
+                }
+                this.cancelCreateCategoryForm();
+                this.render();
+            })
+            .catch(error => {
+                console.error('Error saving category:', error);
+                console.log('Original response:', error.response || error);
+            });
+    }
+
+    showCategoryDetails() {
+        const categoryDetails = document.getElementById('category-details');
+        if (categoryDetails) {
+            categoryDetails.style.display = 'block';
+        }
+    }
+
+    cancelCreateCategoryForm() {
+        const form = document.getElementById('create-category-form');
+        if (form) {
+            form.remove();
+        }
     }
 
     createCategoryNode(category) {
