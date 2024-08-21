@@ -3,6 +3,7 @@ class Categories {
     constructor() {
         this.contentDiv = document.getElementById('content');
         this.categoryData = {};
+        this.selectedCategoryId = null; // Dodato polje za čuvanje ID-a selektovane kategorije
     }
 
     createHTMLElement(tag, attributes = {}, textContent = '') {
@@ -72,6 +73,15 @@ class Categories {
 
         const rootOption = this.createHTMLElement('option', {value: 'root'}, 'Root');
         parentSelect.appendChild(rootOption);
+
+        if (this.selectedCategoryId) {
+            const selectedCategory = this.categoryData[this.selectedCategoryId];
+            const selectedOption = this.createHTMLElement('option', {
+                value: this.selectedCategoryId,
+                selected: true
+            }, selectedCategory.title);
+            parentSelect.appendChild(selectedOption);
+        }
 
         const codeLabel = this.createHTMLElement('label', {}, 'Code:');
         const codeInput = this.createHTMLElement('input', {type: 'text', id: 'new-category-code'});
@@ -174,6 +184,10 @@ class Categories {
         const editButton = this.createHTMLElement('button', {id: 'edit-category'}, 'Edit');
         const deleteButton = this.createHTMLElement('button', {id: 'delete-category'}, 'Delete');
         const addSubcategoryButton = this.createHTMLElement('button', {id: 'add-subcategory'}, 'Add Subcategory');
+        addSubcategoryButton.addEventListener('click', () => {
+            container.style.display = 'none'; // Sakrij detalje kategorije
+            this.showCreateCategoryForm(true); // Prikaži formu za dodavanje podkategorije
+        });
 
         container.appendChild(titleLabel);
         container.appendChild(titleInput);
@@ -217,6 +231,8 @@ class Categories {
             console.log('Clicked category ID:', categoryId);
 
             if (categoryId) {
+                this.selectedCategoryId = categoryId; // Sačuvaj ID selektovane kategorije
+
                 const selectedCategory = this.categoryData[categoryId];
                 console.log('Selected category data:', selectedCategory);
 

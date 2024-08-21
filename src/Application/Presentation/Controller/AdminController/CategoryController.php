@@ -42,9 +42,10 @@ class CategoryController
         $title = $data['title'] ?? '';
         $code = $data['code'] ?? '';
         $description = $data['description'] ?? null;
+        $parentId = isset($data['parent']) && $data['parent'] !== 'root' ? (int)$data['parent'] : null;
 
         try {
-            $category = new DomainCategory(0, null, $code, $title, $description);
+            $category = new DomainCategory(0, $parentId, $code, $title, $description);
             $newCategoryId = $this->categoryService->createRootCategory($category);
 
             return new JsonResponse(['id' => $newCategoryId], 201);

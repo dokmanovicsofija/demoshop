@@ -48,7 +48,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         $newCategory->title = $category->getTitle();
         $newCategory->code = $category->getCode();
         $newCategory->description = $category->getDescription();
-        $newCategory->parent_id = null;
+        $newCategory->parent_id = $category->getParentId();
         $newCategory->save();
 
         return $newCategory->id;
