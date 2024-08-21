@@ -1,12 +1,16 @@
 <?php
 
-namespace Application\Data\SQLRepositories;
+namespace Application\Business\Services;
 
 use Application\Business\Interfaces\RepositoryInterface\ProductRepositoryInterface;
+use Application\Business\Interfaces\ServiceInterface\ProductServiceInterface;
 use Application\Data\Entities\Product;
 
-class ProductRepository implements ProductRepositoryInterface
+class ProductService implements ProductServiceInterface
 {
+    public function __construct(private ProductRepositoryInterface $productRepository)
+    {
+    }
     /**
      * Get the total count of products.
      *
@@ -14,7 +18,7 @@ class ProductRepository implements ProductRepositoryInterface
      */
     public function getProductCount(): int
     {
-        return Product::count();
+        return $this->productRepository->getProductCount();
     }
 
     /**
@@ -24,7 +28,6 @@ class ProductRepository implements ProductRepositoryInterface
      */
     public function getMostViewedProduct(): ?array
     {
-        return Product::orderBy('view_count', 'desc')
-            ->first(['title as productName', 'view_count as viewCount'])
-            ->toArray();    }
+        return $this->productRepository->getMostViewedProduct();
+    }
 }

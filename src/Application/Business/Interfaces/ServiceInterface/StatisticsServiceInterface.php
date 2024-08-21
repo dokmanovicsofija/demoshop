@@ -9,5 +9,5 @@ interface StatisticsServiceInterface
      *
      * @return int The number of times the home page has been viewed.
      */
-    public function getHomeViewCount(): int;
+    public function getHomePageViewCount(): int;
 }

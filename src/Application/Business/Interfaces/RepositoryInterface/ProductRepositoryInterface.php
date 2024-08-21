@@ -14,7 +14,6 @@ interface ProductRepositoryInterface
     /**
      * Get the most viewed product.
      *
-     * @return mixed The most viewed product details.
      */
-    public function getMostViewedProduct();
+    public function getMostViewedProduct(): ?array;
 }
