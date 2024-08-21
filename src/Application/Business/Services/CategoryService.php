@@ -21,4 +21,9 @@ class CategoryService implements CategoryServiceInterface
     {
         return $this->categoryRepository->getCategoryCount();
     }
+
+    public function getAllCategories(): array
+    {
+        return $this->categoryRepository->findAllWithSubcategories();
+    }
 }

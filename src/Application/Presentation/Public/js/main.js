@@ -1,15 +1,37 @@
-// Wait for the DOM content to be fully loaded before running the script
 document.addEventListener('DOMContentLoaded', () => {
     // Get the main content div where different views will be rendered
     const contentDiv = document.getElementById('content');
     // Initialize the router, passing in the contentDiv for rendering views
     const router = new Router(contentDiv);
 
+    function loadCSS(filename) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = filename;
+        link.classList.add('dynamic-css');
+        document.head.appendChild(link);
+    }
+
+    function removeCSS() {
+        const existingCSS = document.querySelectorAll('.dynamic-css');
+        existingCSS.forEach(link => link.remove());
+    }
+
     // Add a route for the admin dashboard
     router.addRoute('/admin/dashboard', () => {
+        removeCSS();
         // Create and render the dashboard view when the route is accessed
         const dashboard = new Dashboard();
         dashboard.render();
+    });
+
+    // Add a route for the categories
+    router.addRoute('/admin/categories', () => {
+        removeCSS();
+        loadCSS('/src/Application/Presentation/Public/css/categories.css');
+        const categories = new Categories();
+        categories.render();
     });
 
     // Automatically navigate to the dashboard route when the page loads

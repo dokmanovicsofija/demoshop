@@ -16,4 +16,11 @@ class CategoryRepository implements CategoryRepositoryInterface
     {
         return Category::count();
     }
+
+    public function findAllWithSubcategories(): array
+    {
+        $categories = Category::with('subcategories')->whereNull('parent_id')->get();
+
+        return $categories->toArray();
+    }
 }

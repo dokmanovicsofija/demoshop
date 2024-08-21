@@ -19,6 +19,7 @@
     </main>
 </div>
 <script src="/src/Application/Presentation/Public/js/router.js"></script>
+<script src="/src/Application/Presentation/Public/js/categories.js"></script>
 <script src="/src/Application/Presentation/Public/js/main.js"></script>
 <script src="/src/Application/Presentation/Public/js/dashboard.js"></script>
 <script src="/src/Application/Presentation/Public/js/ajax.js"></script>

@@ -95,3 +95,38 @@ label {
     margin-bottom: 8px;
     font-size: 16px;
 }
+
+/* Stilovi za stablo kategorija */
+#categories-container {
+    display: flex;
+    gap: 20px;
+}
+
+#categories-tree {
+    width: 300px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    overflow-y: auto;
+}
+
+#categories-tree ul {
+    list-style: none;
+    padding-left: 20px;
+}
+
+#categories-tree li {
+    padding: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+}
+
+#categories-tree li:hover {
+    background-color: #dcdcdc;
+}
+
+#categories-tree li ul {
+    padding-left: 20px;
+}

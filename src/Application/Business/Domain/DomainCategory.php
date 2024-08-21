@@ -78,4 +78,41 @@ class DomainCategory
     {
         return $this->description;
     }
+
+    /**
+     * Convert the DomainCategory object to an associative array.
+     *
+     * @return array The category as an array.
+     */
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'parentId' => $this->getParentId(),
+            'code' => $this->getCode(),
+            'title' => $this->getTitle(),
+            'description' => $this->getDescription(),
+        ];
+    }
+
+    /**
+     * Set the unique identifier of the category.
+     *
+     * @param int $id The category's id.
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * Set the identifier of the parent category.
+     *
+     * @param int|null $parentId The parent category's id, or null if not applicable.
+     */
+    public function setParentId(?int $parentId): void
+    {
+        $this->parentId = $parentId;
+    }
+
 }

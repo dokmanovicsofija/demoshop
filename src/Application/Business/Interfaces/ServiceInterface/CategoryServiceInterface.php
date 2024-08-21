@@ -10,4 +10,6 @@ interface CategoryServiceInterface
      * @return int The number of categories.
      */
     public function getCategoryCount(): int;
+
+    public function getAllCategories(): array;
 }

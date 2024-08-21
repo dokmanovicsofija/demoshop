@@ -10,4 +10,7 @@ interface CategoryRepositoryInterface
      * @return int The number of categories.
      */
     public function getCategoryCount(): int;
+
+    public function findAllWithSubcategories(): array;
+
 }

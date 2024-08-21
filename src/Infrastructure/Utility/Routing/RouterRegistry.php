@@ -2,6 +2,7 @@
 
 namespace Infrastructure\Utility\Routing;
 
+use Application\Presentation\Controller\AdminController\CategoryController;
 use Application\Presentation\Controller\AdminController\DashboardController;
 use Application\Presentation\Controller\FrontController\LoginController;
 use Exception;
@@ -47,8 +48,17 @@ class RouterRegistry
         );
 
         Router::getInstance()->addRoute(
-        new Route('GET', '/admin/dashboard',
-            LoginController::class, 'index')
-    );
+            new Route('GET', '/admin/dashboard',
+                LoginController::class, 'index')
+        );
+
+        Router::getInstance()->addRoute(
+            new Route('GET', '/getCategories', CategoryController::class, 'getCategories')
+        );
+
+        Router::getInstance()->addRoute(
+            new Route('GET', '/admin/categories',
+                LoginController::class, 'index')
+        );
     }
 }
