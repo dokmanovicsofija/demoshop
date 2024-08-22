@@ -1,12 +1,12 @@
 <?php
 
-namespace Infrastructure\Utility\Routing;
+namespace Application\Integration\Routing;
 
+use Application\Integration\Middleware\AdminMiddleware;
 use Application\Presentation\Controller\AdminController\CategoryController;
 use Application\Presentation\Controller\AdminController\DashboardController;
 use Application\Presentation\Controller\FrontController\LoginController;
 use Exception;
-use Infrastructure\Middleware\AdminMiddleware;
 
 /**
  * Class RouterRegistry

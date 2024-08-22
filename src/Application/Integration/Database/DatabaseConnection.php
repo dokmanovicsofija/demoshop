@@ -1,10 +1,10 @@
 <?php
 
-namespace Infrastructure;
+namespace Application\Integration\Database;
 
+use Application\Integration\Utility\PathHelper;
 use Dotenv\Dotenv;
 use Illuminate\Database\Capsule\Manager as Capsule;
-use Infrastructure\Utility\PathHelper;
 
 /**
  * Class DatabaseConnection

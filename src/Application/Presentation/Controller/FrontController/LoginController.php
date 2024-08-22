@@ -2,13 +2,12 @@
 
 namespace Application\Presentation\Controller\FrontController;
 
-use Application\Business\Exceptions\AuthenticationException;
 use Application\Business\Interfaces\ServiceInterface\LoginServiceInterface;
+use Application\Integration\Exceptions\AuthenticationException;
+use Application\Integration\Utility\PathHelper;
 use Infrastructure\Request\HttpRequest;
 use Infrastructure\Response\HtmlResponse;
 use Infrastructure\Utility\GlobalWrapper;
-use Infrastructure\Utility\PathHelper;
-use Infrastructure\Utility\SessionManager;
 
 /**
  * Class LoginController

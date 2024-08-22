@@ -1,6 +1,6 @@
 <?php
 
-namespace Infrastructure\Utility;
+namespace Application\Integration\Utility;
 
 /**
  * Class PathHelper
@@ -18,7 +18,7 @@ class PathHelper
      */
     public static function view(string $viewName): string
     {
-        return __DIR__ . '/../../Application/Presentation/Views/' . $viewName;
+        return __DIR__ . '/../../../Application/Presentation/Views/' . $viewName;
     }
 
     /**
@@ -28,7 +28,7 @@ class PathHelper
      */
     public static function env(): string
     {
-        return __DIR__ . '/../../../';
+        return __DIR__ . '/../../../../';
     }
 
 }

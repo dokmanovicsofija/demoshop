@@ -1,10 +1,10 @@
 <?php
 
-namespace Migration;
+namespace Application\Integration\Database\Migration;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 /**
  * Class CreateProducts

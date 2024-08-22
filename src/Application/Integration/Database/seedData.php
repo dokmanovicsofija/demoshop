@@ -10,10 +10,10 @@
  */
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use Application\Integration\Utility\PathHelper;
 use Dotenv\Dotenv;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Support\Carbon;
-use Infrastructure\Utility\PathHelper;
 
 // Load environment variables
 $dotenv = Dotenv::createUnsafeImmutable(PathHelper::env());

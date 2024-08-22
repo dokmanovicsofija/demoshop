@@ -1,8 +1,8 @@
 <?php
 
-namespace Infrastructure\Utility\Routing;
+namespace Application\Integration\Routing;
 
-use Infrastructure\Middleware\MiddlewareInterface;
+use Application\Integration\Middleware\MiddlewareInterface;
 
 /**
  * Class Route

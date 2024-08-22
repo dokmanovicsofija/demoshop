@@ -1,11 +1,9 @@
 <?php
 
-namespace Infrastructure\Middleware;
+namespace Application\Integration\Middleware;
 
-use Application\Business\Exceptions\AuthorizationException;
+use Application\Integration\Exceptions\AuthorizationException;
 use Infrastructure\Request\HttpRequest;
-use Infrastructure\Response\RedirectResponse;
-use Infrastructure\Utility\SessionManager;
 
 class AdminMiddleware extends AbstractMiddleware
 {

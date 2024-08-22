@@ -1,6 +1,6 @@
 <?php
 
-namespace Infrastructure\Utility\Routing;
+namespace Application\Integration\Routing;
 
 use Exception;
 use Infrastructure\Request\HttpRequest;

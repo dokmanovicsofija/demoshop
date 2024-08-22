@@ -1,13 +1,13 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use Application\Integration\Database\Migration\CreateAdmins;
+use Application\Integration\Database\Migration\CreateCategories;
+use Application\Integration\Database\Migration\CreateProducts;
+use Application\Integration\Database\Migration\CreateStatistics;
+use Application\Integration\Utility\PathHelper;
 use Dotenv\Dotenv;
 use Illuminate\Database\Capsule\Manager as Capsule;
-use Infrastructure\Utility\PathHelper;
-use Migration\CreateAdmins;
-use Migration\CreateCategories;
-use Migration\CreateProducts;
-use Migration\CreateStatistics;
 
 /**
  * Load environment variables from the .env file.

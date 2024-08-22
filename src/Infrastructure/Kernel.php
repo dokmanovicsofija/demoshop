@@ -2,12 +2,12 @@
 
 namespace Infrastructure;
 
+use Application\Integration\Database\DatabaseConnection;
+use Application\Integration\Routing\Router;
+use Application\Integration\Routing\RouterRegistry;
 use Cassandra\Exception\UnauthorizedException;
 use Exception;
 use Infrastructure\Request\HttpRequest;
-use Infrastructure\Utility\Routing\Router;
-use Infrastructure\Utility\Routing\RouterRegistry;
-use Infrastructure\DatabaseConnection;
 
 /**
  * Class Kernel

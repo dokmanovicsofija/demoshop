@@ -2,9 +2,9 @@
 
 namespace Application\Business\Services;
 
-use Application\Business\Exceptions\AuthenticationException;
 use Application\Business\Interfaces\RepositoryInterface\LoginRepositoryInterface;
 use Application\Business\Interfaces\ServiceInterface\LoginServiceInterface;
+use Application\Integration\Exceptions\AuthenticationException;
 use Infrastructure\Utility\SessionManager;
 
 /**
