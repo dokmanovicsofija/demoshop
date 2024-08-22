@@ -88,4 +88,12 @@ interface CategoryRepositoryInterface
      * @return bool True if the category has products, otherwise false.
      */
     public function categoryHasProducts(int $categoryId): bool;
+
+    /**
+     * Finds a category by its unique code.
+     *
+     * @param string $code The unique code of the category.
+     * @return Category|null The category if found, null otherwise.
+     */
+    public function findByCode(string $code): ?Category;
 }

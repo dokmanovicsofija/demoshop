@@ -53,12 +53,12 @@ class RouterRegistry
         );
 
         Router::getInstance()->addRoute(
-            new Route('GET', '/getCategories', CategoryController::class, 'getCategories')
+            (new Route('GET', '/admin/categories', LoginController::class, 'index'))
+                ->addMiddleware(new AdminMiddleware())
         );
 
         Router::getInstance()->addRoute(
-            new Route('GET', '/admin/categories',
-                LoginController::class, 'index')
+            new Route('GET', '/getCategories', CategoryController::class, 'getCategories')
         );
 
         Router::getInstance()->addRoute(

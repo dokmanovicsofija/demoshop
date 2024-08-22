@@ -156,4 +156,15 @@ class CategoryRepository implements CategoryRepositoryInterface
         $category = $this->findById($categoryId);
         return $category ? $category->products()->exists() : false;
     }
+
+    /**
+     * Finds a category by its unique code.
+     *
+     * @param string $code The unique code of the category.
+     * @return Category|null The category if found, null otherwise.
+     */
+    public function findByCode(string $code): ?Category
+    {
+        return Category::where('code', $code)->first();
+    }
 }

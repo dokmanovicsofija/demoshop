@@ -5,7 +5,6 @@ namespace Application\Business\Services;
 use Application\Business\Domain\DomainCategory;
 use Application\Business\Interfaces\RepositoryInterface\CategoryRepositoryInterface;
 use Application\Business\Interfaces\ServiceInterface\CategoryServiceInterface;
-use Application\Data\Entities\Category;
 use InvalidArgumentException;
 
 class CategoryService implements CategoryServiceInterface
@@ -42,6 +41,9 @@ class CategoryService implements CategoryServiceInterface
      */
     public function createRootCategory(DomainCategory $category): int
     {
+        if ($this->categoryRepository->findByCode($category->getCode())) {
+            throw new \InvalidArgumentException('Category code must be unique.');
+        }
         return $this->categoryRepository->addRootCategory($category);
     }
 
