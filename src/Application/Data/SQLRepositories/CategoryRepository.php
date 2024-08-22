@@ -92,4 +92,23 @@ class CategoryRepository implements CategoryRepositoryInterface
     {
         return Category::find($categoryId);
     }
+
+    public function deleteCategory(int $categoryId): void
+    {
+        $category = $this->findById($categoryId);
+        if ($category && $category->subcategories) {
+            foreach ($category->subcategories as $subcategory) {
+                $subcategory->parent_id = $category->parent_id;
+                $subcategory->save();
+            }
+        }
+
+        $category->delete();
+    }
+
+    public function categoryHasProducts(int $categoryId): bool
+    {
+        $category = $this->findById($categoryId);
+        return $category ? $category->products()->exists() : false;
+    }
 }

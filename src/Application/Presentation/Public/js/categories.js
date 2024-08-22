@@ -3,7 +3,7 @@ class Categories {
     constructor() {
         this.contentDiv = document.getElementById('content');
         this.categoryData = {};
-        this.selectedCategoryId = null; // Dodato polje za čuvanje ID-a selektovane kategorije
+        this.selectedCategoryId = null;
     }
 
     createHTMLElement(tag, attributes = {}, textContent = '') {
@@ -104,6 +104,7 @@ class Categories {
                 code: codeInput.value,
                 description: descriptionTextarea.value,
             });
+            this.cancelCreateCategoryForm();
             this.showCategoryDetails();
         });
 
@@ -200,7 +201,6 @@ class Categories {
             this.showCreateCategoryForm(true);
         });
 
-        // Dodajte logiku za edit dugme
         editButton.addEventListener('click', () => {
             if (this.selectedCategoryId) {
                 const selectedCategory = this.categoryData[this.selectedCategoryId];
@@ -209,8 +209,22 @@ class Categories {
 
                 this.showEditCategoryForm(selectedCategory);
             } else {
-                console.error('No category selected.');
-            }
+                alert('Please select a category to edit.');
+                console.error('No category selected.');            }
+        });
+
+        deleteButton.addEventListener('click', () => {
+            if (this.selectedCategoryId) {
+                const selectedCategory = this.categoryData[this.selectedCategoryId];
+
+                // container.style.display = 'none';
+
+                if (confirm('Are you sure you want to delete this category?')) {
+                    this.deleteCategory(this.selectedCategoryId);
+                }
+            } else {
+                alert('Please select a category to delete.');
+                console.error('No category selected.');            }
         });
 
         container.appendChild(titleLabel);
@@ -224,6 +238,19 @@ class Categories {
         container.appendChild(editButton);
         container.appendChild(deleteButton);
         container.appendChild(addSubcategoryButton);
+    }
+
+    deleteCategory(categoryId) {
+        const data = { id: categoryId };
+        Ajax.delete('/deleteCategory', data)
+            .then(response => {
+                console.log('Category deleted successfully:', response);
+                this.render();
+            })
+            .catch(error => {
+                console.error('Error deleting category:', error);
+                alert(error.message || 'Error deleting category');
+            });
     }
 
     showEditCategoryForm(selectedCategory) {

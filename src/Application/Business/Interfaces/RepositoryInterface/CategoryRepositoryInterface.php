@@ -40,4 +40,8 @@ interface CategoryRepositoryInterface
     public function updateParent(int $categoryId, ?int $newParentId): void;
 
     public function findById(int $categoryId): ?Category;
+
+    public function deleteCategory(int $categoryId): void;
+
+    public function categoryHasProducts(int $categoryId): bool;
 }

@@ -35,12 +35,17 @@ class Ajax {
      * Performs a DELETE request to the specified URL.
      *
      * @param {string} url - The URL to which the DELETE request is sent.
+     * @param data
      * @returns {Promise<Object|null>} - A promise that resolves with the JSON response from the server or null if the status is 204 (No Content).
      * @throws {Error} - Throws an error if the response is not ok, with the text of the response.
      */
-    static delete(url) {
+    static delete(url, data) {
         return fetch(url, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
         })
             .then(response => {
                 if (response.ok) {

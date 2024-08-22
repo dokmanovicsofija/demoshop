@@ -43,4 +43,5 @@ interface CategoryServiceInterface
      */
     public function updateCategoryParent(int $categoryId, ?int $parentId): void;
 
+    public function deleteCategory(int $categoryId): void;
 }

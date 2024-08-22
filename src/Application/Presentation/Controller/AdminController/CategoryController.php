@@ -61,7 +61,6 @@ class CategoryController
         $parentId = $data['parent'] ?? null;
 
         try {
-//            $category = new DomainCategory($categoryId, $parentId);
             $this->categoryService->updateCategoryParent($categoryId, $parentId);
 
             return new JsonResponse(['message' => 'Category updated successfully']);
@@ -69,4 +68,18 @@ class CategoryController
             return new JsonResponse(['error' => $e->getMessage()], 400);
         }
     }
+
+    public function deleteCategory(HttpRequest $request): JsonResponse
+    {
+        $data = $request->getParsedBody();
+        $categoryId = (int)$data['id'];
+
+        try {
+            $this->categoryService->deleteCategory($categoryId);
+            return new JsonResponse(['message' => 'Category deleted successfully']);
+        } catch (\InvalidArgumentException $e) {
+            return new JsonResponse(['error' => $e->getMessage()], 400);
+        }
+    }
+
 }
