@@ -3,6 +3,7 @@
 namespace Application\Business\Interfaces\RepositoryInterface;
 
 use Application\Business\Domain\DomainCategory;
+use Application\Data\Entities\Category;
 
 interface CategoryRepositoryInterface
 {
@@ -33,4 +34,10 @@ interface CategoryRepositoryInterface
      * @return int The ID of the newly created root category.
      */
     public function addRootCategory(DomainCategory $category): int;
+
+    public function findSubcategories(int $categoryId): array;
+
+    public function updateParent(int $categoryId, ?int $newParentId): void;
+
+    public function findById(int $categoryId): ?Category;
 }

@@ -55,4 +55,22 @@ class Ajax {
                 }
             });
     }
+
+    /**
+     * Performs a PUT request to the specified URL with the given data.
+     *
+     * @param {string} url - The URL to which the PUT request is sent.
+     * @param {Object} data - The data to be sent in the request body, must be in JSON format.
+     * @returns {Promise<Object>} - A promise that resolves with the JSON response from the server.
+     */
+    static put(url, data) {
+        return fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json());
+    }
 }

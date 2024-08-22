@@ -33,4 +33,14 @@ interface CategoryServiceInterface
      * @return int The ID of the newly created root category.
      */
     public function createRootCategory(DomainCategory $category): int;
+
+    /**
+     * Update the parent of a given category.
+     *
+     * @param int $categoryId The ID of the category to update.
+     * @param int|null $parentId
+     * @return void
+     */
+    public function updateCategoryParent(int $categoryId, ?int $parentId): void;
+
 }

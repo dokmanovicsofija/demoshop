@@ -26,11 +26,30 @@ class CategoryRepository implements CategoryRepositoryInterface
      *
      * @return array An array of categories, each with its subcategories.
      */
+//    public function findAllWithSubcategories(): array
+//    {
+//        $categories = Category::with('subcategories')->whereNull('parent_id')->get();
+//
+//        return $categories->toArray();
+//    }
+
     public function findAllWithSubcategories(): array
     {
-        $categories = Category::with('subcategories')->whereNull('parent_id')->get();
+        $categories = Category::with('subcategories.products')->whereNull('parent_id')->get();
+//        $categories = Category::with('subcategories.subcategories')->whereNull('parent_id')->get();
 
-        return $categories->toArray();
+        return $categories->map(function ($category) {
+            return $this->loadSubcategories($category);
+        })->toArray();
+    }
+
+    private function loadSubcategories($category)
+    {
+        $category->subcategories = $category->subcategories->map(function ($subcategory) {
+            return $this->loadSubcategories($subcategory);
+        });
+
+        return $category;
     }
 
     /**
@@ -52,5 +71,25 @@ class CategoryRepository implements CategoryRepositoryInterface
         $newCategory->save();
 
         return $newCategory->id;
+    }
+
+    public function findSubcategories(int $categoryId): array
+    {
+        return Category::where('parent_id', $categoryId)->get()->toArray();
+    }
+
+    public function updateParent(int $categoryId, ?int $newParentId): void
+    {
+        $category = Category::find($categoryId);
+        if (!$category) {
+            throw new \InvalidArgumentException('Category not found');
+        }
+        $category->parent_id = $newParentId;
+        $category->save();
+    }
+
+    public function findById(int $categoryId): ?Category
+    {
+        return Category::find($categoryId);
     }
 }

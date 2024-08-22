@@ -64,5 +64,9 @@ class RouterRegistry
         Router::getInstance()->addRoute(
             new Route('POST', '/addCategory', CategoryController::class, 'addCategory')
         );
+
+        Router::getInstance()->addRoute(
+            new Route('PUT', '/updateCategory', CategoryController::class, 'updateCategory')
+        );
     }
 }
