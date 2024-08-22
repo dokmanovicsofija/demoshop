@@ -210,21 +210,19 @@ class Categories {
                 this.showEditCategoryForm(selectedCategory);
             } else {
                 alert('Please select a category to edit.');
-                console.error('No category selected.');            }
+                console.error('No category selected.');
+            }
         });
 
         deleteButton.addEventListener('click', () => {
             if (this.selectedCategoryId) {
-                const selectedCategory = this.categoryData[this.selectedCategoryId];
-
-                // container.style.display = 'none';
-
                 if (confirm('Are you sure you want to delete this category?')) {
                     this.deleteCategory(this.selectedCategoryId);
                 }
             } else {
                 alert('Please select a category to delete.');
-                console.error('No category selected.');            }
+                console.error('No category selected.');
+            }
         });
 
         container.appendChild(titleLabel);
@@ -241,7 +239,7 @@ class Categories {
     }
 
     deleteCategory(categoryId) {
-        const data = { id: categoryId };
+        const data = {id: categoryId};
         Ajax.delete('/deleteCategory', data)
             .then(response => {
                 console.log('Category deleted successfully:', response);

@@ -43,5 +43,13 @@ interface CategoryServiceInterface
      */
     public function updateCategoryParent(int $categoryId, ?int $parentId): void;
 
+    /**
+     * Deletes a category by its ID.
+     *
+     * This method removes a category from the system based on its ID.
+     *
+     * @param int $categoryId The ID of the category to be deleted.
+     * @return void
+     */
     public function deleteCategory(int $categoryId): void;
 }

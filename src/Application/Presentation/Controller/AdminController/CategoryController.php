@@ -54,6 +54,16 @@ class CategoryController
         }
     }
 
+    /**
+     * Updates the parent of an existing category.
+     *
+     * This method updates the parent category of the specified category. It uses the ID of the category
+     * and the new parent ID from the request data to perform the update. If the update is successful, it
+     * returns a success message. If an error occurs, it returns an error message.
+     *
+     * @param HttpRequest $request The incoming HTTP request containing the category ID and new parent ID.
+     * @return JsonResponse The JSON response with a success message or an error message.
+     */
     public function updateCategory(HttpRequest $request): JsonResponse
     {
         $data = $request->getParsedBody();
@@ -69,6 +79,16 @@ class CategoryController
         }
     }
 
+    /**
+     * Deletes a category based on the provided ID.
+     *
+     * This method deletes the specified category by its ID. Before deletion, it checks if the category has
+     * associated products. If it does, an error is returned. Otherwise, the category is deleted, and a success
+     * message is returned.
+     *
+     * @param HttpRequest $request The incoming HTTP request containing the category ID to be deleted.
+     * @return JsonResponse The JSON response with a success message or an error message.
+     */
     public function deleteCategory(HttpRequest $request): JsonResponse
     {
         $data = $request->getParsedBody();
@@ -81,5 +101,4 @@ class CategoryController
             return new JsonResponse(['error' => $e->getMessage()], 400);
         }
     }
-
 }

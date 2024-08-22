@@ -73,11 +73,29 @@ class CategoryRepository implements CategoryRepositoryInterface
         return $newCategory->id;
     }
 
+    /**
+     * Retrieves all subcategories of a given category.
+     *
+     * This method fetches all categories that are direct subcategories of the specified category.
+     *
+     * @param int $categoryId The ID of the parent category for which subcategories are to be retrieved.
+     * @return array An array of subcategories for the specified parent category.
+     */
     public function findSubcategories(int $categoryId): array
     {
         return Category::where('parent_id', $categoryId)->get()->toArray();
     }
 
+    /**
+     * Updates the parent category of a given category.
+     *
+     * This method updates the parent category ID for a specified category. If the new parent category is
+     * itself a subcategory of the current category, the method also updates the parent category of the subcategory.
+     *
+     * @param int $categoryId The ID of the category to update.
+     * @param int|null $newParentId The ID of the new parent category, or null if the category should be a root category.
+     * @return void
+     */
     public function updateParent(int $categoryId, ?int $newParentId): void
     {
         $category = Category::find($categoryId);
@@ -88,11 +106,29 @@ class CategoryRepository implements CategoryRepositoryInterface
         $category->save();
     }
 
+    /**
+     * Finds a category by its ID.
+     *
+     * This method retrieves a category by its unique identifier. If no category with the given ID is found,
+     * the method returns null.
+     *
+     * @param int $categoryId The ID of the category to retrieve.
+     * @return Category|null The category entity if found, or null if not found.
+     */
     public function findById(int $categoryId): ?Category
     {
         return Category::find($categoryId);
     }
 
+    /**
+     * Deletes a category by its ID.
+     *
+     * This method removes the category with the specified ID from the database. It does not perform any checks
+     * before deletion, so it assumes that the category exists and can be safely removed.
+     *
+     * @param int $categoryId The ID of the category to delete.
+     * @return void
+     */
     public function deleteCategory(int $categoryId): void
     {
         $category = $this->findById($categoryId);
@@ -106,6 +142,15 @@ class CategoryRepository implements CategoryRepositoryInterface
         $category->delete();
     }
 
+    /**
+     * Checks if a category has associated products.
+     *
+     * This method determines whether a category has any products associated with it. It is used to prevent
+     * deletion of categories that are still in use.
+     *
+     * @param int $categoryId The ID of the category to check.
+     * @return bool True if the category has products, false otherwise.
+     */
     public function categoryHasProducts(int $categoryId): bool
     {
         $category = $this->findById($categoryId);
