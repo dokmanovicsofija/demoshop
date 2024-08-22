@@ -254,6 +254,15 @@ class Categories {
     // Attaches event listeners to the form buttons
     attachFormEventListeners(okButton, cancelButton, titleInput, parentSelect, codeInput, descriptionTextarea) {
         okButton.addEventListener('click', () => {
+            if (!titleInput.value.trim()) {
+                alert('Title is required');
+                return;
+            }
+
+            if (!codeInput.value.trim()) {
+                alert('Code is required');
+                return;
+            }
             this.saveNewCategory({
                 title: titleInput.value,
                 parent: parentSelect.value === 'root' ? null : parentSelect.value,
