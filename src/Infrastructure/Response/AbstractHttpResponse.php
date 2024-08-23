@@ -23,20 +23,18 @@ abstract class AbstractHttpResponse
     {
     }
 
-    /**
-     * Sets the HTTP status code for the response.
-     *
-     * @param int $statusCode The HTTP status code to set.
-     */
-    abstract public function setStatusCode(int $statusCode): void;
+    public function setStatusCode(int $statusCode): void
+    {
+        $this->statusCode = $statusCode;
+    }
 
-    /**
-     * Adds a header to the response.
-     *
-     * @param string $name The name of the header.
-     * @param string $value The value of the header.
-     */
-    abstract public function addHeader(string $name, string $value): void;
+    public function addHeader(string $name, string $value): void
+    {
+        $this->headers[$name] = $value;
+    }
+//    abstract public function setStatusCode(int $statusCode): void;
+
+//    abstract public function addHeader(string $name, string $value): void;
 
     /**
      * Sets the body content of the response.

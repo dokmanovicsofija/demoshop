@@ -21,27 +21,6 @@ use AllowDynamicProperties;
     }
 
     /**
-     * Sets the HTTP status code for the response.
-     *
-     * @param int $statusCode The HTTP status code to set.
-     */
-    public function setStatusCode(int $statusCode): void
-    {
-        $this->statusCode = $statusCode;
-    }
-
-    /**
-     * Adds a header to the response.
-     *
-     * @param string $name The name of the header.
-     * @param string $value The value of the header.
-     */
-    public function addHeader(string $name, string $value): void
-    {
-        $this->headers[] = [$name => $value];
-    }
-
-    /**
      * Sets the body content of the response.
      *
      * @param string $body The body content to set.

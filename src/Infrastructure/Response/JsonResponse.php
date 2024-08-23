@@ -23,27 +23,6 @@ class JsonResponse extends AbstractHttpResponse
     }
 
     /**
-     * Set the HTTP status code for the response.
-     *
-     * @param int $statusCode The HTTP status code.
-     */
-    public function setStatusCode(int $statusCode): void
-    {
-        $this->statusCode = $statusCode;
-    }
-
-    /**
-     * Add a header to the response.
-     *
-     * @param string $name The name of the header.
-     * @param string $value The value of the header.
-     */
-    public function addHeader(string $name, string $value): void
-    {
-        $this->headers[$name] = $value;
-    }
-
-    /**
      * Set the body of the response.
      *
      * @param string $body The body content (which would override the JSON data in this case).
