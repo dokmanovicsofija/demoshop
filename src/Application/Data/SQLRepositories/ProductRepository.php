@@ -42,6 +42,17 @@ class ProductRepository implements ProductRepositoryInterface
         return Product::all()->toArray();
     }
 
+    /**
+     * Update the enable status for a list of products.
+     *
+     * This method updates the `enabled` status of the specified products in the `products` table.
+     * The status is set to 1 (enabled) or 0 (disabled) based on the provided boolean value.
+     *
+     * @param array $productIds An array of product IDs to be updated.
+     * @param bool $status The new status to set for the specified products (true for enabled, false for disabled).
+     *
+     * @return void
+     */
     public function updateStatus(array $productIds, bool $status): void
     {
         $isEnabled = $status ? 1 : 0;

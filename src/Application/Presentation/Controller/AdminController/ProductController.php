@@ -39,6 +39,15 @@ class ProductController
         return new JsonResponse($products);
     }
 
+    /**
+     * Enable the specified products.
+     *
+     * This method retrieves the product IDs from the request, and then updates their status to enabled (true).
+     * A JSON response with a success status is returned after the operation is completed.
+     *
+     * @param HttpRequest $request The HTTP request containing the product IDs to enable.
+     * @return JsonResponse A JSON response indicating the success of the operation.
+     */
     public function enableProducts(HttpRequest $request): JsonResponse
     {
         $productIds = $request->getParsedBody()['productIds'] ?? [];
@@ -48,6 +57,15 @@ class ProductController
         return new JsonResponse(['status' => 'success']);
     }
 
+    /**
+     * Disable the specified products.
+     *
+     * This method retrieves the product IDs from the request, and then updates their status to disabled (false).
+     * A JSON response with a success status is returned after the operation is completed.
+     *
+     * @param HttpRequest $request The HTTP request containing the product IDs to disable.
+     * @return JsonResponse A JSON response indicating the success of the operation.
+     */
     public function disableProducts(HttpRequest $request): JsonResponse
     {
         $productIds = $request->getParsedBody()['productIds'] ?? [];

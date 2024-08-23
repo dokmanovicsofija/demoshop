@@ -55,6 +55,16 @@ class ProductService implements ProductServiceInterface
         return $products;
     }
 
+    /**
+     * Update the status of multiple products.
+     *
+     * This method takes an array of product IDs and a status flag (true for enable, false for disable),
+     * and updates the status of each specified product in the repository.
+     *
+     * @param array $productIds An array of product IDs to update.
+     * @param bool $status The status to set for the specified products. True to enable, false to disable.
+     * @return void
+     */
     public function updateProductStatus(array $productIds, bool $status): void
     {
         $this->productRepository->updateStatus($productIds, $status);
