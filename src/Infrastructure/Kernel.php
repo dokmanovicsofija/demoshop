@@ -2,12 +2,16 @@
 
 namespace Infrastructure;
 
+use Application\Integration\Bootstrap;
 use Application\Integration\Database\DatabaseConnection;
 use Application\Integration\Routing\Router;
 use Application\Integration\Routing\RouterRegistry;
-use Cassandra\Exception\UnauthorizedException;
+use Application\Integration\Utility\PathHelper;
 use Exception;
+use Infrastructure\Exceptions\HttpNotFoundException;
 use Infrastructure\Request\HttpRequest;
+use Infrastructure\Response\HtmlResponse;
+use Throwable;
 
 /**
  * Class Kernel
@@ -27,31 +31,44 @@ class Kernel
      * by matching it to the appropriate route and sending the response.
      *
      * @return void
+     * @throws Exception
      */
     public static function init(): void
     {
-        try {
-            Bootstrap::initialize();
+        set_exception_handler([self::class, 'handleException']);
 
-            DatabaseConnection::init();
+        Bootstrap::initialize();
+        DatabaseConnection::init();
+        RouterRegistry::registerRoutes();
 
-            RouterRegistry::registerRoutes();
+        $request = new HttpRequest();
+        $response = Router::getInstance()->matchRoute($request);
+        $response->send();
+    }
 
-            try {
-                $request = new HttpRequest();
-                $response = Router::getInstance()->matchRoute($request);
-                $response->send();
-            } catch (UnauthorizedException $e) {
-                http_response_code(403);
-                echo 'Access denied: ' . $e->getMessage();
-            } catch (Exception $e) {
-                http_response_code(404);
-                echo $e->getMessage();
-            }
-
-        } catch (Exception $e) {
-            http_response_code(500);
-            echo $e->getMessage();
+    /**
+     * Global exception handler.
+     *
+     * @param Throwable $exception
+     * @return void
+     */
+    public static function handleException(Throwable $exception): void
+    {
+        // Generate an appropriate error response
+        if ($exception instanceof HttpNotFoundException) {
+            $response = HtmlResponse::fromView(
+                PathHelper::view('errors/404.php'),
+                [],
+                404
+            );
+        } else {
+            $response = HtmlResponse::fromView(
+                PathHelper::view('errors/500.php'),
+                [],
+                500
+            );
         }
+
+        $response->send();
     }
 }

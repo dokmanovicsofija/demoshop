@@ -3,6 +3,7 @@
 namespace Application\Integration\Routing;
 
 use Exception;
+use Infrastructure\Exceptions\HttpNotFoundException;
 use Infrastructure\Request\HttpRequest;
 use Infrastructure\Response\AbstractHttpResponse;
 use Infrastructure\Utility\ServiceRegistry;
@@ -75,6 +76,6 @@ class Router extends Singleton
             }
         }
 
-        throw new Exception('Route not found');
+        throw new HttpNotFoundException('Route not found');
     }
 }
