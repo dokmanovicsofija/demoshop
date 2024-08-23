@@ -23,18 +23,32 @@ abstract class AbstractHttpResponse
     {
     }
 
+    /**
+     * Sets the HTTP status code for the response.
+     *
+     * This method allows you to specify the HTTP status code that will be sent with the response.
+     * Common status codes include 200 (OK), 404 (Not Found), 500 (Internal Server Error), etc.
+     *
+     * @param int $statusCode The HTTP status code to set.
+     */
     public function setStatusCode(int $statusCode): void
     {
         $this->statusCode = $statusCode;
     }
 
+    /**
+     * Adds a header to the HTTP response.
+     *
+     * This method allows you to add a custom header to the response, such as 'Content-Type', 'Authorization', etc.
+     * Headers are key-value pairs that provide additional information about the response.
+     *
+     * @param string $name The name of the header.
+     * @param string $value The value of the header.
+     */
     public function addHeader(string $name, string $value): void
     {
         $this->headers[$name] = $value;
     }
-//    abstract public function setStatusCode(int $statusCode): void;
-
-//    abstract public function addHeader(string $name, string $value): void;
 
     /**
      * Sets the body content of the response.
