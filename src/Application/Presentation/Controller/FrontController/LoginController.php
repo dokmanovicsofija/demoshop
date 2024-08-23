@@ -26,26 +26,30 @@ class LoginController
     {
     }
 
-    public function test(HttpRequest $request): HtmlResponse
-    {
-        return HtmlResponse::fromView(PathHelper::view('dashboard.php'));
-    }
-
     /**
-     * Displays the login form or redirects to the dashboard if the user is already logged in.
+     * Displays the login form.
      *
-     * This method checks if the admin session is active. If the admin is already logged in,
-     * it redirects to the dashboard. Otherwise, it displays the login form.
+     * This method returns an HTML response containing the login form.
+     * There are no authentication checks within this method, as it's assumed
+     * that protection is handled by middleware or other logic before this method is accessed.
      *
-     * @return HtmlResponse The response containing either the login form or the dashboard view.
+     * @return HtmlResponse The response containing the login form view.
      */
     public function index(): HtmlResponse
     {
-        if ($this->checkAccess()) {
-            return HtmlResponse::fromView(PathHelper::view('dashboard.php'));
-        }
-
         return HtmlResponse::fromView(PathHelper::view('login.php'));
+    }
+
+    /**
+     * Displays the dashboard view.
+     *
+     * This method returns an HTML response containing the dashboard view.
+     *
+     * @return HtmlResponse The response containing the dashboard view.
+     */
+    public function dashboard(): HtmlResponse
+    {
+        return HtmlResponse::fromView(PathHelper::view('dashboard.php'));
     }
 
     /**
@@ -73,26 +77,5 @@ class LoginController
                 'errorMessage' => $e->getMessage()
             ]);
         }
-    }
-
-    /**
-     * Checks if the user has access based on the 'keepLoggedIn' cookie.
-     *
-     * This method uses the `GlobalWrapper` class to access the 'keepLoggedIn' cookie.
-     * If the value of this cookie is set to 'true', the user is considered logged in
-     * and access is granted. Otherwise, access is denied.
-     *
-     * @return bool Returns true if the user selected 'keep me logged in', otherwise returns false.
-     */
-
-    public function checkAccess(): bool
-    {
-        $keepLoggedIn = GlobalWrapper::getCookie('keepLoggedIn') ?? 'false';
-
-        if ($keepLoggedIn === 'true') {
-            return true;
-        }
-
-        return false;
     }
 }
