@@ -126,6 +126,10 @@ class Products {
             const editButton = this.createHTMLElement('button', {class: 'edit-button'}, 'Edit');
             const deleteButton = this.createHTMLElement('button', {class: 'delete-button'}, 'Delete');
 
+            deleteButton.addEventListener('click', () => {
+                this.deleteProduct(product.id);
+            });
+
             actionButtonsDiv.appendChild(editButton);
             actionButtonsDiv.appendChild(deleteButton);
             actionsCell.appendChild(actionButtonsDiv);
@@ -144,16 +148,11 @@ class Products {
         });
     }
 
-    // attachButtonListeners() {
-    //     document.getElementById('enable-selected-btn').addEventListener('click', () => this.updateSelectedProducts(true));
-    //     document.getElementById('disable-selected-btn').addEventListener('click', () => this.updateSelectedProducts(false));
-    // }
-
     updateSelectedProducts(enable) {
         const selectedProductIds = Array.from(document.querySelectorAll('input.product-checkbox:checked'))
             .map(checkbox => checkbox.getAttribute('data-product-id'));
 
-        console.log(selectedProductIds); // Proveri da li dobijaš tačne ID-jeve
+        console.log(selectedProductIds);
 
         if (selectedProductIds.length === 0) {
             alert('Please select at least one product.');
@@ -165,10 +164,26 @@ class Products {
         Ajax.post(url, {productIds: selectedProductIds})
             .then(response => {
                 console.log(response);
-                this.loadProducts(); // Ponovo učitavanje proizvoda nakon ažuriranja
+                this.loadProducts();
             })
             .catch(error => {
                 console.error('Error updating products:', error);
+            });
+    }
+
+    deleteProduct(productId) {
+        const confirmed = confirm('Are you sure you want to delete this product?');
+        if (!confirmed) {
+            return;
+        }
+
+        Ajax.delete('/deleteProduct', {id: productId})
+            .then(response => {
+                console.log(response);
+                this.loadProducts();
+            })
+            .catch(error => {
+                console.error('Error deleting product:', error);
             });
     }
 }

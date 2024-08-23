@@ -4,6 +4,7 @@ namespace Application\Data\SQLRepositories;
 
 use Application\Business\Interfaces\RepositoryInterface\ProductRepositoryInterface;
 use Application\Data\Entities\Product;
+use Exception;
 
 class ProductRepository implements ProductRepositoryInterface
 {
@@ -60,4 +61,24 @@ class ProductRepository implements ProductRepositoryInterface
         Product::whereIn('id', $productIds)->update(['enabled' => $isEnabled]);
     }
 
+    /**
+     * Deletes a product from the database by its ID.
+     *
+     * This method uses Eloquent to find a product by its ID and then deletes it from the database.
+     * If the product with the specified ID does not exist, an exception is thrown.
+     *
+     * @param int $productId The ID of the product to be deleted.
+     * @return void
+     * @throws Exception If the product with the given ID is not found.
+     */
+    public function deleteProductById(int $productId): void
+    {
+        $product = Product::find($productId);
+
+        if ($product) {
+            $product->delete();
+        } else {
+            throw new Exception("Product with ID {$productId} not found.");
+        }
+    }
 }

@@ -31,4 +31,15 @@ interface ProductRepositoryInterface
      * @return void
      */
     public function updateStatus(array $productIds, bool $status): void;
+
+    /**
+     * Deletes a product by its ID.
+     *
+     * This method is responsible for deleting a product from the database based on the provided product ID.
+     * Implementations of this method should handle the deletion logic, including any necessary error handling.
+     *
+     * @param int $productId The ID of the product to be deleted.
+     * @return void
+     */
+    public function deleteProductById(int $productId): void;
 }

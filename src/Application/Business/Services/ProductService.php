@@ -69,4 +69,19 @@ class ProductService implements ProductServiceInterface
     {
         $this->productRepository->updateStatus($productIds, $status);
     }
+
+    /**
+     * Deletes a product by its ID.
+     *
+     * This method delegates the deletion of a product to the repository layer.
+     * It calls the `deleteProductById` method of the `ProductRepository` to remove the product
+     * from the database. The repository is responsible for executing the actual deletion logic.
+     *
+     * @param int $productId The ID of the product to be deleted.
+     * @return void
+     */
+    public function deleteProduct(int $productId): void
+    {
+        $this->productRepository->deleteProductById($productId);
+    }
 }

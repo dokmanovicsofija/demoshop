@@ -74,4 +74,23 @@ class ProductController
 
         return new JsonResponse(['status' => 'success']);
     }
+
+    /**
+     * Handles the deletion of a product.
+     *
+     * @param HttpRequest $request
+     * @return JsonResponse
+     */
+    public function deleteProduct(HttpRequest $request): JsonResponse
+    {
+        $data = $request->getParsedBody();
+        $productId = (int)$data['id'];
+
+        try {
+            $this->productService->deleteProduct($productId);
+            return new JsonResponse(['status' => 'success', 'message' => 'Product deleted successfully']);
+        } catch (\Exception $e) {
+            return new JsonResponse(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
 }

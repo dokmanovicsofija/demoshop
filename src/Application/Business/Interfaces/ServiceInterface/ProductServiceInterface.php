@@ -31,5 +31,17 @@ interface ProductServiceInterface
      * @return void
      */
     public function updateProductStatus(array $productIds, bool $status): void;
+
+    /**
+     * Deletes a product by its ID.
+     *
+     * This method is responsible for initiating the process of deleting a product from the system
+     * based on the provided product ID. Implementations of this method should ensure that the
+     * product is properly removed from the database or other storage.
+     *
+     * @param int $productId The ID of the product to be deleted.
+     * @return void
+     */
+    public function deleteProduct(int $productId): void;
 }
 

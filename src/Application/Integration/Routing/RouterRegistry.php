@@ -53,6 +53,7 @@ class RouterRegistry
                 ->addMiddleware(new AdminMiddleware())
         );
 
+        //Categories routes
         Router::getInstance()->addRoute(
             (new Route('GET', '/admin/categories', LoginController::class, 'dashboard'))
                 ->addMiddleware(new AdminMiddleware())
@@ -78,7 +79,7 @@ class RouterRegistry
                 ->addMiddleware(new AdminMiddleware())
         );
 
-        // Product routes
+        //Product routes
         Router::getInstance()->addRoute(
             (new Route('GET', '/admin/products', LoginController::class, 'dashboard'))
                 ->addMiddleware(new AdminMiddleware())
@@ -89,7 +90,7 @@ class RouterRegistry
                 ->addMiddleware(new AdminMiddleware())
         );
 
-        // Enable/disable products
+        //Enable/disable products
         Router::getInstance()->addRoute(
             (new Route('POST', '/enableProducts', ProductController::class, 'enableProducts'))
                 ->addMiddleware(new AdminMiddleware())
@@ -97,6 +98,11 @@ class RouterRegistry
 
         Router::getInstance()->addRoute(
             (new Route('POST', '/disableProducts', ProductController::class, 'disableProducts'))
+                ->addMiddleware(new AdminMiddleware())
+        );
+
+        Router::getInstance()->addRoute(
+            (new Route('DELETE', '/deleteProduct', ProductController::class, 'deleteProduct'))
                 ->addMiddleware(new AdminMiddleware())
         );
     }
