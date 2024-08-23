@@ -70,6 +70,15 @@ class Products {
         productsContainer.appendChild(pagination);
 
         this.contentDiv.appendChild(productsContainer);
+
+        // Attach event listeners after buttons are added to the DOM
+        document.getElementById('enable-selected-btn').addEventListener('click', () => {
+            this.updateSelectedProducts(true);
+        });
+
+        document.getElementById('disable-selected-btn').addEventListener('click', () => {
+            this.updateSelectedProducts(false);
+        });
     }
 
     // Loads products from the server and renders them
@@ -90,7 +99,11 @@ class Products {
             const row = this.createHTMLElement('tr');
 
             const checkboxCell = this.createHTMLElement('td');
-            const checkbox = this.createHTMLElement('input', {type: 'checkbox'});
+            const checkbox = this.createHTMLElement('input', {
+                type: 'checkbox',
+                class: 'product-checkbox',
+                'data-product-id': product.id
+            });
             checkboxCell.appendChild(checkbox);
 
             const titleCell = this.createHTMLElement('td', {}, product.title);
@@ -102,9 +115,9 @@ class Products {
             const enableCell = this.createHTMLElement('td');
             const enableCheckbox = this.createHTMLElement('input', {
                 type: 'checkbox',
-                checked: product.isEnabled,
                 class: 'readonly-checkbox'
             });
+            enableCheckbox.checked = product.enabled === 1;
             enableCell.appendChild(enableCheckbox);
 
             const actionsCell = this.createHTMLElement('td');
@@ -135,25 +148,27 @@ class Products {
     //     document.getElementById('enable-selected-btn').addEventListener('click', () => this.updateSelectedProducts(true));
     //     document.getElementById('disable-selected-btn').addEventListener('click', () => this.updateSelectedProducts(false));
     // }
-    //
-    // updateSelectedProducts(enable) {
-    //     const selectedProductIds = Array.from(document.querySelectorAll('.products-table tbody input[type="checkbox"]:checked'))
-    //         .map(checkbox => checkbox.closest('tr').dataset.productId);
-    //
-    //     if (selectedProductIds.length === 0) {
-    //         alert('Please select at least one product.');
-    //         return;
-    //     }
-    //
-    //     const url = enable ? '/enableProducts' : '/disableProducts';
-    //
-    //     Ajax.post(url, { productIds: selectedProductIds })
-    //         .then(response => {
-    //             console.log(response);
-    //             this.loadProducts(); // Ponovo učitavanje proizvoda nakon ažuriranja
-    //         })
-    //         .catch(error => {
-    //             console.error('Error updating products:', error);
-    //         });
-    // }
+
+    updateSelectedProducts(enable) {
+        const selectedProductIds = Array.from(document.querySelectorAll('input.product-checkbox:checked'))
+            .map(checkbox => checkbox.getAttribute('data-product-id'));
+
+        console.log(selectedProductIds); // Proveri da li dobijaš tačne ID-jeve
+
+        if (selectedProductIds.length === 0) {
+            alert('Please select at least one product.');
+            return;
+        }
+
+        const url = enable ? '/enableProducts' : '/disableProducts';
+
+        Ajax.post(url, {productIds: selectedProductIds})
+            .then(response => {
+                console.log(response);
+                this.loadProducts(); // Ponovo učitavanje proizvoda nakon ažuriranja
+            })
+            .catch(error => {
+                console.error('Error updating products:', error);
+            });
+    }
 }

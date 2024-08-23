@@ -41,4 +41,12 @@ class ProductRepository implements ProductRepositoryInterface
     {
         return Product::all()->toArray();
     }
+
+    public function updateStatus(array $productIds, bool $status): void
+    {
+        $isEnabled = $status ? 1 : 0;
+
+        Product::whereIn('id', $productIds)->update(['enabled' => $isEnabled]);
+    }
+
 }

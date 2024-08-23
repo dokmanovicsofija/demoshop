@@ -22,5 +22,14 @@ interface ProductServiceInterface
      *
      */
     public function getAllProducts(): array;
+
+    /**
+     * Update the enable status of multiple products.
+     *
+     * @param array $productIds An array of product IDs to update.
+     * @param bool $status The status to set (true for enable, false for disable).
+     * @return void
+     */
+    public function updateProductStatus(array $productIds, bool $status): void;
 }
 

@@ -54,4 +54,9 @@ class ProductService implements ProductServiceInterface
 
         return $products;
     }
+
+    public function updateProductStatus(array $productIds, bool $status): void
+    {
+        $this->productRepository->updateStatus($productIds, $status);
+    }
 }

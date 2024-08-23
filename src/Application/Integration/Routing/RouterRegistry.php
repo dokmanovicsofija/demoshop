@@ -84,14 +84,14 @@ class RouterRegistry
                 ->addMiddleware(new AdminMiddleware())
         );
 
-//        // Enable/disable products
-//        Router::getInstance()->addRoute(
-//            new Route('POST', '/enableProducts', ProductController::class, 'enableProducts')
-//        );
-//
-//        Router::getInstance()->addRoute(
-//            new Route('POST', '/disableProducts', ProductController::class, 'disableProducts')
-//        );
+        // Enable/disable products
+        Router::getInstance()->addRoute(
+            new Route('POST', '/enableProducts', ProductController::class, 'enableProducts')
+        );
+
+        Router::getInstance()->addRoute(
+            new Route('POST', '/disableProducts', ProductController::class, 'disableProducts')
+        );
 
     }
 }

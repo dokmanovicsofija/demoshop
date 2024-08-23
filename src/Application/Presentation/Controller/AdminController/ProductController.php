@@ -38,4 +38,22 @@ class ProductController
         $products = $this->productService->getAllProducts();
         return new JsonResponse($products);
     }
+
+    public function enableProducts(HttpRequest $request): JsonResponse
+    {
+        $productIds = $request->getParsedBody()['productIds'] ?? [];
+
+        $this->productService->updateProductStatus($productIds, true);
+
+        return new JsonResponse(['status' => 'success']);
+    }
+
+    public function disableProducts(HttpRequest $request): JsonResponse
+    {
+        $productIds = $request->getParsedBody()['productIds'] ?? [];
+
+        $this->productService->updateProductStatus($productIds, false);
+
+        return new JsonResponse(['status' => 'success']);
+    }
 }
