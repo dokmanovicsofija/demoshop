@@ -47,10 +47,6 @@ class HttpRequest
         $this->uri = strtok(GlobalWrapper::getGlobal('_SERVER')['REQUEST_URI'], '?');
         $this->queryParams = GlobalWrapper::getGlobal('_GET');
         $this->postData = GlobalWrapper::getGlobal('_POST');
-//        $this->method = GlobalWrapper::getInstanceForType('server')->get('REQUEST_METHOD');
-//        $this->uri = strtok(GlobalWrapper::getInstanceForType('server')->get('REQUEST_URI'), '?');
-//        $this->queryParams = GlobalWrapper::getInstanceForType('get')->getAll() ?? [];
-//        $this->postData = GlobalWrapper::getInstanceForType('post')->getAll() ?? [];
     }
 
     /**
