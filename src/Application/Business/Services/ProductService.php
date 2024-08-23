@@ -2,15 +2,18 @@
 
 namespace Application\Business\Services;
 
+use Application\Business\Interfaces\RepositoryInterface\CategoryRepositoryInterface;
 use Application\Business\Interfaces\RepositoryInterface\ProductRepositoryInterface;
 use Application\Business\Interfaces\ServiceInterface\ProductServiceInterface;
 use Application\Data\Entities\Product;
 
 class ProductService implements ProductServiceInterface
 {
-    public function __construct(private ProductRepositoryInterface $productRepository)
+    public function __construct(private ProductRepositoryInterface  $productRepository,
+                                private CategoryRepositoryInterface $categoryRepository)
     {
     }
+
     /**
      * Get the total count of products.
      *
@@ -29,5 +32,26 @@ class ProductService implements ProductServiceInterface
     public function getMostViewedProduct(): ?array
     {
         return $this->productRepository->getMostViewedProduct();
+    }
+
+    /**
+     * Retrieve all products with their associated category names.
+     *
+     * This method fetches all products from the repository and, for each product,
+     * retrieves the associated category name based on the `category_id`.
+     * If the category is not found, 'Unknown' is assigned as the category name.
+     *
+     * @return array An array of products, each with its associated category name.
+     */
+    public function getAllProducts(): array
+    {
+        $products = $this->productRepository->findAll();
+
+        foreach ($products as &$product) {
+            $category = $this->categoryRepository->findById($product['category_id']);
+            $product['category_name'] = $category ? $category->title : 'Unknown';
+        }
+
+        return $products;
     }
 }

@@ -21,6 +21,7 @@ use Application\Data\SQLRepositories\StatisticsRepository;
 use Application\Integration\Routing\Router;
 use Application\Presentation\Controller\AdminController\CategoryController;
 use Application\Presentation\Controller\AdminController\DashboardController;
+use Application\Presentation\Controller\AdminController\ProductController;
 use Application\Presentation\Controller\FrontController\LoginController;
 use Exception;
 use Infrastructure\Utility\ServiceRegistry;
@@ -81,6 +82,7 @@ class Bootstrap
         ));
         ServiceRegistry::register(ProductServiceInterface::class, new ProductService(
             ServiceRegistry::get(ProductRepositoryInterface::class),
+            ServiceRegistry::get(CategoryRepositoryInterface::class)
         ));
         ServiceRegistry::register(CategoryServiceInterface::class, new CategoryService(
             ServiceRegistry::get(CategoryRepositoryInterface::class),
@@ -111,6 +113,9 @@ class Bootstrap
         ));
         ServiceRegistry::register(CategoryController::class, new CategoryController(
             ServiceRegistry::get(CategoryServiceInterface::class)
+        ));
+        ServiceRegistry::register(ProductController::class, new ProductController(
+            ServiceRegistry::get(ProductServiceInterface::class)
         ));
     }
 }

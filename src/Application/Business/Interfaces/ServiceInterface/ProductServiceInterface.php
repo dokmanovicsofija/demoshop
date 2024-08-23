@@ -16,5 +16,11 @@ interface ProductServiceInterface
      *
      */
     public function getMostViewedProduct(): ?array;
+
+    /**
+     * Fetches all products from the database.
+     *
+     */
+    public function getAllProducts(): array;
 }
 

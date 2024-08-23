@@ -34,6 +34,14 @@ document.addEventListener('DOMContentLoaded', () => {
         categories.render();
     });
 
+    // Add a route for the products
+    router.addRoute('/admin/products', () => {
+        removeCSS();
+        loadCSS('/src/Application/Presentation/Public/css/products.css');
+        const products = new Products();
+        products.render();
+    });
+
     // Automatically navigate to the dashboard route when the page loads
     router.goTo('/admin/dashboard');
 

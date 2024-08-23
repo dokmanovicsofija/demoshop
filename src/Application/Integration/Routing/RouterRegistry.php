@@ -5,6 +5,7 @@ namespace Application\Integration\Routing;
 use Application\Integration\Middleware\AdminMiddleware;
 use Application\Presentation\Controller\AdminController\CategoryController;
 use Application\Presentation\Controller\AdminController\DashboardController;
+use Application\Presentation\Controller\AdminController\ProductController;
 use Application\Presentation\Controller\FrontController\LoginController;
 use Exception;
 
@@ -72,5 +73,25 @@ class RouterRegistry
         Router::getInstance()->addRoute(
             new Route('DELETE', '/deleteCategory', CategoryController::class, 'deleteCategory')
         );
+
+        // Product routes
+        Router::getInstance()->addRoute(
+            new Route('GET', '/admin/products', LoginController::class, 'index')
+        );
+
+        Router::getInstance()->addRoute(
+            (new Route('GET', '/getProducts', ProductController::class, 'getProducts'))
+                ->addMiddleware(new AdminMiddleware())
+        );
+
+//        // Enable/disable products
+//        Router::getInstance()->addRoute(
+//            new Route('POST', '/enableProducts', ProductController::class, 'enableProducts')
+//        );
+//
+//        Router::getInstance()->addRoute(
+//            new Route('POST', '/disableProducts', ProductController::class, 'disableProducts')
+//        );
+
     }
 }

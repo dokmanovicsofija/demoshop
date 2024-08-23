@@ -16,4 +16,10 @@ interface ProductRepositoryInterface
      *
      */
     public function getMostViewedProduct(): ?array;
+
+    /**
+     * Fetches all products from the database.
+     *
+     */
+    public function findAll(): array;
 }

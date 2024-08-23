@@ -26,5 +26,19 @@ class ProductRepository implements ProductRepositoryInterface
     {
         return Product::orderBy('view_count', 'desc')
             ->first(['title as productName', 'view_count as viewCount'])
-            ->toArray();    }
+            ->toArray();
+    }
+
+    /**
+     * Retrieve all products from the database.
+     *
+     * This method fetches all products from the `products` table and returns them as an array.
+     * Each product is represented as an associative array of its attributes.
+     *
+     * @return array An array of all products in the database.
+     */
+    public function findAll(): array
+    {
+        return Product::all()->toArray();
+    }
 }
