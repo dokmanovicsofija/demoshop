@@ -1,6 +1,6 @@
 <?php
 
-namespace Infrastructure;
+namespace Application\Integration;
 
 use Application\Business\Interfaces\RepositoryInterface\CategoryRepositoryInterface;
 use Application\Business\Interfaces\RepositoryInterface\LoginRepositoryInterface;
