@@ -37,9 +37,6 @@ class Router extends Singleton
     public function addRoute(Route $route): void
     {
         $this->routes[] = $route;
-//        $method = $route->getMethod();
-//        $url = $route->getUrl();
-//        $this->routes[$method][$url] = $route;
     }
 
     /**
@@ -55,9 +52,6 @@ class Router extends Singleton
      */
     public function matchRoute(HttpRequest $request): AbstractHttpResponse
     {
-//        $method = $_SERVER['REQUEST_METHOD'];
-//        $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
         $method = $request->getMethod();
         $url = $request->getUri();
 
@@ -78,27 +72,6 @@ class Router extends Singleton
                 }
             }
         }
-
-//        if (isset($this->routes[$method])) {
-//            foreach ($this->routes[$method] as $routeUrl => $route) {
-//                $pattern = preg_replace('/\/:([^\/]+)/', '/(?P<$1>[^/]+)', $routeUrl);
-//                if (preg_match('#^' . $pattern . '$#', $url, $matches)) {
-//                    $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
-//
-//                    $controllerClass = $route->getController();
-//                    $controller = ServiceRegistry::getInstance()->get($controllerClass);
-//                    $request = new HttpRequest();
-//
-//                    foreach ($route->getMiddlewares() as $middleware) {
-//                        $middleware->handle($request);
-//                    }
-//
-//                    return call_user_func_array([$controller, $route->getAction()], array_merge([$request], $params));
-//
-//                }
-//            }
-//        }
-
         throw new HttpNotFoundException('Route not found');
     }
 }
