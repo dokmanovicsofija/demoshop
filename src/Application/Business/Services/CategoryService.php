@@ -98,4 +98,14 @@ class CategoryService implements CategoryServiceInterface
 
         $this->categoryRepository->deleteCategory($categoryId);
     }
+
+    /**
+     * Get all categories without subcategories.
+     *
+     * @return array
+     */
+    public function getAllCategories2(): array
+    {
+        return $this->categoryRepository->findAllCategories();
+    }
 }

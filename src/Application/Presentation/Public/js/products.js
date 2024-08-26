@@ -86,6 +86,11 @@ class Products {
 
             this.deleteProducts(selectedProductIds);
         });
+
+        // Dodajemo event listener za dugme "Add new product"
+        addProductButton.addEventListener('click', () => {
+            this.showAddProductForm();
+        });
     }
 
     // Loads products from the server and renders them
@@ -197,5 +202,142 @@ class Products {
             .catch(error => {
                 console.error('Error deleting products:', error);
             });
+    }
+
+    loadAllCategories() {
+        return Ajax.get('/getAllCategories')
+            .then(data => {
+                return data;
+            })
+            .catch(error => {
+                console.error('Error fetching categories:', error);
+                return [];
+            });
+    }
+
+    showAddProductForm() {
+        this.clearContent();
+
+        const formContainer = this.createHTMLElement('div', {id: 'product-form', class: 'product-form'});
+
+        const skuLabel = this.createHTMLElement('label', {}, 'SKU:');
+        const skuInput = this.createHTMLElement('input', {type: 'text', id: 'new-product-sku'});
+
+        const titleLabel = this.createHTMLElement('label', {}, 'Title:');
+        const titleInput = this.createHTMLElement('input', {type: 'text', id: 'new-product-title'});
+
+        const brandLabel = this.createHTMLElement('label', {}, 'Brand:');
+        const brandInput = this.createHTMLElement('input', {type: 'text', id: 'new-product-brand'});
+
+        const categoryLabel = this.createHTMLElement('label', {}, 'Category:');
+        const categorySelect = this.createHTMLElement('select', {id: 'new-product-category'});
+
+        const rootOption = this.createHTMLElement('option', {value: '0'}, 'Root');
+        categorySelect.appendChild(rootOption);
+
+        this.loadAllCategories().then(categories => {
+            console.log("Categories loaded:", categories);
+            categories.forEach(category => {
+                console.log("Adding category:", category.name);
+                const option = this.createHTMLElement('option', {value: category.id}, category.title);
+                categorySelect.appendChild(option);
+            });
+        });
+
+        const priceLabel = this.createHTMLElement('label', {}, 'Price:');
+        const priceInput = this.createHTMLElement('input', {type: 'number', id: 'new-product-price', step: '0.01'});
+
+        const shortDescLabel = this.createHTMLElement('label', {}, 'Short description:');
+        const shortDescTextarea = this.createHTMLElement('textarea', {id: 'new-product-short-description'});
+
+        const descLabel = this.createHTMLElement('label', {}, 'Description:');
+        const descTextarea = this.createHTMLElement('textarea', {id: 'new-product-description'});
+
+        const imageLabel = this.createHTMLElement('label', {}, 'Image:');
+        const imageInput = this.createHTMLElement('input', {type: 'file', id: 'new-product-image'});
+
+        const enableCheckboxLabel = this.createHTMLElement('label', {}, 'Enable in shop:');
+        const enableCheckbox = this.createHTMLElement('input', {type: 'checkbox', id: 'new-product-enabled'});
+
+        const featuredCheckboxLabel = this.createHTMLElement('label', {}, 'Featured:');
+        const featuredCheckbox = this.createHTMLElement('input', {type: 'checkbox', id: 'new-product-featured'});
+
+        const saveButton = this.createHTMLElement('button', {id: 'save-product'}, 'Save');
+        const cancelButton = this.createHTMLElement('button', {id: 'cancel-product'}, 'Cancel');
+
+        saveButton.addEventListener('click', () => this.saveNewProduct());
+        cancelButton.addEventListener('click', () => this.cancelAddProductForm());
+
+        formContainer.appendChild(skuLabel);
+        formContainer.appendChild(skuInput);
+        formContainer.appendChild(titleLabel);
+        formContainer.appendChild(titleInput);
+        formContainer.appendChild(brandLabel);
+        formContainer.appendChild(brandInput);
+        formContainer.appendChild(categoryLabel);
+        formContainer.appendChild(categorySelect);
+        formContainer.appendChild(priceLabel);
+        formContainer.appendChild(priceInput);
+        formContainer.appendChild(shortDescLabel);
+        formContainer.appendChild(shortDescTextarea);
+        formContainer.appendChild(descLabel);
+        formContainer.appendChild(descTextarea);
+        formContainer.appendChild(imageLabel);
+        formContainer.appendChild(imageInput);
+        formContainer.appendChild(enableCheckboxLabel);
+        formContainer.appendChild(enableCheckbox);
+        formContainer.appendChild(featuredCheckboxLabel);
+        formContainer.appendChild(featuredCheckbox);
+        formContainer.appendChild(saveButton);
+        formContainer.appendChild(cancelButton);
+
+        this.contentDiv.appendChild(formContainer);
+    }
+
+    saveNewProduct() {
+        const formData = new FormData();
+
+        const sku = document.getElementById('new-product-sku').value.trim();
+        const title = document.getElementById('new-product-title').value.trim();
+        const brand = document.getElementById('new-product-brand').value.trim();
+        const category = document.getElementById('new-product-category').value;
+        const price = document.getElementById('new-product-price').value.trim();
+        const shortDesc = document.getElementById('new-product-short-description').value.trim();
+        const description = document.getElementById('new-product-description').value.trim();
+        const image = document.getElementById('new-product-image').files[0];
+        const enabled = document.getElementById('new-product-enabled').checked;
+        const featured = document.getElementById('new-product-featured').checked;
+
+        if (!sku || !title || !brand || !category || !price) {
+            alert('All fields except image and description must be filled out.');
+            return;
+        }
+
+        formData.append('sku', sku);
+        formData.append('title', title);
+        formData.append('brand', brand);
+        formData.append('category', category);
+        formData.append('price', price);
+        formData.append('short_description', shortDesc);
+        formData.append('description', description);
+        if (image) {
+            formData.append('image', image); // Dodavanje slike u form data
+        }
+        formData.append('enabled', enabled ? 1 : 0);
+        formData.append('featured', featured ? 1 : 0);
+
+        Ajax.post('/addProduct', formData)
+            .then(response => {
+                console.log('Product added successfully:', response);
+                this.cancelAddProductForm();
+                this.render();  // Ponovo učitava sve proizvode nakon dodavanja
+            })
+            .catch(error => {
+                console.error('Error adding product:', error);
+            });
+    }
+
+    cancelAddProductForm() {
+        this.render();
     }
 }

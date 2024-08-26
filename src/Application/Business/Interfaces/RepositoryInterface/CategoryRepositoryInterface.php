@@ -96,4 +96,11 @@ interface CategoryRepositoryInterface
      * @return Category|null The category if found, null otherwise.
      */
     public function findByCode(string $code): ?Category;
+
+    /**
+     * Retrieve all categories from the database.
+     *
+     * @return array
+     */
+    public function findAllCategories(): array;
 }

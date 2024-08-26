@@ -52,4 +52,11 @@ interface CategoryServiceInterface
      * @return void
      */
     public function deleteCategory(int $categoryId): void;
+
+    /**
+     * Get all categories without subcategories.
+     *
+     * @return array
+     */
+    public function getAllCategories2(): array;
 }

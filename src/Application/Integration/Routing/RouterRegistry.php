@@ -105,5 +105,10 @@ class RouterRegistry
             (new Route('DELETE', '/deleteProduct', ProductController::class, 'deleteProduct'))
                 ->addMiddleware(new AdminMiddleware())
         );
+
+        Router::getInstance()->addRoute(
+            (new Route('GET', '/getAllCategories', CategoryController::class, 'getAllCategories'))
+                ->addMiddleware(new AdminMiddleware())
+        );
     }
 }

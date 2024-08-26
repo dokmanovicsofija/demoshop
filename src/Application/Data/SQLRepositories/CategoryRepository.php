@@ -26,17 +26,9 @@ class CategoryRepository implements CategoryRepositoryInterface
      *
      * @return array An array of categories, each with its subcategories.
      */
-//    public function findAllWithSubcategories(): array
-//    {
-//        $categories = Category::with('subcategories')->whereNull('parent_id')->get();
-//
-//        return $categories->toArray();
-//    }
-
     public function findAllWithSubcategories(): array
     {
         $categories = Category::with('subcategories.products')->whereNull('parent_id')->get();
-//        $categories = Category::with('subcategories.subcategories')->whereNull('parent_id')->get();
 
         return $categories->map(function ($category) {
             return $this->loadSubcategories($category);
@@ -166,5 +158,17 @@ class CategoryRepository implements CategoryRepositoryInterface
     public function findByCode(string $code): ?Category
     {
         return Category::where('code', $code)->first();
+    }
+
+    /**
+     * Retrieve all categories from the database.
+     *
+     * @return array
+     */
+    public function findAllCategories(): array
+    {
+        $categories = Category::all();
+
+        return $categories->toArray();
     }
 }

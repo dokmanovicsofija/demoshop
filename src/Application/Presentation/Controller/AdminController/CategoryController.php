@@ -101,4 +101,14 @@ class CategoryController
             return new JsonResponse(['error' => $e->getMessage()], 400);
         }
     }
+
+    /**
+     * Endpoint to retrieve all categories.
+     *
+     */
+    public function getAllCategories(): JsonResponse
+    {
+        $categories = $this->categoryService->getAllCategories2();
+        return new JsonResponse($categories);
+    }
 }
