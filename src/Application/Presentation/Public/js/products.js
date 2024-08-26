@@ -79,6 +79,13 @@ class Products {
         document.getElementById('disable-selected-btn').addEventListener('click', () => {
             this.updateSelectedProducts(false);
         });
+
+        deleteSelectedButton.addEventListener('click', () => {
+            const selectedProductIds = Array.from(document.querySelectorAll('input.product-checkbox:checked'))
+                .map(checkbox => checkbox.getAttribute('data-product-id'));
+
+            this.deleteProducts(selectedProductIds);
+        });
     }
 
     // Loads products from the server and renders them
@@ -127,7 +134,7 @@ class Products {
             const deleteButton = this.createHTMLElement('button', {class: 'delete-button'}, 'Delete');
 
             deleteButton.addEventListener('click', () => {
-                this.deleteProduct(product.id);
+                this.deleteProducts([product.id]);
             });
 
             actionButtonsDiv.appendChild(editButton);
@@ -171,19 +178,24 @@ class Products {
             });
     }
 
-    deleteProduct(productId) {
-        const confirmed = confirm('Are you sure you want to delete this product?');
+    deleteProducts(productIds) {
+        if (!Array.isArray(productIds) || productIds.length === 0) {
+            alert('Please select at least one product to delete.');
+            return;
+        }
+
+        const confirmed = confirm('Are you sure you want to delete the selected product(s)?');
         if (!confirmed) {
             return;
         }
 
-        Ajax.delete('/deleteProduct', {id: productId})
+        Ajax.delete('/deleteProduct', {ids: productIds})
             .then(response => {
                 console.log(response);
                 this.loadProducts();
             })
             .catch(error => {
-                console.error('Error deleting product:', error);
+                console.error('Error deleting products:', error);
             });
     }
 }

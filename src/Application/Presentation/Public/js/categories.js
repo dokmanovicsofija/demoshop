@@ -110,12 +110,10 @@ class Categories {
     createCategoryNode(category) {
         const li = this.createHTMLElement('li', {'data-category-id': category.id});
 
-        // Ako kategorija ima podkategorije, dodaj dugme za proširenje
         if (category.subcategories && category.subcategories.length > 0) {
             const toggleButton = this.createHTMLElement('button', {class: 'toggle-button'}, '+');
             li.appendChild(toggleButton);
 
-            // Dodaj event listener za proširenje i sklapanje podkategorija
             toggleButton.addEventListener('click', () => {
                 const subUl = li.querySelector('ul');
                 if (subUl.style.display === 'none') {
@@ -128,7 +126,6 @@ class Categories {
             });
         }
 
-        // Dodaj tekst kategorije
         li.appendChild(document.createTextNode(category.title));
 
         if (category.subcategories && category.subcategories.length > 0) {
@@ -145,23 +142,6 @@ class Categories {
 
         return li;
     }
-
-    // // Creates a category node in the tree
-    // createCategoryNode(category) {
-    //     const li = this.createHTMLElement('li', {'data-category-id': category.id});
-    //     li.textContent = category.title;
-    //
-    //     if (category.subcategories && category.subcategories.length > 0) {
-    //         const subUl = this.createHTMLElement('ul');
-    //         category.subcategories.forEach(subcategory => {
-    //             const subLi = this.createCategoryNode(subcategory);
-    //             subUl.appendChild(subLi);
-    //         });
-    //         li.appendChild(subUl);
-    //     }
-    //
-    //     return li;
-    // }
 
     // Appends fields to the category details section
     appendDetailsFields(container) {

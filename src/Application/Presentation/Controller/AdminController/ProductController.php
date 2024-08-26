@@ -83,14 +83,12 @@ class ProductController
      */
     public function deleteProduct(HttpRequest $request): JsonResponse
     {
-        $data = $request->getParsedBody();
-        $productId = (int)$data['id'];
+        $productIds = $request->getParsedBody()['ids'] ?? [];
 
-        try {
+        foreach ($productIds as $productId) {
             $this->productService->deleteProduct($productId);
-            return new JsonResponse(['status' => 'success', 'message' => 'Product deleted successfully']);
-        } catch (\Exception $e) {
-            return new JsonResponse(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
+
+        return new JsonResponse(['status' => 'success', 'message' => 'Products deleted successfully']);
     }
 }
