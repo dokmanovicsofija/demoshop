@@ -32,6 +32,27 @@ class Ajax {
     }
 
     /**
+     * Sends a POST request to the specified URL with the given data.
+     *
+     * This method uses the Fetch API to send a POST request to the provided URL.
+     * The `data` parameter is included as the body of the request. The response
+     * from the server is expected to be in JSON format, and the method returns a promise
+     * that resolves to the parsed JSON data.
+     *
+     * @param {string} url - The URL to which the POST request is sent.
+     * @param {FormData|Object} data - The data to be sent in the body of the POST request.
+     *                                  Typically, this is a FormData object or a plain JavaScript object.
+     * @returns {Promise<Object>} A promise that resolves to the JSON-parsed response from the server.
+     */
+    static post2(url, data) {
+        return fetch(url, {
+            method: 'POST',
+            body: data
+        })
+            .then(response => response.json());
+    }
+
+    /**
      * Performs a DELETE request to the specified URL.
      *
      * @param {string} url - The URL to which the DELETE request is sent.

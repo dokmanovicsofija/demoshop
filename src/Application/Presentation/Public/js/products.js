@@ -232,8 +232,8 @@ class Products {
         const categoryLabel = this.createHTMLElement('label', {}, 'Category:');
         const categorySelect = this.createHTMLElement('select', {id: 'new-product-category'});
 
-        const rootOption = this.createHTMLElement('option', {value: '0'}, 'Root');
-        categorySelect.appendChild(rootOption);
+        // const rootOption = this.createHTMLElement('option', {value: '0'}, 'Root');
+        // categorySelect.appendChild(rootOption);
 
         this.loadAllCategories().then(categories => {
             console.log("Categories loaded:", categories);
@@ -321,23 +321,19 @@ class Products {
         formData.append('short_description', shortDesc);
         formData.append('description', description);
         if (image) {
-            formData.append('image', image); // Dodavanje slike u form data
+            formData.append('image', image);
         }
         formData.append('enabled', enabled ? 1 : 0);
         formData.append('featured', featured ? 1 : 0);
+        console.log(formData);
 
-        Ajax.post('/addProduct', formData)
+        Ajax.post2('/addProduct', formData)
             .then(response => {
                 console.log('Product added successfully:', response);
-                this.cancelAddProductForm();
-                this.render();  // Ponovo učitava sve proizvode nakon dodavanja
+                this.render();
             })
             .catch(error => {
                 console.error('Error adding product:', error);
             });
-    }
-
-    cancelAddProductForm() {
-        this.render();
     }
 }

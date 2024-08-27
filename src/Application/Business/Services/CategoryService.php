@@ -42,7 +42,7 @@ class CategoryService implements CategoryServiceInterface
     public function createRootCategory(DomainCategory $category): int
     {
         if ($this->categoryRepository->findByCode($category->getCode())) {
-            throw new \InvalidArgumentException('Category code must be unique.');
+            throw new InvalidArgumentException('Category code must be unique.');
         }
         return $this->categoryRepository->addRootCategory($category);
     }
@@ -56,7 +56,7 @@ class CategoryService implements CategoryServiceInterface
      * @param int $categoryId The ID of the category to update.
      * @param int|null $parentId The ID of the new parent category, or null to make it a root category.
      * @return void
-     * @throws \InvalidArgumentException If the category to be updated does not exist.
+     * @throws InvalidArgumentException If the category to be updated does not exist.
      */
     public function updateCategoryParent(int $categoryId, ?int $parentId): void
     {

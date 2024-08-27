@@ -28,7 +28,7 @@ class SessionManager extends Singleton
      * @param string $key The key to retrieve.
      * @return mixed|null The value associated with the key, or null if not set.
      */
-    public function get(string $key)
+    public function get(string $key): mixed
     {
         return GlobalWrapper::getSessionValue($key);
     }
@@ -41,6 +41,7 @@ class SessionManager extends Singleton
      */
     public function set(string $key, $value): void
     {
+
         GlobalWrapper::setSessionValue($key, $value);
     }
 

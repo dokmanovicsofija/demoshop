@@ -2,9 +2,12 @@
 
 namespace Application\Presentation\Controller\AdminController;
 
+use Application\Business\Domain\DomainProduct;
 use Application\Business\Interfaces\ServiceInterface\ProductServiceInterface;
 use Infrastructure\Request\HttpRequest;
 use Infrastructure\Response\JsonResponse;
+use InvalidArgumentException;
+use RuntimeException;
 
 /**
  * Class ProductController
@@ -90,5 +93,85 @@ class ProductController
         }
 
         return new JsonResponse(['status' => 'success', 'message' => 'Products deleted successfully']);
+    }
+
+    /**
+     * Handles the process of storing a new product.
+     *
+     * @param HttpRequest $request The HTTP request containing product data and uploaded files.
+     * @return JsonResponse The JSON response indicating the result of the operation.
+     */
+    public function storeProduct(HttpRequest $request): JsonResponse
+    {
+        $data = $request->bodyParams();
+        $files = $request->getUploadedFiles();
+
+        $sku = $data['sku'] ?? '';
+        $title = $data['title'] ?? '';
+        $brand = $data['brand'] ?? '';
+        $categoryId = $data['category'] ?? '';
+        $price = $data['price'] ?? 0;
+        $shortDescription = $data['short_description'] ?? null;
+        $description = $data['description'] ?? null;
+        $enabled = isset($data['enabled']) && $data['enabled'] == 1;
+        $featured = isset($data['featured']) && $data['featured'] == 1;
+        $imageName = null;
+
+        try {
+            if (isset($files['image'])) {
+                $imageName = $this->processImage($files['image']);
+            }
+
+            $productDomainModel = new DomainProduct(
+                0,
+                (int)$categoryId,
+                $sku,
+                $title,
+                $brand,
+                (float)$price,
+                $shortDescription,
+                $description,
+                $imageName,
+                $enabled,
+                $featured,
+                0
+            );
+
+            $id = $this->productService->createProduct($productDomainModel);
+
+            return new JsonResponse(['status' => 'success', 'message' => 'Product added successfully']);
+        } catch (InvalidArgumentException $e) {
+            return new JsonResponse(['error' => $e->getMessage()], 400);
+        } catch (RuntimeException $e) {
+            return new JsonResponse(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Processes the uploaded image by validating, moving, and generating a unique file name.
+     *
+     * @param array $image The uploaded image file information from the $_FILES array.
+     * @return string|null The name of the saved image file or null if no image was processed.
+     * @throws InvalidArgumentException If there is an error with the uploaded file.
+     * @throws RuntimeException If the file cannot be moved to the destination directory.
+     */
+    private function processImage(array $image): ?string
+    {
+        $tmpName = $image['tmp_name'];
+        $error = $image['error'];
+
+        if ($error !== UPLOAD_ERR_OK) {
+            throw new InvalidArgumentException('Error uploading image.');
+        }
+
+        $uploadDir = realpath(__DIR__ . '/../../Public/uploads/');
+        $imageName = uniqid() . basename($image['name']);
+        $imagePath = $uploadDir . '/' . $imageName;
+
+        if (!move_uploaded_file($tmpName, $imagePath)) {
+            throw new RuntimeException('Failed to move uploaded file.');
+        }
+
+        return $imageName;
     }
 }

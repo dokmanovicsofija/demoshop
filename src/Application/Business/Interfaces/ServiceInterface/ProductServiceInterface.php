@@ -2,6 +2,8 @@
 
 namespace Application\Business\Interfaces\ServiceInterface;
 
+use Application\Business\Domain\DomainProduct;
+
 interface ProductServiceInterface
 {
     /**
@@ -43,5 +45,13 @@ interface ProductServiceInterface
      * @return void
      */
     public function deleteProduct(int $productId): void;
+
+    /**
+     * Creates a new product in the system and returns its unique identifier.
+     *
+     * @param DomainProduct $product The domain model representing the product to be created.
+     * @return int The unique identifier of the newly created product.
+     */
+    public function createProduct(DomainProduct $product): int;
 }
 

@@ -164,7 +164,7 @@
 #product-form label {
     display: block;
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 /* Styling for form inputs */
@@ -204,6 +204,7 @@
     font-size: 14px;
     margin-right: 10px;
     transition: background-color 0.3s ease;
+    margin-top: 10px;
 }
 
 #product-form button:hover {

@@ -28,7 +28,6 @@ class LoginRepository implements LoginRepositoryInterface
      */
     public function findByUsername(string $username): ?DomainAdmin
     {
-
         $adminData = Admin::where('username', $username)->first();
 
         if (!$adminData) {

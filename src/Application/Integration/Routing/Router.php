@@ -19,7 +19,7 @@ use Application\Integration\Routing\Route;
 class Router extends Singleton
 {
     /**
-     * @var array An associative array to store registered routes.
+     * @var Route[] An associative array to store registered routes.
      * The array is organized by HTTP method (e.g., GET, POST) and then by URL pattern.
      */
     protected array $routes = [];
@@ -37,6 +37,7 @@ class Router extends Singleton
     public function addRoute(Route $route): void
     {
         $this->routes[] = $route;
+
     }
 
     /**
@@ -56,21 +57,22 @@ class Router extends Singleton
         $url = $request->getUri();
 
         foreach ($this->routes as $route) {
-            if ($route->getMethod() === $method) {
-                $pattern = preg_replace('/\/:([^\/]+)/', '/(?P<$1>[^/]+)', $route->getUrl());
-                if (preg_match('#^' . $pattern . '$#', $url, $matches)) {
-                    $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
+            $pattern = preg_replace('/\/:([^\/]+)/', '/(?P<$1>[^/]+)', $route->getUrl());
+            if ($route->getMethod() === $method && preg_match('#^' . $pattern . '$#', $url, $matches)) {
 
-                    $controllerClass = $route->getController();
-                    $controller = ServiceRegistry::getInstance()->get($controllerClass);
 
-                    foreach ($route->getMiddlewares() as $middleware) {
-                        $middlewareResponse = $middleware->handle($request);
-                    }
+                $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
 
-                    return call_user_func_array([$controller, $route->getAction()], array_merge([$request], $params));
+                $controllerClass = $route->getController();
+                $controller = ServiceRegistry::getInstance()->get($controllerClass);
+
+                foreach ($route->getMiddlewares() as $middleware) {
+                     $middleware->handle($request);
                 }
+
+                return call_user_func_array([$controller, $route->getAction()], array_merge([$request], $params));
             }
+
         }
         throw new HttpNotFoundException('Route not found');
     }

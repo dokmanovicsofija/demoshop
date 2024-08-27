@@ -30,7 +30,7 @@ class RouterRegistry
     public static function registerRoutes(): void
     {
         Router::getInstance()->addRoute(
-            new Route('GET', '/login', LoginController::class, 'index')
+            (new Route('GET', '/login', LoginController::class, 'index'))
         );
 
         Router::getInstance()->addRoute(
@@ -55,60 +55,55 @@ class RouterRegistry
 
         //Categories routes
         Router::getInstance()->addRoute(
-            (new Route('GET', '/admin/categories', LoginController::class, 'dashboard'))
-                ->addMiddleware(new AdminMiddleware())
+            new Route('GET', '/admin/categories', LoginController::class, 'dashboard')
+//                ->addMiddleware(new AdminMiddleware())
         );
 
         Router::getInstance()->addRoute(
-            (new Route('GET', '/getCategories', CategoryController::class, 'getCategories'))
-                ->addMiddleware(new AdminMiddleware())
+            new Route('GET', '/getCategories', CategoryController::class, 'getCategories')
         );
 
         Router::getInstance()->addRoute(
-            (new Route('POST', '/addCategory', CategoryController::class, 'addCategory'))
-                ->addMiddleware(new AdminMiddleware())
+            new Route('POST', '/addCategory', CategoryController::class, 'addCategory')
         );
 
         Router::getInstance()->addRoute(
-            (new Route('PUT', '/updateCategory', CategoryController::class, 'updateCategory'))
-                ->addMiddleware(new AdminMiddleware())
+            new Route('PUT', '/updateCategory', CategoryController::class, 'updateCategory')
         );
 
         Router::getInstance()->addRoute(
-            (new Route('DELETE', '/deleteCategory', CategoryController::class, 'deleteCategory'))
-                ->addMiddleware(new AdminMiddleware())
+            new Route('DELETE', '/deleteCategory', CategoryController::class, 'deleteCategory')
         );
 
         //Product routes
         Router::getInstance()->addRoute(
-            (new Route('GET', '/admin/products', LoginController::class, 'dashboard'))
-                ->addMiddleware(new AdminMiddleware())
+            new Route('GET', '/admin/products', LoginController::class, 'dashboard')
+//                ->addMiddleware(new AdminMiddleware())
         );
 
         Router::getInstance()->addRoute(
-            (new Route('GET', '/getProducts', ProductController::class, 'getProducts'))
-                ->addMiddleware(new AdminMiddleware())
+            new Route('GET', '/getProducts', ProductController::class, 'getProducts')
         );
 
         //Enable/disable products
         Router::getInstance()->addRoute(
-            (new Route('POST', '/enableProducts', ProductController::class, 'enableProducts'))
-                ->addMiddleware(new AdminMiddleware())
+            new Route('POST', '/enableProducts', ProductController::class, 'enableProducts')
         );
 
         Router::getInstance()->addRoute(
-            (new Route('POST', '/disableProducts', ProductController::class, 'disableProducts'))
-                ->addMiddleware(new AdminMiddleware())
+            new Route('POST', '/disableProducts', ProductController::class, 'disableProducts')
         );
 
         Router::getInstance()->addRoute(
-            (new Route('DELETE', '/deleteProduct', ProductController::class, 'deleteProduct'))
-                ->addMiddleware(new AdminMiddleware())
+            new Route('DELETE', '/deleteProduct', ProductController::class, 'deleteProduct')
         );
 
         Router::getInstance()->addRoute(
-            (new Route('GET', '/getAllCategories', CategoryController::class, 'getAllCategories'))
-                ->addMiddleware(new AdminMiddleware())
+            new Route('GET', '/getAllCategories', CategoryController::class, 'getAllCategories')
+        );
+
+        Router::getInstance()->addRoute(
+            new Route('POST', '/addProduct', ProductController::class, 'storeProduct')
         );
     }
 }

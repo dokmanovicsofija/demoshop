@@ -42,35 +42,24 @@ class LoginService implements LoginServiceInterface
 
         if ($admin && password_verify($password, $admin->getPassword())) {
 
-            SessionManager::getInstance()->set('admin', $admin->getId());
+            SessionManager::getInstance()->set('loggedIn', true);
 
             if ($keepLoggedIn) {
-                SessionManager::getInstance()->setCookie(
-                    'keepLoggedIn',
-                    'true',
-                    time() + (86400 * 30),
-                    "/",
-                    "",
-                    false,
-                    true
-                );
-                SessionManager::getInstance()->setCookie(session_name(), session_id(), time() + (86400 * 30), "/", "", false, true);
-            } else {
-                SessionManager::getInstance()->setCookie(
-                    'keepLoggedIn',
-                    'true',
-                    0,
-                    "/",
-                    "",
-                    false,
-                    true
-                );
-                SessionManager::getInstance()->setCookie(session_name(), session_id(), 0, "/", "", false, true);
-            }
 
+                //GENERATE AND SAVE TOKEN, SAVE TO COOKIE
+                SessionManager::getInstance()->setCookie(
+                    'loggedIn',
+                    'true',
+                    time() + (86400 * 30)
+                );
+                SessionManager::getInstance()->setCookie(session_name(), session_id(), time() + (86400 * 30), "/", "",
+                    false, true);
+            }
             return true;
-        } else {
-            throw new AuthenticationException("Invalid username or password");
         }
+
+
+            throw new AuthenticationException("Invalid username or password");
+
     }
 }

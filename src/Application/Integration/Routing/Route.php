@@ -30,9 +30,8 @@ class Route
         private string $url,
         private string $controller,
         private string $action,
-        private array  $middlewares = []
-    )
-    {
+        private array $middlewares = []
+    ) {
     }
 
     /**
@@ -84,6 +83,7 @@ class Route
     public function addMiddleware(MiddlewareInterface $middleware): self
     {
         $this->middlewares[] = $middleware;
+
         return $this;
     }
 

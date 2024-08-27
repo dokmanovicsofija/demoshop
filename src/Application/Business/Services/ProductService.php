@@ -6,12 +6,19 @@ use Application\Business\Interfaces\RepositoryInterface\CategoryRepositoryInterf
 use Application\Business\Interfaces\RepositoryInterface\ProductRepositoryInterface;
 use Application\Business\Interfaces\ServiceInterface\ProductServiceInterface;
 use Application\Data\Entities\Product;
+use Application\Business\Domain\DomainProduct;
+use InvalidArgumentException;
 
-class ProductService implements ProductServiceInterface
+readonly class ProductService implements ProductServiceInterface
 {
-    public function __construct(private ProductRepositoryInterface  $productRepository,
-                                private CategoryRepositoryInterface $categoryRepository)
-    {
+    /**
+     * @param ProductRepositoryInterface $productRepository
+     * @param CategoryRepositoryInterface $categoryRepository
+     */
+    public function __construct(
+        private ProductRepositoryInterface $productRepository,
+        private CategoryRepositoryInterface $categoryRepository
+    ) {
     }
 
     /**
@@ -83,5 +90,25 @@ class ProductService implements ProductServiceInterface
     public function deleteProduct(int $productId): void
     {
         $this->productRepository->deleteProductById($productId);
+    }
+
+    /**
+     * Creates a new product in the system.
+     *
+     * This method first checks if a product with the same SKU already exists in the repository.
+     * If such a product exists, it throws an `InvalidArgumentException`. Otherwise, it saves the new product
+     * to the repository and returns the unique identifier of the newly created product.
+     *
+     * @param DomainProduct $product The domain model representing the product to be created.
+     * @return int The unique identifier of the newly created product.
+     * @throws InvalidArgumentException If a product with the same SKU already exists.
+     */
+    public function createProduct(DomainProduct $product): int
+    {
+        if ($this->productRepository->findBySku($product->getSku())) {
+            throw new InvalidArgumentException('A product with the same SKU already exists.');
+        }
+
+        return $this->productRepository->save($product);
     }
 }

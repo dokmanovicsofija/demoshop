@@ -134,4 +134,29 @@ class HttpRequest
 
         return $data ?? [];
     }
+
+    /**
+     * Gets the uploaded files from the request.
+     *
+     * @return array An associative array of uploaded files.
+     */
+    public function getUploadedFiles(): array
+    {
+        return $_FILES;
+    }
+
+    /**
+     * Retrieves the POST data from the HTTP request.
+     *
+     * This method returns the contents of the $_POST super global, which contains
+     * the data sent in the body of an HTTP POST request. This is typically used
+     * to access form data or other payloads submitted by the client in a POST request.
+     *
+     * @return array An associative array of POST data, where the keys are the names of the form fields
+     *               and the values are the data submitted by the client.
+     */
+    public function bodyParams(): array
+    {
+        return $_POST;
+    }
 }

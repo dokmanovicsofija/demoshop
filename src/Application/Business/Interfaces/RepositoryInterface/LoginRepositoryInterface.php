@@ -22,4 +22,6 @@ interface LoginRepositoryInterface
      * @return DomainAdmin|null The `DomainAdmin` object if found, or null if not found.
      */
     public function findByUsername(string $username): ?DomainAdmin;
+
+    // TODO setTokenForAdmin, getAdminByTOken
 }

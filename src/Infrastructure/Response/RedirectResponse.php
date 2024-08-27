@@ -17,9 +17,9 @@ class RedirectResponse extends AbstractHttpResponse
      */
     public function __construct(string $url, int $statusCode = 302)
     {
-        $this->url = $url;
+        parent::__construct($statusCode);
 
-        parent::__construct($statusCode, []);
+        $this->addHeader('Location', $url);
     }
 
     /**
@@ -29,7 +29,7 @@ class RedirectResponse extends AbstractHttpResponse
      */
     public function send(): void
     {
-        $this->addHeader('Location', $this->url);
+//TODO not needed
         $this->sendHeaders();
         exit;
     }
