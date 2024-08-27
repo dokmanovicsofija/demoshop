@@ -63,12 +63,10 @@
     background-color: #e9ecef;
 }
 
-/* Styling for checkboxes in the table */
 .products-table input[type="checkbox"] {
     cursor: pointer;
 }
 
-/* Styling for action buttons in the actions column */
 .products-table .actions button {
     background-color: transparent;
     border: none;
@@ -149,7 +147,6 @@
     border-color: #ced4da;
 }
 
-/* General container for the product form */
 #product-form {
     max-width: 600px;
     margin: 20px auto;
@@ -160,14 +157,12 @@
     font-family: Arial, sans-serif;
 }
 
-/* Styling for form labels */
 #product-form label {
     display: block;
     font-weight: bold;
     margin-bottom: 10px;
 }
 
-/* Styling for form inputs */
 #product-form input[type="text"],
 #product-form input[type="number"],
 #product-form input[type="file"],
@@ -182,18 +177,15 @@
     box-sizing: border-box;
 }
 
-/* Textarea styling */
 #product-form textarea {
     height: 100px;
     resize: vertical;
 }
 
-/* Styling for checkboxes */
 #product-form input[type="checkbox"] {
     margin-right: 10px;
 }
 
-/* Container for form buttons */
 #product-form button {
     background-color: #007bff;
     color: white;
@@ -217,4 +209,108 @@
 
 #product-form button#cancel-product:hover {
     background-color: #d32f2f;
+}
+
+#sort-select {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    color: #333;
+    margin-left: 10px;
+    cursor: pointer;
+    appearance: none;
+}
+
+#sort-select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+#sort-select:hover {
+    background-color: #f1f1f1;
+}
+
+.button-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#sort-select::after {
+    content: '▼';
+    font-size: 12px;
+    color: #999;
+    position: absolute;
+    right: 15px;
+    pointer-events: none;
+}
+
+.button-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#filter-select, #sort-select {
+    padding: 8px;
+    font-size: 14px;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    appearance: none;
+    margin-left: 10px;
+}
+
+#filter-select::after, #sort-select::after {
+    content: '▼';
+    font-size: 12px;
+    color: #999;
+    position: absolute;
+    right: 15px;
+    pointer-events: none;
+}
+
+#filter-select:focus, #sort-select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+#filter-select:hover, #sort-select:hover {
+    background-color: #f1f1f1;
+}
+
+#filter-select option, #sort-select option {
+    padding: 10px;
+    background-color: #fff;
+    color: #333;
+}
+
+.button-container select {
+    margin-right: 10px;
+}
+
+#search-input {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    color: #333;
+    margin-left: 10px;
+    width: 200px;
+}
+
+#search-input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.button-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }

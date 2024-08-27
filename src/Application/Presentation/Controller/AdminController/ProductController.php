@@ -174,4 +174,17 @@ class ProductController
 
         return $imageName;
     }
+
+    public function listProducts(HttpRequest $request): JsonResponse
+    {
+        $sort = $request->getQueryParams('sort', 'ASC');
+        $filter = (int)$request->getQueryParams('filter', null);
+        $page = (int)$request->getQueryParams('page', 1);
+        $search = $request->getQueryParams('search', null);
+
+        $products = $this->productService->getFilteredAndPaginatedProducts($page, $sort, $filter, $search);
+
+        return new JsonResponse($products);
+    }
+
 }

@@ -105,5 +105,10 @@ class RouterRegistry
         Router::getInstance()->addRoute(
             new Route('POST', '/addProduct', ProductController::class, 'storeProduct')
         );
+
+        Router::getInstance()->addRoute(
+            new Route('GET', '/listProducts', ProductController::class,
+                'listProducts')
+        );
     }
 }

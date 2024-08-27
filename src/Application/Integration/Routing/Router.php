@@ -56,6 +56,8 @@ class Router extends Singleton
         $method = $request->getMethod();
         $url = $request->getUri();
 
+        $url = parse_url($url, PHP_URL_PATH);
+
         foreach ($this->routes as $route) {
             $pattern = preg_replace('/\/:([^\/]+)/', '/(?P<$1>[^/]+)', $route->getUrl());
             if ($route->getMethod() === $method && preg_match('#^' . $pattern . '$#', $url, $matches)) {

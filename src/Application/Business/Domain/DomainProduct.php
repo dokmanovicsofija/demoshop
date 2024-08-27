@@ -28,19 +28,19 @@ class DomainProduct
      * @param int $viewCount The number of times the product has been viewed (default is 0).
      */
     public function __construct(
-        private int     $id,
-        private int     $categoryId,
-        private string  $sku,
-        private string  $title,
-        private string  $brand,
-        private float   $price,
+        private int $id,
+        private int $categoryId,
+        private string $sku,
+        private string $title,
+        private string $brand,
+        private float $price,
         private ?string $shortDescription,
         private ?string $description,
         private ?string $image,
-        private bool    $enabled,
-        private bool    $featured,
-        private int     $viewCount)
-    {
+        private bool $enabled,
+        private bool $featured,
+        private int $viewCount,
+    ) {
     }
 
     /**
@@ -161,5 +161,28 @@ class DomainProduct
     public function getViewCount(): int
     {
         return $this->viewCount;
+    }
+
+    /**
+     * Converts the object to an array.
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'category_id' => $this->getCategoryId(),
+            'sku' => $this->getSku(),
+            'title' => $this->getTitle(),
+            'brand' => $this->getBrand(),
+            'price' => $this->getPrice(),
+            'short_description' => $this->getShortDescription(),
+            'description' => $this->getDescription(),
+            'image' => $this->getImage(),
+            'enabled' => $this->isEnabled(),
+            'featured' => $this->isFeatured(),
+            'viewCount' => $this->getViewCount(),
+        ];
     }
 }

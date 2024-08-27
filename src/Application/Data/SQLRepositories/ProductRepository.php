@@ -161,4 +161,31 @@ class ProductRepository implements ProductRepositoryInterface
 
         return null;
     }
+
+    public function getFilteredAndPaginatedProducts(
+        int $page,
+        string $sort = 'asc',
+        ?int $filter = null,
+        ?string $search = null
+    ): array {
+        $query = Product::query();
+
+        if ($filter && is_int($filter)) {
+            $query->where('category_id', $filter);
+        }
+
+        if ($search) {
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+
+        $query->orderBy('price', $sort);
+
+        $productsPerPage = 3;
+
+        $offset = ($page - 1) * $productsPerPage;
+
+        $products = $query->skip($offset)->take($productsPerPage)->get();
+
+        return $products->toArray();
+    }
 }

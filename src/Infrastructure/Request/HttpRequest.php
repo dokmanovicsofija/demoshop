@@ -75,23 +75,36 @@ class HttpRequest
     }
 
     /**
-     * Gets the query parameters from the request URL.
+     * Retrieve a query parameter from the URL by its key.
      *
-     * @return array An associative array of query parameters.
+     * This method returns the value of the specified query parameter if it exists,
+     * or a default value if the parameter is not found.
+     *
+     * @param string $key The name of the query parameter to retrieve.
+     * @param string|null $default The default value to return if the parameter is not found. Defaults to null.
+     * @return string|null The value of the query parameter if it exists, or the default value.
      */
-    public function getQueryParams(): array
+    public function getQueryParams(string $key, ?string $default = null): ?string
     {
-        return $this->queryParams;
+        $value = $this->queryParams[$key] ?? $default;
+
+        if ($value === '') {
+            return $default;
+        }
+
+        return $value;
     }
 
     /**
-     * Gets the POST data from the request body.
+     * Get a body parameter from the POST request.
      *
-     * @return array An associative array of POST data.
+     * @param string $key The key of the body parameter.
+     * @param string|null $default The default value to return if the key is not found.
+     * @return string|null The value of the body parameter or the default value.
      */
-    public function getPostData(): array
+    public function getBodyParam(string $key, ?string $default = null): ?string
     {
-        return $this->postData;
+        return $this->bodyParams[$key] ?? $default;
     }
 
     /**

@@ -53,5 +53,21 @@ interface ProductServiceInterface
      * @return int The unique identifier of the newly created product.
      */
     public function createProduct(DomainProduct $product): int;
+
+    /**
+     * Retrieves filtered, sorted, and paginated products.
+     *
+     * @param int $page The current page number for pagination.
+     * @param string $sort The sort order for the products ('asc' or 'desc').
+     * @param int|null $filter The category ID to filter products by. Optional.
+     * @param string|null $search The search term to filter products by title. Optional.
+     * @return array An array of products that match the specified criteria.
+     */
+    public function getFilteredAndPaginatedProducts(
+        int $page,
+        string $sort = 'asc',
+        ?int $filter = null,
+        ?string $search = null
+    ): array;
 }
 

@@ -38,13 +38,37 @@ class Products {
         const deleteSelectedButton = this.createHTMLElement('button', {id: 'delete-selected-btn'}, 'Delete selected');
         const enableSelectedButton = this.createHTMLElement('button', {id: 'enable-selected-btn'}, 'Enable selected');
         const disableSelectedButton = this.createHTMLElement('button', {id: 'disable-selected-btn'}, 'Disable selected');
-        const filterButton = this.createHTMLElement('button', {id: 'filter-btn'}, 'Filter');
+
+        const sortSelect = this.createHTMLElement('select', {id: 'sort-select'});
+        const ascOption = this.createHTMLElement('option', {value: 'asc'}, 'Price: Low to High');
+        const descOption = this.createHTMLElement('option', {value: 'desc'}, 'Price: High to Low');
+        sortSelect.appendChild(ascOption);
+        sortSelect.appendChild(descOption);
+
+        const filterSelect = this.createHTMLElement('select', {id: 'filter-select'});
+        const allCategoriesOption = this.createHTMLElement('option', {value: ''}, 'All Categories');
+        filterSelect.appendChild(allCategoriesOption);
+
+        this.loadAllCategories().then(categories => {
+            categories.forEach(category => {
+                const option = this.createHTMLElement('option', {value: category.id}, category.title);
+                filterSelect.appendChild(option);
+            });
+        });
+
+        const searchInput = this.createHTMLElement('input', {
+            type: 'text',
+            id: 'search-input',
+            placeholder: 'Search by title...'
+        });
 
         buttonContainer.appendChild(addProductButton);
         buttonContainer.appendChild(deleteSelectedButton);
         buttonContainer.appendChild(enableSelectedButton);
         buttonContainer.appendChild(disableSelectedButton);
-        buttonContainer.appendChild(filterButton);
+        buttonContainer.appendChild(filterSelect);
+        buttonContainer.appendChild(sortSelect);
+        buttonContainer.appendChild(searchInput);
 
         productsContainer.appendChild(buttonContainer);
 
@@ -65,11 +89,24 @@ class Products {
         table.appendChild(tbody);
         productsContainer.appendChild(table);
 
-        const pagination = this.createHTMLElement('div', {class: 'pagination'});
-        pagination.innerHTML = '<span>&lt;&lt;</span> <span class="current-page">1</span> / <span class="total-pages">7</span> <span>&gt;&gt;</span>';
-        productsContainer.appendChild(pagination);
-
         this.contentDiv.appendChild(productsContainer);
+
+        sortSelect.addEventListener('change', () => {
+            this.sortOrder = sortSelect.value;
+            console.log('Sort order selected:', this.sortOrder);
+            this.loadProducts2();
+        });
+
+        filterSelect.addEventListener('change', () => {
+            this.filterCategory = filterSelect.value;
+            this.loadProducts2();
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            this.searchQuery = e.target.value.trim() === '' ? 'null' : e.target.value.trim();
+            // this.searchQuery = e.target.value;
+            this.loadProducts2();
+        });
 
         // Attach event listeners after buttons are added to the DOM
         document.getElementById('enable-selected-btn').addEventListener('click', () => {
@@ -87,10 +124,20 @@ class Products {
             this.deleteProducts(selectedProductIds);
         });
 
-        // Dodajemo event listener za dugme "Add new product"
         addProductButton.addEventListener('click', () => {
             this.showAddProductForm();
         });
+    }
+
+    // Loads products from the server and renders them
+    loadProducts2() {
+        const url = `/listProducts?sort=${this.sortOrder}&filter=${this.filterCategory}&search=${this.searchQuery}`;
+
+        Ajax.get(url)
+            .then(data => {
+                this.renderProducts(data);
+            })
+            .catch(error => console.error('Error fetching products:', error));
     }
 
     // Loads products from the server and renders them
@@ -105,7 +152,7 @@ class Products {
     // Renders the products in the table
     renderProducts(products) {
         const tbody = document.querySelector('#products-table tbody');
-        tbody.innerHTML = ''; // Clear the table body
+        tbody.innerHTML = '';
 
         products.forEach(product => {
             const row = this.createHTMLElement('tr');

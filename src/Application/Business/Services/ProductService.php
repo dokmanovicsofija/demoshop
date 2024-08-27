@@ -121,4 +121,20 @@ readonly class ProductService implements ProductServiceInterface
 
         return $this->productRepository->save($product);
     }
+
+    public function getFilteredAndPaginatedProducts(
+        int $page,
+        string $sort = 'asc',
+        ?int $filter = null,
+        ?string $search = null
+    ): array {
+        $products = $this->productRepository->getFilteredAndPaginatedProducts($page, $sort, $filter, $search);
+
+        foreach ($products as &$product) {
+            $category = $this->categoryRepository->findById($product['category_id']);
+            $product['category_name'] = $category ? $category->title : 'Unknown';
+        }
+
+        return $products;
+    }
 }

@@ -66,4 +66,23 @@ interface ProductRepositoryInterface
      * @return bool `true` if the product exists, `false` otherwise.
      */
     public function findBySku(string $sku): bool;
+
+    /**
+     * Retrieves filtered, sorted, and paginated products from the database.
+     *
+     * This method fetches products based on the given pagination, sorting, filtering by category ID,
+     * and searching by title criteria. It returns an array of products that match the specified conditions.
+     *
+     * @param int $page The current page number for pagination.
+     * @param string $sort The sort order for the products ('asc' or 'desc'). Defaults to 'asc'.
+     * @param int|null $filter The category ID to filter products by. Optional.
+     * @param string|null $search The search term to filter products by title. Optional.
+     * @return array An array of products that match the specified criteria.
+     */
+    public function getFilteredAndPaginatedProducts(
+        int $page,
+        string $sort = 'asc',
+        ?int $filter = null,
+        ?string $search = null
+    ): array;
 }
