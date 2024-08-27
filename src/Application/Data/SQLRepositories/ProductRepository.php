@@ -128,4 +128,37 @@ class ProductRepository implements ProductRepositoryInterface
 
         return false;
     }
+
+    /**
+     * Finds a domain product by its ID.
+     *
+     * This method retrieves a product from the database by its unique identifier
+     * and returns it as a `DomainProduct` object.
+     *
+     * @param int $productId The unique identifier of the product to find.
+     * @return DomainProduct|null The domain product if found, or null if not found.
+     */
+    public function findDomainProductById(int $productId): ?DomainProduct
+    {
+        $productModel = Product::find($productId);
+
+        if ($productModel) {
+            return new DomainProduct(
+                $productModel->id,
+                $productModel->category_id,
+                $productModel->sku,
+                $productModel->title,
+                $productModel->brand,
+                $productModel->price,
+                $productModel->short_description,
+                $productModel->description,
+                $productModel->image,
+                $productModel->enabled,
+                $productModel->featured,
+                0
+            );
+        }
+
+        return null;
+    }
 }

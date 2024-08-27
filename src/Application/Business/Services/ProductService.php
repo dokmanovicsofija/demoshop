@@ -89,7 +89,17 @@ readonly class ProductService implements ProductServiceInterface
      */
     public function deleteProduct(int $productId): void
     {
-        $this->productRepository->deleteProductById($productId);
+        $product = $this->productRepository->findDomainProductById($productId);
+
+        if ($product) {
+            $imagePath = __DIR__ . '/../../Presentation/Public/uploads/' . $product->getImage();
+
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+
+            $this->productRepository->deleteProductById($productId);
+        }
     }
 
     /**
