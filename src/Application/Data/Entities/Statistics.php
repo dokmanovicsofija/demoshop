@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
  *
  * This class represents the Statistics entity in the database.
  * It uses Eloquent ORM for interaction with the database.
+ *
+ * @method static Statistics first() Retrieve the first record in the database.
  */
 class Statistics extends Model
 {

@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Model;
  *
  * This class represents the Admin entity in the database.
  * It uses Eloquent ORM for interaction with the database.
+ *
+ * @method static Admin where(string $column, mixed $value)
+ * @method static Admin first()
  */
 class Admin extends Model
 {

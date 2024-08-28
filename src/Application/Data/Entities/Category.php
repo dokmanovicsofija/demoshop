@@ -9,8 +9,22 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * Class Category
  *
- * This class represents the Category entity in the database.
- * It uses Eloquent ORM for interaction with the database.
+ * @property int $id
+ * @property string $title
+ * @property string $code
+ * @property string $description
+ * @property int|null $parent_id
+ *
+ * @method static int count()
+ * @method static Category find(int $id)
+ * @method static Category where(string $column, mixed $value)
+ * @method static Category whereNull(string $column)
+ * @method static Category[] get()
+ * @method static Category first()
+ * @method static Category with($relations)
+ * @method static Category[] all()
+ *
+ * @package Application\Data\Entities
  */
 class Category extends Model
 {
@@ -25,7 +39,10 @@ class Category extends Model
      * using methods like `create` or `update`, only these fields will be considered.
      */
     protected $fillable = [
-        'code', 'title', 'description', 'parent_id',
+        'code',
+        'title',
+        'description',
+        'parent_id',
     ];
 
     /**

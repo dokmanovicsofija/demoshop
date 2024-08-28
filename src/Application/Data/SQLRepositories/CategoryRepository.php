@@ -146,7 +146,7 @@ class CategoryRepository implements CategoryRepositoryInterface
     public function categoryHasProducts(int $categoryId): bool
     {
         $category = $this->findById($categoryId);
-        return $category ? $category->products()->exists() : false;
+        return $category && $category->products()->exists();
     }
 
     /**
