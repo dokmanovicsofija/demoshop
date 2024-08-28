@@ -209,15 +209,6 @@ class Products {
             .catch(error => console.error('Error fetching products:', error));
     }
 
-    // Loads products from the server and renders them
-    // loadProducts() {
-    //     Ajax.get('/getProducts')
-    //         .then(data => {
-    //             this.renderProducts(data);
-    //         })
-    //         .catch(error => console.error('Error fetching products:', error));
-    // }
-
     // Renders the products in the table
     renderProducts(products) {
         const tbody = document.querySelector('#products-table tbody');
@@ -276,6 +267,7 @@ class Products {
         });
     }
 
+    // Method to enable or disable selected products based on user choice
     updateSelectedProducts(enable) {
         const selectedProductIds = Array.from(document.querySelectorAll('input.product-checkbox:checked'))
             .map(checkbox => checkbox.getAttribute('data-product-id'));
@@ -299,6 +291,7 @@ class Products {
             });
     }
 
+    // Method to delete selected products
     deleteProducts(productIds) {
         if (!Array.isArray(productIds) || productIds.length === 0) {
             alert('Please select at least one product to delete.');
@@ -320,6 +313,7 @@ class Products {
             });
     }
 
+    // Method to fetch all product categories
     loadAllCategories() {
         return Ajax.get('/getAllCategories')
             .then(data => {
@@ -331,6 +325,7 @@ class Products {
             });
     }
 
+    // Method to show the form for adding a new product
     showAddProductForm() {
         this.clearContent();
 
@@ -407,6 +402,7 @@ class Products {
         this.contentDiv.appendChild(formContainer);
     }
 
+    // Method to save the new product
     saveNewProduct() {
         const formData = new FormData();
 
@@ -450,6 +446,7 @@ class Products {
             });
     }
 
+    // Method to cancel adding a new product and return to product list
     cancelAddProductForm() {
         this.render();
     }
