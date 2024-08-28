@@ -2,6 +2,8 @@ class Products {
     constructor() {
         // Reference to the main content div where products will be rendered
         this.contentDiv = document.getElementById('content');
+        this.currentPage = 1;
+        this.totalPages = 1;
     }
 
     // Method for creating an HTML element with specified attributes and optional text content
@@ -18,7 +20,7 @@ class Products {
     render() {
         this.clearContent();
         this.createProductsLayout();
-        this.loadProducts();
+        this.loadProducts2();
     }
 
     // Clears the content div
@@ -84,12 +86,58 @@ class Products {
             headerRow.appendChild(th);
         });
 
+        //Pagination
+        const pagination = this.createHTMLElement('div', {class: 'pagination'});
+
+        // Pagination buttons
+        const firstPageButton = this.createHTMLElement('button', {id: 'first-page-btn'}, '<<');
+        const prevPageButton = this.createHTMLElement('button', {id: 'prev-page-btn'}, '<');
+        const nextPageButton = this.createHTMLElement('button', {id: 'next-page-btn'}, '>');
+        const lastPageButton = this.createHTMLElement('button', {id: 'last-page-btn'}, '>>');
+        this.currentPageSpan = this.createHTMLElement('span', {}, '1');
+        this.totalPagesSpan = this.createHTMLElement('span', {}, '/ 1');
+
         thead.appendChild(headerRow);
         table.appendChild(thead);
         table.appendChild(tbody);
         productsContainer.appendChild(table);
 
         this.contentDiv.appendChild(productsContainer);
+
+        pagination.appendChild(firstPageButton);
+        pagination.appendChild(prevPageButton);
+        pagination.appendChild(this.currentPageSpan);
+        pagination.appendChild(this.totalPagesSpan);
+        pagination.appendChild(nextPageButton);
+        pagination.appendChild(lastPageButton);
+        productsContainer.appendChild(pagination);
+
+        // Event listeners for pagination buttons
+        firstPageButton.addEventListener('click', () => {
+            this.page = 1;
+            this.loadProducts2();
+        });
+
+        prevPageButton.addEventListener('click', () => {
+            this.page = this.currentPage;
+            if (this.page > 1) {
+                this.page--;
+                this.loadProducts2();
+            }
+        });
+
+        nextPageButton.addEventListener('click', () => {
+            this.page = this.currentPage;
+            if (this.page < this.totalPages) {
+                this.page++;
+                this.loadProducts2();
+            }
+        });
+
+        lastPageButton.addEventListener('click', () => {
+            this.page = this.totalPages;
+            this.loadProducts2();
+        });
 
         sortSelect.addEventListener('change', () => {
             this.sortOrder = sortSelect.value;
@@ -99,6 +147,7 @@ class Products {
 
         filterSelect.addEventListener('change', () => {
             this.filterCategory = filterSelect.value;
+            this.page = 1;
             this.loadProducts2();
         });
 
@@ -134,7 +183,7 @@ class Products {
     // Loads products from the server and renders them
     loadProducts2() {
         const params = new URLSearchParams({
-            // page: this.page,
+            page: this.page || 1,
             sort: this.sortOrder || 'asc',
             filter: this.filterCategory || '',
             search: this.searchQuery || ''
@@ -146,19 +195,28 @@ class Products {
 
         Ajax.get(url)
             .then(data => {
-                this.renderProducts(data);
+                this.totalPages = data.total_pages || 1;
+                this.currentPage = data.current_page || 1;
+                this.currentPageSpan.textContent = `${this.currentPage}`;
+                this.totalPagesSpan.textContent = ` / ${this.totalPages}`;
+                this.renderProducts(data.products);
+
+                if (data.products.length === 0 && this.currentPage > 1) {
+                    this.currentPage--;
+                    this.loadProducts2();
+                }
             })
             .catch(error => console.error('Error fetching products:', error));
     }
 
     // Loads products from the server and renders them
-    loadProducts() {
-        Ajax.get('/getProducts')
-            .then(data => {
-                this.renderProducts(data);
-            })
-            .catch(error => console.error('Error fetching products:', error));
-    }
+    // loadProducts() {
+    //     Ajax.get('/getProducts')
+    //         .then(data => {
+    //             this.renderProducts(data);
+    //         })
+    //         .catch(error => console.error('Error fetching products:', error));
+    // }
 
     // Renders the products in the table
     renderProducts(products) {
@@ -234,7 +292,7 @@ class Products {
         Ajax.post(url, {productIds: selectedProductIds})
             .then(response => {
                 console.log(response);
-                this.loadProducts();
+                this.loadProducts2();
             })
             .catch(error => {
                 console.error('Error updating products:', error);
@@ -255,7 +313,7 @@ class Products {
         Ajax.delete('/deleteProduct', {ids: productIds})
             .then(response => {
                 console.log(response);
-                this.loadProducts();
+                this.loadProducts2();
             })
             .catch(error => {
                 console.error('Error deleting products:', error);
@@ -390,5 +448,9 @@ class Products {
             .catch(error => {
                 console.error('Error adding product:', error);
             });
+    }
+
+    cancelAddProductForm() {
+        this.render();
     }
 }

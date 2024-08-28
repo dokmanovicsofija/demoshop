@@ -191,10 +191,16 @@ class ProductRepository implements ProductRepositoryInterface
 
         $productsPerPage = 3;
 
+        $totalProducts = $query->count();
+
         $offset = ($page - 1) * $productsPerPage;
 
         $products = $query->skip($offset)->take($productsPerPage)->get();
 
-        return $products->toArray();
+        return [
+            'products' => $products->toArray(),
+            'total_pages' => ceil($totalProducts / $productsPerPage),
+            'current_page' => $page
+        ];
     }
 }
