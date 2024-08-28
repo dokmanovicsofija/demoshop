@@ -74,7 +74,7 @@ class SessionManager extends Singleton
      */
     public function setCookie(string $name, string $value, int $expiry = 0, string $path = '/'): void
     {
-        GlobalWrapper::setCookie($name, $value, $expiry, $path);
+        setcookie($name, $value, $expiry, $path);
     }
 
     /**
@@ -85,7 +85,7 @@ class SessionManager extends Singleton
      */
     public function getCookie(string $name): mixed
     {
-        return GlobalWrapper::getCookie($name);
+        return $_COOKIE[$name] ?? null;
     }
 
     /**
@@ -96,6 +96,6 @@ class SessionManager extends Singleton
      */
     public function unsetCookie(string $name, string $path = '/'): void
     {
-        GlobalWrapper::unsetCookie($name, $path);
+        setcookie($name, '', time() - 3600, $path);
     }
 }
