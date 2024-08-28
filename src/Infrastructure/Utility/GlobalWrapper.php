@@ -18,7 +18,6 @@ class GlobalWrapper
         return match ($globalName) {
             '_GET' => $_GET,
             '_POST' => $_POST,
-            '_SESSION' => $_SESSION,
             '_SERVER' => $_SERVER,
             '_REQUEST' => $_REQUEST,
             '_FILES' => $_FILES,
@@ -36,47 +35,6 @@ class GlobalWrapper
     public static function getAllHeaders(): array
     {
         return getallheaders();
-    }
-
-    /**
-     * Get a value from the session.
-     *
-     * @param string $key The key to retrieve.
-     * @return mixed|null The value associated with the key, or null if not set.
-     */
-    public static function getSessionValue(string $key): mixed
-    {
-        return $_SESSION[$key] ?? null;
-    }
-
-    /**
-     * Set a value in the session.
-     *
-     * @param string $key The key to set.
-     * @param mixed $value The value to set.
-     */
-    public static function setSessionValue(string $key, $value): void
-    {
-        $_SESSION[$key] = $value;
-    }
-
-    /**
-     * Unset a value in the session.
-     *
-     * @param string $key The key to unset.
-     */
-    public static function unsetSessionValue(string $key): void
-    {
-        unset($_SESSION[$key]);
-    }
-
-    /**
-     * Destroy the session.
-     */
-    public static function destroySession(): void
-    {
-        session_unset();
-        session_destroy();
     }
 
     /**

@@ -30,7 +30,7 @@ class SessionManager extends Singleton
      */
     public function get(string $key): mixed
     {
-        return GlobalWrapper::getSessionValue($key);
+        return $_SESSION[$key] ?? null;
     }
 
     /**
@@ -39,10 +39,9 @@ class SessionManager extends Singleton
      * @param string $key The key to set.
      * @param mixed $value The value to set.
      */
-    public function set(string $key, $value): void
+    public function set(string $key, mixed $value): void
     {
-
-        GlobalWrapper::setSessionValue($key, $value);
+        $_SESSION[$key] = $value;
     }
 
     /**
@@ -52,7 +51,7 @@ class SessionManager extends Singleton
      */
     public function unset(string $key): void
     {
-        GlobalWrapper::unsetSessionValue($key);
+        unset($_SESSION[$key]);
     }
 
     /**
@@ -60,7 +59,8 @@ class SessionManager extends Singleton
      */
     public function destroy(): void
     {
-        GlobalWrapper::destroySession();
+        session_unset();
+        session_destroy();
         self::$instances[static::class] = null;
     }
 
