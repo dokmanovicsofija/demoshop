@@ -1,35 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Internal Server Error</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
-        }
-
-        h1 {
-            font-size: 50px;
-            color: #333;
-        }
-
-        p {
-            font-size: 20px;
-            color: #666;
-        }
-
-        a {
-            color: #007BFF;
-            text-decoration: none;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="/src/Application/Presentation/Public/css/errors.css">
+    <title>500 Internal Server Error</title>
 </head>
 <body>
-<h1>500 - Internal Server Error</h1>
-<p>Sorry, something went wrong on our end.</p>
-<p><a href="/admin">Go to Home</a></p>
+<div class="error-container">
+    <h1 class="error-message">500 - Internal Server Error</h1>
+    <p>Something went wrong on our end.</p>
+</div>
+<a href="/admin" class="home-button">Go to Homepage</a>
 </body>
 </html>
