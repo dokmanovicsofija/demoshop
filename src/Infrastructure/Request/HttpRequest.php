@@ -4,6 +4,7 @@ namespace Infrastructure\Request;
 
 use Exception;
 use Infrastructure\Utility\GlobalWrapper;
+use Infrastructure\Utility\Singleton;
 
 /**
  * Class HttpRequest
@@ -11,7 +12,7 @@ use Infrastructure\Utility\GlobalWrapper;
  * Represents an HTTP request. It provides methods to retrieve request information such as HTTP method,
  * URI, query parameters, and POST data.
  */
-class HttpRequest
+class HttpRequest extends Singleton
 {
     /**
      * @var string The HTTP method used for the request (e.g., GET, POST).
@@ -41,8 +42,10 @@ class HttpRequest
      * * `$_GET`, and `$_POST` super globals using the `GlobalWrapper` class.
      * @throws Exception
      */
-    public function __construct()
+    protected function __construct()
     {
+        parent::__construct();
+
         $this->method = GlobalWrapper::getGlobal('_SERVER')['REQUEST_METHOD'];
         $this->uri = strtok(GlobalWrapper::getGlobal('_SERVER')['REQUEST_URI'], '?');
         $this->queryParams = GlobalWrapper::getGlobal('_GET');

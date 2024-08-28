@@ -38,7 +38,7 @@ class Kernel
         DatabaseConnection::init();
         RouterRegistry::registerRoutes();
 
-        $request = new HttpRequest();
+        $request = HttpRequest::getInstance();
         $response = Router::getInstance()->matchRoute($request);
         $response->send();
     }
