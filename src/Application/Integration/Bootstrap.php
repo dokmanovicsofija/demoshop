@@ -22,6 +22,7 @@ use Application\Integration\Routing\Router;
 use Application\Presentation\Controller\AdminController\CategoryController;
 use Application\Presentation\Controller\AdminController\DashboardController;
 use Application\Presentation\Controller\AdminController\ProductController;
+use Application\Presentation\Controller\FrontController\HomeController;
 use Application\Presentation\Controller\FrontController\LoginController;
 use Exception;
 use Infrastructure\Utility\ServiceRegistry;
@@ -103,6 +104,7 @@ class Bootstrap
      */
     protected static function registerControllers(): void
     {
+        ServiceRegistry::register(HomeController::class, new HomeController());
         ServiceRegistry::register(LoginController::class, new LoginController(
             ServiceRegistry::get(LoginServiceInterface::class)
         ));

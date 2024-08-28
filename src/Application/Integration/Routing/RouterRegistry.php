@@ -6,6 +6,7 @@ use Application\Integration\Middleware\AdminMiddleware;
 use Application\Presentation\Controller\AdminController\CategoryController;
 use Application\Presentation\Controller\AdminController\DashboardController;
 use Application\Presentation\Controller\AdminController\ProductController;
+use Application\Presentation\Controller\FrontController\HomeController;
 use Application\Presentation\Controller\FrontController\LoginController;
 use Exception;
 
@@ -29,6 +30,10 @@ class RouterRegistry
      */
     public static function registerRoutes(): void
     {
+        Router::getInstance()->addRoute(
+            (new Route('GET', '/', HomeController::class, 'index'))
+        );
+
         Router::getInstance()->addRoute(
             (new Route('GET', '/login', LoginController::class, 'index'))
         );
