@@ -21,9 +21,9 @@ use Application\Data\SQLRepositories\StatisticsRepository;
 use Application\Integration\Routing\Router;
 use Application\Presentation\Controller\AdminController\CategoryController;
 use Application\Presentation\Controller\AdminController\DashboardController;
+use Application\Presentation\Controller\AdminController\LoginController;
 use Application\Presentation\Controller\AdminController\ProductController;
 use Application\Presentation\Controller\FrontController\HomeController;
-use Application\Presentation\Controller\FrontController\LoginController;
 use Exception;
 use Infrastructure\Utility\ServiceRegistry;
 

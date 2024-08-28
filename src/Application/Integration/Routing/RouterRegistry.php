@@ -5,9 +5,9 @@ namespace Application\Integration\Routing;
 use Application\Integration\Middleware\AdminMiddleware;
 use Application\Presentation\Controller\AdminController\CategoryController;
 use Application\Presentation\Controller\AdminController\DashboardController;
+use Application\Presentation\Controller\AdminController\LoginController;
 use Application\Presentation\Controller\AdminController\ProductController;
 use Application\Presentation\Controller\FrontController\HomeController;
-use Application\Presentation\Controller\FrontController\LoginController;
 use Exception;
 
 /**

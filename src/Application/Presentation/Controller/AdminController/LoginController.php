@@ -1,13 +1,12 @@
 <?php
 
-namespace Application\Presentation\Controller\FrontController;
+namespace Application\Presentation\Controller\AdminController;
 
 use Application\Business\Interfaces\ServiceInterface\LoginServiceInterface;
 use Application\Integration\Exceptions\AuthenticationException;
 use Application\Integration\Utility\PathHelper;
 use Infrastructure\Request\HttpRequest;
 use Infrastructure\Response\HtmlResponse;
-use Infrastructure\Utility\GlobalWrapper;
 
 /**
  * Class LoginController
