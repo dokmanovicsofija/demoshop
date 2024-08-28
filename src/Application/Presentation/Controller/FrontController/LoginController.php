@@ -65,9 +65,9 @@ class LoginController
      */
     public function login(HttpRequest $request): HtmlResponse
     {
-        $username = $request->post('username');
-        $password = $request->post('password');
-        $keepLoggedIn = $request->post('keepLoggedIn') === 'on';
+        $username = $request->getBodyParam('username');
+        $password = $request->getBodyParam('password');
+        $keepLoggedIn = $request->getBodyParam('keepLoggedIn') === 'on';
 
         try {
             $this->loginService->authenticate($username, $password, $keepLoggedIn);

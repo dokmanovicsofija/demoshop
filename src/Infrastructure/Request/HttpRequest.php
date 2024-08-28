@@ -107,30 +107,6 @@ class HttpRequest extends Singleton
      */
     public function getBodyParam(string $key, ?string $default = null): ?string
     {
-        return $this->bodyParams[$key] ?? $default;
-    }
-
-    /**
-     * Gets a query parameter by key.
-     *
-     * @param string $key The key of the query parameter.
-     * @param mixed|null $default The default value to return if the key is not found.
-     * @return mixed The value of the query parameter or the default value if not found.
-     */
-    public function get(string $key, mixed $default = null): mixed
-    {
-        return $this->queryParams[$key] ?? $default;
-    }
-
-    /**
-     * Gets a POST parameter by key.
-     *
-     * @param string $key The key of the POST parameter.
-     * @param mixed|null $default The default value to return if the key is not found.
-     * @return mixed The value of the POST parameter or the default value if not found.
-     */
-    public function post(string $key, mixed $default = null): mixed
-    {
         return $this->postData[$key] ?? $default;
     }
 
