@@ -43,7 +43,7 @@ class Bootstrap
      *
      * @throws Exception If there is an issue during the initialization process.
      */
-    public static function initialize(): void
+    public static function init(): void
     {
         self::registerRepos();
         self::registerServices();

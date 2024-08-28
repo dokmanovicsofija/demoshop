@@ -4,14 +4,11 @@ namespace Infrastructure;
 
 use Application\Integration\Bootstrap;
 use Application\Integration\Database\DatabaseConnection;
+use Application\Integration\Exceptions\ExceptionHandler;
 use Application\Integration\Routing\Router;
 use Application\Integration\Routing\RouterRegistry;
-use Application\Integration\Utility\PathHelper;
 use Exception;
-use Infrastructure\Exceptions\HttpNotFoundException;
 use Infrastructure\Request\HttpRequest;
-use Infrastructure\Response\HtmlResponse;
-use Throwable;
 
 /**
  * Class Kernel
@@ -35,40 +32,14 @@ class Kernel
      */
     public static function init(): void
     {
-        set_exception_handler([self::class, 'handleException']);
+        set_exception_handler([ExceptionHandler::class, 'handle']);
 
-        Bootstrap::initialize();
+        Bootstrap::init();
         DatabaseConnection::init();
         RouterRegistry::registerRoutes();
 
         $request = new HttpRequest();
         $response = Router::getInstance()->matchRoute($request);
-        $response->send();
-    }
-
-    /**
-     * Global exception handler.
-     *
-     * @param Throwable $exception
-     * @return void
-     */
-    public static function handleException(Throwable $exception): void
-    {
-        // Generate an appropriate error response
-        if ($exception instanceof HttpNotFoundException) {
-            $response = HtmlResponse::fromView(
-                PathHelper::view('errors/404.php'),
-                [],
-                404
-            );
-        } else {
-            $response = HtmlResponse::fromView(
-                PathHelper::view('errors/500.php'),
-                [],
-                500
-            );
-        }
-
         $response->send();
     }
 }
