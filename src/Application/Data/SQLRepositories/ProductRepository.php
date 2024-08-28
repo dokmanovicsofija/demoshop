@@ -162,6 +162,15 @@ class ProductRepository implements ProductRepositoryInterface
         return null;
     }
 
+    /**
+     * Retrieves a filtered and paginated list of products.
+     *
+     * @param int $page The current page number for pagination.
+     * @param string $sort The sort order for the product price ('asc' or 'desc').
+     * @param int|null $filter The category ID to filter the products by (optional).
+     * @param string|null $search The search query to filter products by title (optional).
+     * @return array The filtered and paginated list of products as an array.
+     */
     public function getFilteredAndPaginatedProducts(
         int $page,
         string $sort = 'asc',
@@ -170,7 +179,7 @@ class ProductRepository implements ProductRepositoryInterface
     ): array {
         $query = Product::query();
 
-        if ($filter && is_int($filter)) {
+        if ($filter) {
             $query->where('category_id', $filter);
         }
 

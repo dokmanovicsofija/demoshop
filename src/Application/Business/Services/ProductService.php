@@ -122,6 +122,19 @@ readonly class ProductService implements ProductServiceInterface
         return $this->productRepository->save($product);
     }
 
+    /**
+     * Retrieves a filtered and paginated list of products, including their category names.
+     *
+     * This method fetches products from the product repository based on the provided filtering,
+     * sorting, and pagination parameters. It then augments each product with its corresponding
+     * category name by querying the category repository.
+     *
+     * @param int $page The current page number for pagination.
+     * @param string $sort The sort order for the product price ('asc' or 'desc').
+     * @param int|null $filter The category ID to filter the products by (optional).
+     * @param string|null $search The search query to filter products by title (optional).
+     * @return array The filtered and paginated list of products with category names included.
+     */
     public function getFilteredAndPaginatedProducts(
         int $page,
         string $sort = 'asc',

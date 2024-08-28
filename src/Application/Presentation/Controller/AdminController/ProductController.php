@@ -175,6 +175,16 @@ class ProductController
         return $imageName;
     }
 
+    /**
+     * Handles the request to list filtered and paginated products.
+     *
+     * This method processes the incoming HTTP request, extracting query parameters
+     * for sorting, filtering, pagination, and search criteria. It then retrieves the
+     * corresponding products using the product service and returns them as a JSON response.
+     *
+     * @param HttpRequest $request The incoming HTTP request containing query parameters.
+     * @return JsonResponse A JSON response containing the filtered and paginated list of products.
+     */
     public function listProducts(HttpRequest $request): JsonResponse
     {
         $sort = $request->getQueryParams('sort', 'ASC');
@@ -186,5 +196,4 @@ class ProductController
 
         return new JsonResponse($products);
     }
-
 }

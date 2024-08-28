@@ -104,7 +104,9 @@ class Products {
 
         searchInput.addEventListener('input', (e) => {
             this.searchQuery = e.target.value.trim() === '' ? 'null' : e.target.value.trim();
-            // this.searchQuery = e.target.value;
+            if (this.searchQuery === 'null') {
+                this.searchQuery = null;
+            }
             this.loadProducts2();
         });
 
@@ -131,7 +133,16 @@ class Products {
 
     // Loads products from the server and renders them
     loadProducts2() {
-        const url = `/listProducts?sort=${this.sortOrder}&filter=${this.filterCategory}&search=${this.searchQuery}`;
+        const params = new URLSearchParams({
+            // page: this.page,
+            sort: this.sortOrder || 'asc',
+            filter: this.filterCategory || '',
+            search: this.searchQuery || ''
+        });
+        const url = `/listProducts?${params.toString()}`;
+        console.log(url);
+
+        console.log('searchQuery:', this.searchQuery, 'Type:', typeof this.searchQuery);
 
         Ajax.get(url)
             .then(data => {
@@ -278,9 +289,6 @@ class Products {
 
         const categoryLabel = this.createHTMLElement('label', {}, 'Category:');
         const categorySelect = this.createHTMLElement('select', {id: 'new-product-category'});
-
-        // const rootOption = this.createHTMLElement('option', {value: '0'}, 'Root');
-        // categorySelect.appendChild(rootOption);
 
         this.loadAllCategories().then(categories => {
             console.log("Categories loaded:", categories);
