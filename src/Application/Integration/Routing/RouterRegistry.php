@@ -2,6 +2,7 @@
 
 namespace Application\Integration\Routing;
 
+use Application\Business\Interfaces\ServiceInterface\LoginServiceInterface;
 use Application\Integration\Middleware\AdminMiddleware;
 use Application\Presentation\Controller\AdminController\CategoryController;
 use Application\Presentation\Controller\AdminController\DashboardController;
@@ -9,6 +10,8 @@ use Application\Presentation\Controller\AdminController\LoginController;
 use Application\Presentation\Controller\AdminController\ProductController;
 use Application\Presentation\Controller\FrontController\HomeController;
 use Exception;
+use Infrastructure\Utility\CookieManager;
+use Infrastructure\Utility\ServiceRegistry;
 
 /**
  * Class RouterRegistry
@@ -30,6 +33,9 @@ class RouterRegistry
      */
     public static function registerRoutes(): void
     {
+        $loginService = ServiceRegistry::get(LoginServiceInterface::class);
+        $cookieManager = ServiceRegistry::get(CookieManager::class);
+
         Router::getInstance()->addRoute(
             (new Route('GET', '/', HomeController::class, 'index'))
         );
@@ -40,7 +46,7 @@ class RouterRegistry
 
         Router::getInstance()->addRoute(
             (new Route('GET', '/admin', LoginController::class, 'dashboard'))
-                ->addMiddleware(new AdminMiddleware())
+                ->addMiddleware(new AdminMiddleware($loginService, $cookieManager))
         );
 
         Router::getInstance()->addRoute(
@@ -55,7 +61,7 @@ class RouterRegistry
 
         Router::getInstance()->addRoute(
             (new Route('GET', '/admin/dashboard', LoginController::class, 'dashboard'))
-                ->addMiddleware(new AdminMiddleware())
+                ->addMiddleware(new AdminMiddleware($loginService, $cookieManager))
         );
 
         //Categories routes

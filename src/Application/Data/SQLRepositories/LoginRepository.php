@@ -60,4 +60,15 @@ class LoginRepository implements LoginRepositoryInterface
         $admin->token = $token;
         $admin->save();
     }
+
+    /**
+     * Finds an admin by their token.
+     *
+     * @param string $token The token to search for.
+     * @return Admin|null Returns the admin if found, null otherwise.
+     */
+    public function findByToken(string $token): ?Admin
+    {
+        return Admin::where('token', $token)->first();
+    }
 }

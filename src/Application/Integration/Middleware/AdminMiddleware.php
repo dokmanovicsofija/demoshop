@@ -2,9 +2,11 @@
 
 namespace Application\Integration\Middleware;
 
-use Application\Integration\Exceptions\AuthorizationException;
+use Application\Business\Interfaces\ServiceInterface\LoginServiceInterface;
 use Infrastructure\Request\HttpRequest;
 use Infrastructure\Response\RedirectResponse;
+use Infrastructure\Utility\CookieManager;
+use Infrastructure\Utility\SessionManager;
 
 /**
  * Class AdminMiddleware
@@ -14,6 +16,11 @@ use Infrastructure\Response\RedirectResponse;
  */
 class AdminMiddleware extends AbstractMiddleware
 {
+
+    public function __construct(private LoginServiceInterface $loginService, private CookieManager $cookieManager)
+    {
+    }
+
     /**
      * Handles the incoming HTTP request.
      *
@@ -26,12 +33,17 @@ class AdminMiddleware extends AbstractMiddleware
      */
     public function handle(HttpRequest $request): void
     {
-        $keepLoggedIn = $_COOKIE['keepLoggedIn'] ?? 'false';
+        $sessionManager = SessionManager::getInstance();
 
-        if ($keepLoggedIn !== 'true') {
-            $response = new RedirectResponse('/login');
-            $response->send();
-            exit;
+        if (!$sessionManager->get('loggedIn')) {
+            $token = $this->cookieManager->getCookie('keepLoggedIn');
+
+            if (!$token || !$this->loginService->validateToken($token)) {
+                $response = new RedirectResponse('/login');
+                $response->send();
+                return;
+            }
+            $sessionManager->set('loggedIn', true);
         }
 
         parent::handle($request);

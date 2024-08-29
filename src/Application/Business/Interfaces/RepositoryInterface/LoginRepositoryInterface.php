@@ -3,6 +3,7 @@
 namespace Application\Business\Interfaces\RepositoryInterface;
 
 use Application\Business\Domain\DomainAdmin;
+use Application\Data\Entities\Admin;
 
 /**
  * Interface LoginRepositoryInterface
@@ -35,5 +36,11 @@ interface LoginRepositoryInterface
      */
     public function updateToken(int $adminId, string $token): void;
 
-    // TODO setTokenForAdmin, getAdminByTOken
+    /**
+     * Finds an admin by their token.
+     *
+     * @param string $token The token to search for.
+     * @return Admin|null Returns the admin if found, null otherwise.
+     */
+    public function findByToken(string $token): ?Admin;
 }

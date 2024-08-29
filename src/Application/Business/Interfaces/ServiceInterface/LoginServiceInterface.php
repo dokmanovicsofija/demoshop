@@ -24,4 +24,12 @@ interface LoginServiceInterface
      * @return void
      */
     public function authenticate(string $username, string $password, bool $keepLoggedIn): void;
+
+    /**
+     * Validates the provided token by checking if it matches any admin in the database.
+     *
+     * @param string $token The token to validate.
+     * @return bool Returns true if the token is valid, false otherwise.
+     */
+    public function validateToken(string $token): bool;
 }
