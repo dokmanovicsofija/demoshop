@@ -66,7 +66,6 @@ class LoginService implements LoginServiceInterface
 //                );
 //                SessionManager::getInstance()->setCookie(session_name(), session_id(), time() + (86400 * 30), "/");
             return;
-//            return true;
         }
 
         throw new AuthenticationException("Invalid username or password");

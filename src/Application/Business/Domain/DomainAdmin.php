@@ -67,6 +67,16 @@ class DomainAdmin
         return $this->token;
     }
 
+    /**
+     * Set the admins token.
+     *
+     * This method assigns a new token value to the admin.
+     * The token is typically used for session management or to
+     * maintain a persistent login state for the admin.
+     *
+     * @param string $token The token value to be assigned to the admin.
+     * @return void
+     */
     public function setToken(string $token): void
     {
         $this->token = $token;
