@@ -35,27 +35,23 @@ class ExceptionHandler
                 [],
                 404
             );
+        } elseif ($exception instanceof AuthenticationException) {
+            $response = HtmlResponse::fromView(
+                PathHelper::view('login.php'),
+                ['errorMessage' => $exception->getMessage()],
+                401
+            );
+        } elseif ($exception instanceof AuthorizationException) {
+            $response = HtmlResponse::fromView(
+                PathHelper::view('errors/403.php'),
+                [],
+                403
+            );
         } else {
             $response = HtmlResponse::fromView(
                 PathHelper::view('errors/500.php'),
                 [],
                 500
-            );
-        }
-
-        if ($exception instanceof AuthenticationException) {
-            $response = HtmlResponse::fromView(
-                PathHelper::view('errors/401.php'),
-                [],
-                401
-            );
-        }
-
-        if ($exception instanceof AuthorizationException) {
-            $response = HtmlResponse::fromView(
-                PathHelper::view('errors/403.php'),
-                [],
-                403
             );
         }
 

@@ -5,6 +5,8 @@ namespace Application\Business\Services;
 use Application\Business\Interfaces\RepositoryInterface\LoginRepositoryInterface;
 use Application\Business\Interfaces\ServiceInterface\LoginServiceInterface;
 use Application\Integration\Exceptions\AuthenticationException;
+use Application\Integration\Utility\PathHelper;
+use Infrastructure\Response\HtmlResponse;
 use Infrastructure\Utility\SessionManager;
 
 /**
@@ -33,10 +35,10 @@ class LoginService implements LoginServiceInterface
      * @param string $username The username of the admin attempting to log in.
      * @param string $password The password of the admin attempting to log in.
      * @param bool $keepLoggedIn A flag indicating whether the admin should remain logged in across sessions.
-     * @return bool
+     * @return void
      * @throws AuthenticationException
      */
-    public function authenticate(string $username, string $password, bool $keepLoggedIn): bool
+    public function authenticate(string $username, string $password, bool $keepLoggedIn): void
     {
         $admin = $this->adminRepository->findByUsername($username);
 
@@ -52,14 +54,12 @@ class LoginService implements LoginServiceInterface
                     'true',
                     time() + (86400 * 30)
                 );
-                SessionManager::getInstance()->setCookie(session_name(), session_id(), time() + (86400 * 30), "/", "",
-                    false, true);
+                SessionManager::getInstance()->setCookie(session_name(), session_id(), time() + (86400 * 30), "/");
             }
-            return true;
+            return;
+//            return true;
         }
 
-
-            throw new AuthenticationException("Invalid username or password");
-
+        throw new AuthenticationException("Invalid username or password");
     }
 }

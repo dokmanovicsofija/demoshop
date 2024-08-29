@@ -151,4 +151,17 @@ class HttpRequest extends Singleton
     {
         return $_POST;
     }
+
+    /**
+     * Get all POST data from the request.
+     *
+     * This method returns all POST data as an associative array, where the keys are the
+     * names of the form fields and the values are the data submitted by the client.
+     *
+     * @return array An associative array of all POST data.
+     */
+    public function getAllPostData(): array
+    {
+        return $this->postData;
+    }
 }

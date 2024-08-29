@@ -64,17 +64,54 @@ class LoginController
      */
     public function login(HttpRequest $request): HtmlResponse
     {
-        $username = $request->getBodyParam('username');
-        $password = $request->getBodyParam('password');
-        $keepLoggedIn = $request->getBodyParam('keepLoggedIn') === 'on';
+        $postData = $request->getAllPostData();
+        $username = $postData['username'] ?? null;
+        $password = $postData['password'] ?? null;
+        $keepLoggedIn = isset($postData['keepLoggedIn']) && $postData['keepLoggedIn'] === 'on';
 
-        try {
-            $this->loginService->authenticate($username, $password, $keepLoggedIn);
-            return HtmlResponse::fromView(PathHelper::view('dashboard.php'));
-        } catch (AuthenticationException $e) {
+        $validationResponse = $this->validateLoginData($username, $password);
+        if ($validationResponse !== null) {
+            return $validationResponse;
+        }
+
+        $this->loginService->authenticate($username, $password, $keepLoggedIn);
+
+        return HtmlResponse::fromView(PathHelper::view('dashboard.php'));
+    }
+
+    /**
+     * Validates the login data.
+     *
+     * This method checks the username and password provided by the user during login.
+     * It ensures that the username is not empty, the password is not empty, and that the
+     * password meets the minimum length requirement. If any of these validations fail,
+     * it returns an `HtmlResponse` that renders the login page with the appropriate error message.
+     * If all validations pass, it returns `null`, allowing the login process to proceed.
+     *
+     * @param string $username The username provided by the user.
+     * @param string $password The password provided by the user.
+     * @return HtmlResponse|null Returns an `HtmlResponse` with an error message if validation fails, or `null` if validation passes.
+     */
+    private function validateLoginData(string $username, string $password): ?HtmlResponse
+    {
+        if (empty($username)) {
             return HtmlResponse::fromView(PathHelper::view('login.php'), [
-                'errorMessage' => $e->getMessage()
+                'errorMessage' => 'Username is required.'
             ]);
         }
+
+        if (empty($password)) {
+            return HtmlResponse::fromView(PathHelper::view('login.php'), [
+                'errorMessage' => 'Password is required.'
+            ]);
+        }
+
+        if (strlen($password) < 5) {
+            return HtmlResponse::fromView(PathHelper::view('login.php'), [
+                'errorMessage' => 'Password must be at least 5 characters long.'
+            ]);
+        }
+
+        return null;
     }
 }

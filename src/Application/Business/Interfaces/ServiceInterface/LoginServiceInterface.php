@@ -2,6 +2,8 @@
 
 namespace Application\Business\Interfaces\ServiceInterface;
 
+use Infrastructure\Response\HtmlResponse;
+
 /**
  * Interface LoginServiceInterface
  *
@@ -19,7 +21,7 @@ interface LoginServiceInterface
      * @param string $username The username of the admin attempting to log in.
      * @param string $password The password of the admin attempting to log in.
      * @param bool $keepLoggedIn A flag indicating whether the admin should remain logged in across sessions.
-     * @return bool
+     * @return void
      */
-    public function authenticate(string $username, string $password, bool $keepLoggedIn): bool;
+    public function authenticate(string $username, string $password, bool $keepLoggedIn): void;
 }
