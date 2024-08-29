@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @method static Admin where(string $column, mixed $value)
  * @method static Admin first()
+ * @method static Admin find(int $id)
  */
 class Admin extends Model
 {
@@ -26,7 +27,9 @@ class Admin extends Model
      * using methods like `create` or `update`, only these fields will be considered.
      */
     protected $fillable = [
-        'username', 'password', 'token',
+        'username',
+        'password',
+        'token',
     ];
 
     /**

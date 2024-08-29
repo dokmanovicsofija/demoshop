@@ -5,6 +5,7 @@ namespace Application\Data\SQLRepositories;
 use Application\Business\Domain\DomainAdmin;
 use Application\Business\Interfaces\RepositoryInterface\LoginRepositoryInterface;
 use Application\Data\Entities\Admin;
+use Exception;
 
 //use Illuminate\Database\Capsule\Manager as Capsule;
 
@@ -40,5 +41,23 @@ class LoginRepository implements LoginRepositoryInterface
             $adminData->password,
             $adminData->token
         );
+    }
+
+    /**
+     * Update the token for a specific admin in the database.
+     *
+     * This method updates the token field for the admin with the given ID.
+     *
+     * @param int $adminId The ID of the admin whose token is to be updated.
+     * @param string $token The new token to be set.
+     * @return void
+     * @throws Exception
+     */
+    public function updateToken(int $adminId, string $token): void
+    {
+        $admin = Admin::find($adminId);
+
+        $admin->token = $token;
+        $admin->save();
     }
 }

@@ -25,6 +25,7 @@ use Application\Presentation\Controller\AdminController\LoginController;
 use Application\Presentation\Controller\AdminController\ProductController;
 use Application\Presentation\Controller\FrontController\HomeController;
 use Exception;
+use Infrastructure\Utility\CookieManager;
 use Infrastructure\Utility\ServiceRegistry;
 
 /**
@@ -80,6 +81,7 @@ class Bootstrap
         ServiceRegistry::getInstance()->register(Router::class, Router::getInstance());
         ServiceRegistry::register(LoginServiceInterface::class, new LoginService(
             ServiceRegistry::get(LoginRepositoryInterface::class),
+            new CookieManager()
         ));
         ServiceRegistry::register(ProductServiceInterface::class, new ProductService(
             ServiceRegistry::get(ProductRepositoryInterface::class),

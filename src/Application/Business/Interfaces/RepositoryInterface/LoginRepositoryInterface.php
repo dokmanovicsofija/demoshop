@@ -23,5 +23,17 @@ interface LoginRepositoryInterface
      */
     public function findByUsername(string $username): ?DomainAdmin;
 
+    /**
+     * Update the authentication token for a specific admin.
+     *
+     * This method updates the `token` field for the admin with the given ID.
+     * It assumes that the admin with the provided ID already exists.
+     *
+     * @param int $adminId The ID of the admin whose token needs to be updated.
+     * @param string $token The new token to set for the admin.
+     * @return void
+     */
+    public function updateToken(int $adminId, string $token): void;
+
     // TODO setTokenForAdmin, getAdminByTOken
 }

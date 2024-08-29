@@ -7,7 +7,9 @@ use Application\Business\Interfaces\ServiceInterface\LoginServiceInterface;
 use Application\Integration\Exceptions\AuthenticationException;
 use Application\Integration\Utility\PathHelper;
 use Infrastructure\Response\HtmlResponse;
+use Infrastructure\Utility\CookieManager;
 use Infrastructure\Utility\SessionManager;
+use Random\RandomException;
 
 /**
  * Class LoginService
@@ -21,7 +23,7 @@ class LoginService implements LoginServiceInterface
      *
      * @param LoginRepositoryInterface $adminRepository The repository interface for admin data access.
      */
-    public function __construct(private LoginRepositoryInterface $adminRepository)
+    public function __construct(private LoginRepositoryInterface $adminRepository, private CookieManager $cookieManager)
     {
     }
 
@@ -37,6 +39,7 @@ class LoginService implements LoginServiceInterface
      * @param bool $keepLoggedIn A flag indicating whether the admin should remain logged in across sessions.
      * @return void
      * @throws AuthenticationException
+     * @throws RandomException
      */
     public function authenticate(string $username, string $password, bool $keepLoggedIn): void
     {
@@ -46,16 +49,22 @@ class LoginService implements LoginServiceInterface
 
             SessionManager::getInstance()->set('loggedIn', true);
 
-            if ($keepLoggedIn) {
 
-                //GENERATE AND SAVE TOKEN, SAVE TO COOKIE
-                SessionManager::getInstance()->setCookie(
-                    'loggedIn',
-                    'true',
-                    time() + (86400 * 30)
-                );
-                SessionManager::getInstance()->setCookie(session_name(), session_id(), time() + (86400 * 30), "/");
+            if ($keepLoggedIn) {
+                $token = bin2hex(random_bytes(32));
+                $admin->setToken($token);
+                $this->adminRepository->updateToken($admin->getId(), $token);
+
+                $this->cookieManager->setCookie('keepLoggedIn', $token, time() + (86400 * 30));
             }
+
+//                //GENERATE AND SAVE TOKEN, SAVE TO COOKIE
+//                SessionManager::getInstance()->setCookie(
+//                    'loggedIn',
+//                    'true',
+//                    time() + (86400 * 30)
+//                );
+//                SessionManager::getInstance()->setCookie(session_name(), session_id(), time() + (86400 * 30), "/");
             return;
 //            return true;
         }

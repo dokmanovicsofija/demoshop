@@ -19,8 +19,12 @@ class DomainAdmin
      * @param string $password The hashed password of the admin.
      * @param string|null $token An optional token associated with the admin (default is null).
      */
-    public function __construct(private int $id, private string $username, private string $password, private ?string $token = null)
-    {
+    public function __construct(
+        private int $id,
+        private string $username,
+        private string $password,
+        private ?string $token = null
+    ) {
     }
 
     /**
@@ -61,5 +65,10 @@ class DomainAdmin
     public function getToken(): ?string
     {
         return $this->token;
+    }
+
+    public function setToken(string $token): void
+    {
+        $this->token = $token;
     }
 }
