@@ -130,7 +130,7 @@ class Categories {
 
         if (category.subcategories && category.subcategories.length > 0) {
             const subUl = this.createHTMLElement('ul', {}, '');
-            subUl.style.display = 'none'; // Podkategorije su skriveno na početku
+            subUl.style.display = 'none';
 
             category.subcategories.forEach(subcategory => {
                 const subLi = this.createCategoryNode(subcategory);
@@ -219,6 +219,8 @@ class Categories {
 
         const formContainer = this.createHTMLElement('div', {id: 'create-category-form', class: 'category-form'});
 
+        const errorMessageDiv = this.createHTMLElement('div', {id: 'error-message', style: 'display:none; color:red;'});
+
         const titleLabel = this.createHTMLElement('label', {}, 'Title:');
         const titleInput = this.createHTMLElement('input', {type: 'text', id: 'new-category-title'});
 
@@ -243,6 +245,7 @@ class Categories {
 
         this.attachFormEventListeners(okButton, cancelButton, titleInput, parentSelect, codeInput, descriptionTextarea);
 
+        formContainer.appendChild(errorMessageDiv);
         formContainer.appendChild(titleLabel);
         formContainer.appendChild(titleInput);
         formContainer.appendChild(parentLabel);
@@ -274,15 +277,18 @@ class Categories {
     // Attaches event listeners to the form buttons
     attachFormEventListeners(okButton, cancelButton, titleInput, parentSelect, codeInput, descriptionTextarea) {
         okButton.addEventListener('click', () => {
+            this.clearErrorMessage();
+
             if (!titleInput.value.trim()) {
-                alert('Title is required');
+                this.displayErrorMessage('Title is required');
                 return;
             }
 
             if (!codeInput.value.trim()) {
-                alert('Code is required');
+                this.displayErrorMessage('Code is required');
                 return;
             }
+
             this.saveNewCategory({
                 title: titleInput.value,
                 parent: parentSelect.value === 'root' ? null : parentSelect.value,
@@ -305,7 +311,7 @@ class Categories {
             .then(response => {
                 console.log('Original response:', response);
                 if (response.error) {
-                    alert(response.error);
+                    this.displayErrorMessage(response.error);
                     return;
                 }
                 this.cancelCreateCategoryForm();
@@ -479,5 +485,19 @@ class Categories {
                 }
             }
         });
+    }
+
+    // Helper method to display error messages
+    displayErrorMessage(message) {
+        const errorDiv = document.getElementById('error-message');
+        errorDiv.textContent = message;
+        errorDiv.style.display = 'block';
+    }
+
+// Helper method to clear error messages
+    clearErrorMessage() {
+        const errorDiv = document.getElementById('error-message');
+        errorDiv.textContent = '';
+        errorDiv.style.display = 'none';
     }
 }

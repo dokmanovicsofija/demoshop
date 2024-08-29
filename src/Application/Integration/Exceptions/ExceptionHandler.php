@@ -5,6 +5,7 @@ namespace Application\Integration\Exceptions;
 use Infrastructure\Exceptions\HttpNotFoundException;
 use Infrastructure\Response\HtmlResponse;
 use Application\Integration\Utility\PathHelper;
+use Infrastructure\Response\JsonResponse;
 use Throwable;
 
 /**
@@ -46,6 +47,17 @@ class ExceptionHandler
                 PathHelper::view('errors/403.php'),
                 [],
                 403
+            );
+        } elseif ($exception instanceof \InvalidArgumentException) {
+            $response = new JsonResponse(
+                ['error-message' => $exception->getMessage()],
+                400
+            );
+        } elseif ($exception instanceof \RuntimeException) {
+            $response = HtmlResponse::fromView(
+                PathHelper::view('errors/500.php'),
+                ['errorMessage' => $exception->getMessage()],
+                500
             );
         } else {
             $response = HtmlResponse::fromView(

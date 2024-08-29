@@ -42,8 +42,9 @@ class CategoryService implements CategoryServiceInterface
     public function createRootCategory(DomainCategory $category): int
     {
         if ($this->categoryRepository->findByCode($category->getCode())) {
-            throw new InvalidArgumentException('Category code must be unique.');
+            throw new \InvalidArgumentException('Category code must be unique.');
         }
+
         return $this->categoryRepository->addRootCategory($category);
     }
 
@@ -75,9 +76,10 @@ class CategoryService implements CategoryServiceInterface
                 }
             }
             $this->categoryRepository->updateParent($categoryId, $parentId);
-        } else {
-            $this->categoryRepository->updateParent($categoryId, $parentId);
+            return;
         }
+        $this->categoryRepository->updateParent($categoryId, $parentId);
+
     }
 
     /**

@@ -7,7 +7,7 @@ use Application\Business\Interfaces\ServiceInterface\CategoryServiceInterface;
 use Infrastructure\Request\HttpRequest;
 use Infrastructure\Response\JsonResponse;
 
-class CategoryController
+readonly class CategoryController
 {
     /**
      * CategoryController constructor.
@@ -44,14 +44,14 @@ class CategoryController
         $description = $data['description'] ?? null;
         $parentId = isset($data['parent']) && $data['parent'] !== 'root' ? (int)$data['parent'] : null;
 
-        try {
-            $category = new DomainCategory(0, $parentId, $code, $title, $description);
-            $newCategoryId = $this->categoryService->createRootCategory($category);
-
-            return new JsonResponse(['id' => $newCategoryId], 201);
-        } catch (\InvalidArgumentException $e) {
-            return new JsonResponse(['error' => $e->getMessage()], 400);
+        if (empty($title) || empty($code)) {
+            throw new \InvalidArgumentException('Title and code are required.');
         }
+
+        $category = new DomainCategory(0, $parentId, $code, $title, $description);
+        $newCategoryId = $this->categoryService->createRootCategory($category);
+
+        return new JsonResponse(['id' => $newCategoryId], 201);
     }
 
     /**
@@ -70,13 +70,9 @@ class CategoryController
         $categoryId = (int)$data['id'];
         $parentId = $data['parent'] ?? null;
 
-        try {
-            $this->categoryService->updateCategoryParent($categoryId, $parentId);
+        $this->categoryService->updateCategoryParent($categoryId, $parentId);
 
-            return new JsonResponse(['message' => 'Category updated successfully']);
-        } catch (\InvalidArgumentException $e) {
-            return new JsonResponse(['error' => $e->getMessage()], 400);
-        }
+        return new JsonResponse(['message' => 'Category updated successfully']);
     }
 
     /**
@@ -94,12 +90,9 @@ class CategoryController
         $data = $request->getParsedBody();
         $categoryId = (int)$data['id'];
 
-        try {
-            $this->categoryService->deleteCategory($categoryId);
-            return new JsonResponse(['message' => 'Category deleted successfully']);
-        } catch (\InvalidArgumentException $e) {
-            return new JsonResponse(['error' => $e->getMessage()], 400);
-        }
+        $this->categoryService->deleteCategory($categoryId);
+        return new JsonResponse(['message' => 'Category deleted successfully']);
+
     }
 
     /**

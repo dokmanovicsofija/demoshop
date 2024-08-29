@@ -15,7 +15,7 @@ use RuntimeException;
  * This controller handles requests related to products in the admin section.
  * It interacts with the ProductService to perform operations and returns results as JSON responses.
  */
-class ProductController
+readonly class ProductController
 {
     /**
      * ProductController constructor.
@@ -117,34 +117,28 @@ class ProductController
         $featured = isset($data['featured']) && $data['featured'] == 1;
         $imageName = null;
 
-        try {
-            if (isset($files['image'])) {
-                $imageName = $this->processImage($files['image']);
-            }
-
-            $productDomainModel = new DomainProduct(
-                0,
-                (int)$categoryId,
-                $sku,
-                $title,
-                $brand,
-                (float)$price,
-                $shortDescription,
-                $description,
-                $imageName,
-                $enabled,
-                $featured,
-                0
-            );
-
-            $id = $this->productService->createProduct($productDomainModel);
-
-            return new JsonResponse(['status' => 'success', 'message' => 'Product added successfully']);
-        } catch (InvalidArgumentException $e) {
-            return new JsonResponse(['error' => $e->getMessage()], 400);
-        } catch (RuntimeException $e) {
-            return new JsonResponse(['error' => $e->getMessage()], 500);
+        if (isset($files['image'])) {
+            $imageName = $this->processImage($files['image']);
         }
+
+        $productDomainModel = new DomainProduct(
+            0,
+            (int)$categoryId,
+            $sku,
+            $title,
+            $brand,
+            (float)$price,
+            $shortDescription,
+            $description,
+            $imageName,
+            $enabled,
+            $featured,
+            0
+        );
+
+        $this->productService->createProduct($productDomainModel);
+
+        return new JsonResponse(['status' => 'success', 'message' => 'Product added successfully']);
     }
 
     /**
