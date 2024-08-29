@@ -6,6 +6,8 @@ use Infrastructure\Exceptions\HttpNotFoundException;
 use Infrastructure\Response\HtmlResponse;
 use Application\Integration\Utility\PathHelper;
 use Infrastructure\Response\JsonResponse;
+use Infrastructure\Response\RedirectResponse;
+use JetBrains\PhpStorm\NoReturn;
 use Throwable;
 
 /**
@@ -28,7 +30,7 @@ class ExceptionHandler
      * @param Throwable $exception The exception that was thrown during the application's execution.
      * @return void
      */
-    public static function handle(Throwable $exception): void
+    #[NoReturn] public static function handle(Throwable $exception): void
     {
         if ($exception instanceof HttpNotFoundException) {
             $response = HtmlResponse::fromView(
@@ -36,6 +38,8 @@ class ExceptionHandler
                 [],
                 404
             );
+        } elseif ($exception instanceof RedirectToLoginException) {
+            $response = new RedirectResponse('/login');
         } elseif ($exception instanceof AuthenticationException) {
             $response = HtmlResponse::fromView(
                 PathHelper::view('login.php'),

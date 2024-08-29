@@ -2,6 +2,8 @@
 
 namespace Infrastructure\Response;
 
+use JetBrains\PhpStorm\NoReturn;
+
 class RedirectResponse extends AbstractHttpResponse
 {
     /**
@@ -18,7 +20,6 @@ class RedirectResponse extends AbstractHttpResponse
     public function __construct(string $url, int $statusCode = 302)
     {
         parent::__construct($statusCode);
-
         $this->addHeader('Location', $url);
     }
 
@@ -27,11 +28,9 @@ class RedirectResponse extends AbstractHttpResponse
      *
      * @return void
      */
-    public function send(): void
+    #[NoReturn] public function send(): void
     {
-//TODO not needed
         $this->sendHeaders();
-        exit;
     }
 
     /**

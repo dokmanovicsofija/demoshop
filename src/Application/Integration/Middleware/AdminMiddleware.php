@@ -3,6 +3,7 @@
 namespace Application\Integration\Middleware;
 
 use Application\Business\Interfaces\ServiceInterface\LoginServiceInterface;
+use Application\Integration\Exceptions\RedirectToLoginException;
 use Infrastructure\Request\HttpRequest;
 use Infrastructure\Response\RedirectResponse;
 use Infrastructure\Utility\CookieManager;
@@ -17,7 +18,7 @@ use Infrastructure\Utility\SessionManager;
 class AdminMiddleware extends AbstractMiddleware
 {
 
-    public function __construct(private LoginServiceInterface $loginService, private CookieManager $cookieManager)
+    public function __construct(private readonly LoginServiceInterface $loginService, private readonly CookieManager $cookieManager)
     {
     }
 
@@ -30,6 +31,7 @@ class AdminMiddleware extends AbstractMiddleware
      *
      * @param HttpRequest $request The incoming HTTP request.
      * @return void
+     * @throws RedirectToLoginException
      */
     public function handle(HttpRequest $request): void
     {
@@ -39,10 +41,9 @@ class AdminMiddleware extends AbstractMiddleware
             $token = $this->cookieManager->getCookie('keepLoggedIn');
 
             if (!$token || !$this->loginService->validateToken($token)) {
-                $response = new RedirectResponse('/login');
-                $response->send();
-                return;
+                throw new RedirectToLoginException('User is not authenticated, redirecting to login.');
             }
+
             $sessionManager->set('loggedIn', true);
         }
 
