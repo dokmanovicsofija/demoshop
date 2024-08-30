@@ -9,6 +9,7 @@ use Application\Integration\Routing\Router;
 use Application\Integration\Routing\RouterRegistry;
 use Exception;
 use Infrastructure\Request\HttpRequest;
+use JetBrains\PhpStorm\NoReturn;
 
 /**
  * Class Kernel
@@ -30,10 +31,9 @@ class Kernel
      * @return void
      * @throws Exception
      */
-    public static function init(): void
+    #[NoReturn] public static function init(): void
     {
-        set_exception_handler([ExceptionHandler::class, 'handle']);
-
+        ExceptionHandler::init();
         Bootstrap::init();
         DatabaseConnection::init();
         RouterRegistry::registerRoutes();

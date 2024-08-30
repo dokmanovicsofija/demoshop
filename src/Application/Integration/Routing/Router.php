@@ -37,7 +37,6 @@ class Router extends Singleton
     public function addRoute(Route $route): void
     {
         $this->routes[] = $route;
-
     }
 
     /**
@@ -69,7 +68,7 @@ class Router extends Singleton
                 $controller = ServiceRegistry::getInstance()->get($controllerClass);
 
                 foreach ($route->getMiddlewares() as $middleware) {
-                     $middleware->handle($request);
+                    $middleware->handle($request);
                 }
 
                 return call_user_func_array([$controller, $route->getAction()], array_merge([$request], $params));

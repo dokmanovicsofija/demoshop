@@ -20,6 +20,18 @@ use Throwable;
 class ExceptionHandler
 {
     /**
+     * Initializes the global exception handler.
+     *
+     * This method sets the global exception handler to the handle method of this class.
+     *
+     * @return void
+     */
+    public static function init(): void
+    {
+        set_exception_handler([self::class, 'handle']);
+    }
+
+    /**
      * Handle all exceptions thrown in the application.
      *
      * This method acts as the global exception handler for the application. It takes an exception
