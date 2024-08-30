@@ -78,11 +78,9 @@ class Bootstrap
      */
     protected static function registerServices(): void
     {
-        ServiceRegistry::register(CookieManager::class, new CookieManager());
         ServiceRegistry::getInstance()->register(Router::class, Router::getInstance());
         ServiceRegistry::register(LoginServiceInterface::class, new LoginService(
-            ServiceRegistry::get(LoginRepositoryInterface::class),
-            ServiceRegistry::get(CookieManager::class)
+            ServiceRegistry::get(LoginRepositoryInterface::class)
         ));
         ServiceRegistry::register(ProductServiceInterface::class, new ProductService(
             ServiceRegistry::get(ProductRepositoryInterface::class),

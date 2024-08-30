@@ -18,7 +18,7 @@ use Infrastructure\Utility\SessionManager;
 class AdminMiddleware extends AbstractMiddleware
 {
 
-    public function __construct(private readonly LoginServiceInterface $loginService, private readonly CookieManager $cookieManager)
+    public function __construct(private readonly LoginServiceInterface $loginService)
     {
     }
 
@@ -36,9 +36,10 @@ class AdminMiddleware extends AbstractMiddleware
     public function handle(HttpRequest $request): void
     {
         $sessionManager = SessionManager::getInstance();
+        $cookieManager = CookieManager::getInstance();
 
         if (!$sessionManager->get('loggedIn')) {
-            $token = $this->cookieManager->getCookie('keepLoggedIn');
+            $token = $cookieManager->getCookie('keepLoggedIn');
 
             if (!$token || !$this->loginService->validateToken($token)) {
                 throw new RedirectToLoginException('User is not authenticated, redirecting to login.');

@@ -23,7 +23,7 @@ class LoginService implements LoginServiceInterface
      *
      * @param LoginRepositoryInterface $adminRepository The repository interface for admin data access.
      */
-    public function __construct(private LoginRepositoryInterface $adminRepository, private CookieManager $cookieManager)
+    public function __construct(private LoginRepositoryInterface $adminRepository)
     {
     }
 
@@ -55,7 +55,7 @@ class LoginService implements LoginServiceInterface
                 $admin->setToken($token);
                 $this->adminRepository->updateToken($admin->getId(), $token);
 
-                $this->cookieManager->setCookie('keepLoggedIn', $token, time() + (86400 * 30));
+                CookieManager::getInstance()->setCookie('keepLoggedIn', $token, time() + (86400 * 30));
             }
 
             return;

@@ -12,8 +12,23 @@ namespace Infrastructure\Utility;
  * and sent back to the server with each HTTP request. They are commonly
  * used for session management, personalization, and tracking.
  */
-class CookieManager
+class CookieManager extends Singleton
 {
+    /**
+     * CookieManager constructor.
+     *
+     * The constructor is protected to ensure the Singleton pattern is enforced.
+     * It calls the parent constructor from the Singleton class to ensure that
+     * the Singleton instance is properly initialized.
+     *
+     * This design ensures that only one instance of CookieManager is created
+     * throughout the application, and it can be accessed via the getInstance() method.
+     */
+    protected function __construct()
+    {
+        parent::__construct();
+    }
+
     /**
      * Set a cookie.
      *
