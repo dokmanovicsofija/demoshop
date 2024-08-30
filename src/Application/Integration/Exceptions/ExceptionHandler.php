@@ -38,39 +38,60 @@ class ExceptionHandler
                 [],
                 404
             );
-        } elseif ($exception instanceof RedirectToLoginException) {
+            $response->send();
+            return;
+        }
+
+        if ($exception instanceof RedirectToLoginException) {
             $response = new RedirectResponse('/login');
-        } elseif ($exception instanceof AuthenticationException) {
+            return;
+        }
+
+        if ($exception instanceof AuthenticationException) {
             $response = HtmlResponse::fromView(
                 PathHelper::view('login.php'),
                 ['errorMessage' => $exception->getMessage()],
                 401
             );
-        } elseif ($exception instanceof AuthorizationException) {
+            $response->send();
+            return;
+        }
+
+        if ($exception instanceof AuthorizationException) {
             $response = HtmlResponse::fromView(
                 PathHelper::view('errors/403.php'),
                 [],
                 403
             );
-        } elseif ($exception instanceof \InvalidArgumentException) {
+            $response->send();
+            return;
+        }
+
+        if ($exception instanceof \InvalidArgumentException) {
             $response = new JsonResponse(
                 ['error-message' => $exception->getMessage()],
                 400
             );
-        } elseif ($exception instanceof \RuntimeException) {
+            $response->send();
+            return;
+        }
+
+        if ($exception instanceof \RuntimeException) {
             $response = HtmlResponse::fromView(
                 PathHelper::view('errors/500.php'),
                 ['errorMessage' => $exception->getMessage()],
                 500
             );
-        } else {
-            $response = HtmlResponse::fromView(
-                PathHelper::view('errors/500.php'),
-                [],
-                500
-            );
+            $response->send();
+            return;
         }
 
+        // Default case for all other exceptions
+        $response = HtmlResponse::fromView(
+            PathHelper::view('errors/500.php'),
+            [],
+            500
+        );
         $response->send();
     }
 }
