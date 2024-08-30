@@ -55,7 +55,12 @@ class ExceptionHandler
         }
 
         if ($exception instanceof RedirectToLoginException) {
-            $response = new RedirectResponse('/login');
+            $response = HtmlResponse::fromView(
+                PathHelper::view('login.php'),
+                [],
+                401
+            );
+            $response->send();
             return;
         }
 

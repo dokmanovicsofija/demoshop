@@ -41,10 +41,6 @@ class RouterRegistry
         );
 
         Router::getInstance()->addRoute(
-            (new Route('GET', '/login', LoginController::class, 'index'))
-        );
-
-        Router::getInstance()->addRoute(
             (new Route('GET', '/admin', LoginController::class, 'dashboard'))
                 ->addMiddleware(new AdminMiddleware($loginService, $cookieManager))
         );

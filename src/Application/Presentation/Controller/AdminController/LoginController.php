@@ -26,20 +26,6 @@ class LoginController
     }
 
     /**
-     * Displays the login form.
-     *
-     * This method returns an HTML response containing the login form.
-     * There are no authentication checks within this method, as it's assumed
-     * that protection is handled by middleware or other logic before this method is accessed.
-     *
-     * @return HtmlResponse The response containing the login form view.
-     */
-    public function index(): HtmlResponse
-    {
-        return HtmlResponse::fromView(PathHelper::view('login.php'));
-    }
-
-    /**
      * Displays the dashboard view.
      *
      * This method returns an HTML response containing the dashboard view.
