@@ -15,9 +15,9 @@ class ValidationException extends Exception
      * Constructs a new ValidationException.
      *
      * @param string $message The validation error message.
-     * @param int $code The error code (default is 0).
+     * @param int $code The error code 400.
      */
-    public function __construct(string $message, int $code = 0)
+    public function __construct(string $message, int $code = 400)
     {
         parent::__construct($message, $code);
     }
