@@ -4,6 +4,7 @@ namespace Application\Presentation\Controller\AdminController;
 
 use Application\Business\Interfaces\ServiceInterface\LoginServiceInterface;
 use Application\Integration\Exceptions\AuthenticationException;
+use Application\Integration\Exceptions\ValidationException;
 use Application\Integration\Utility\PathHelper;
 use Infrastructure\Request\HttpRequest;
 use Infrastructure\Response\HtmlResponse;
@@ -47,6 +48,7 @@ class LoginController
      *
      * @param HttpRequest $request The HTTP request containing the login data.
      * @return HtmlResponse The response containing either the dashboard or the login form with an error message.
+     * @throws ValidationException
      */
     public function login(HttpRequest $request): HtmlResponse
     {
@@ -55,10 +57,7 @@ class LoginController
         $password = $postData['password'] ?? null;
         $keepLoggedIn = isset($postData['keepLoggedIn']) && $postData['keepLoggedIn'] === 'on';
 
-        $validationResponse = $this->validateLoginData($username, $password);
-        if ($validationResponse !== null) {
-            return $validationResponse;
-        }
+        $this->validateLoginData($username, $password);
 
         $this->loginService->authenticate($username, $password, $keepLoggedIn);
 
@@ -70,34 +69,30 @@ class LoginController
      *
      * This method checks the username and password provided by the user during login.
      * It ensures that the username is not empty, the password is not empty, and that the
-     * password meets the minimum length requirement. If any of these validations fail,
-     * it returns an `HtmlResponse` that renders the login page with the appropriate error message.
-     * If all validations pass, it returns `null`, allowing the login process to proceed.
+     * password meets the minimum length requirement and matches the required pattern.
+     * If any of these validations fail, it throws a `ValidationException`.
      *
      * @param string $username The username provided by the user.
      * @param string $password The password provided by the user.
-     * @return HtmlResponse|null Returns an `HtmlResponse` with an error message if validation fails, or `null` if validation passes.
+     * @throws ValidationException if validation fails.
      */
-    private function validateLoginData(string $username, string $password): ?HtmlResponse
+    private function validateLoginData(string $username, string $password): void
     {
         if (empty($username)) {
-            return HtmlResponse::fromView(PathHelper::view('login.php'), [
-                'errorMessage' => 'Username is required.'
-            ]);
+            throw new ValidationException('Username is required.');
         }
 
         if (empty($password)) {
-            return HtmlResponse::fromView(PathHelper::view('login.php'), [
-                'errorMessage' => 'Password is required.'
-            ]);
+            throw new ValidationException('Password is required.');
         }
 
-        if (strlen($password) < 5) {
-            return HtmlResponse::fromView(PathHelper::view('login.php'), [
-                'errorMessage' => 'Password must be at least 5 characters long.'
-            ]);
+        if (strlen($password) < 8) {
+            throw new ValidationException('Password must be at least 8 characters long.');
         }
 
-        return null;
+        $pattern = '/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).+$/';
+        if (!preg_match($pattern, $password)) {
+            throw new ValidationException('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.');
+        }
     }
 }

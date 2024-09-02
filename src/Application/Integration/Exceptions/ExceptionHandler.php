@@ -6,7 +6,6 @@ use Infrastructure\Exceptions\HttpNotFoundException;
 use Infrastructure\Response\HtmlResponse;
 use Application\Integration\Utility\PathHelper;
 use Infrastructure\Response\JsonResponse;
-use Infrastructure\Response\RedirectResponse;
 use JetBrains\PhpStorm\NoReturn;
 use Throwable;
 
@@ -44,6 +43,16 @@ class ExceptionHandler
      */
     #[NoReturn] public static function handle(Throwable $exception): void
     {
+        if ($exception instanceof ValidationException) {
+            $response = HtmlResponse::fromView(
+                PathHelper::view('login.php'),
+                ['errorMessage' => $exception->getMessage()],
+                400
+            );
+            $response->send();
+            return;
+        }
+
         if ($exception instanceof HttpNotFoundException) {
             $response = HtmlResponse::fromView(
                 PathHelper::view('errors/404.php'),
