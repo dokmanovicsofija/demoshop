@@ -4,6 +4,8 @@ namespace Application\Presentation\Controller\AdminController;
 
 use Application\Business\Domain\DomainProduct;
 use Application\Business\Interfaces\ServiceInterface\ProductServiceInterface;
+use Application\Presentation\Exceptions\EmptyProductIdArrayException;
+use Application\Presentation\Exceptions\ImageProcessingException;
 use Infrastructure\Request\HttpRequest;
 use Infrastructure\Response\JsonResponse;
 use InvalidArgumentException;
@@ -50,10 +52,13 @@ readonly class ProductController
      *
      * @param HttpRequest $request The HTTP request containing the product IDs to enable.
      * @return JsonResponse A JSON response indicating the success of the operation.
+     * @throws EmptyProductIdArrayException
      */
     public function enableProducts(HttpRequest $request): JsonResponse
     {
         $productIds = $request->getParsedBody()['productIds'] ?? [];
+
+        $this->validateProductIds($productIds);
 
         $this->productService->updateProductStatus($productIds, true);
 
@@ -68,10 +73,13 @@ readonly class ProductController
      *
      * @param HttpRequest $request The HTTP request containing the product IDs to disable.
      * @return JsonResponse A JSON response indicating the success of the operation.
+     * @throws EmptyProductIdArrayException
      */
     public function disableProducts(HttpRequest $request): JsonResponse
     {
         $productIds = $request->getParsedBody()['productIds'] ?? [];
+
+        $this->validateProductIds($productIds);
 
         $this->productService->updateProductStatus($productIds, false);
 
@@ -83,10 +91,13 @@ readonly class ProductController
      *
      * @param HttpRequest $request
      * @return JsonResponse
+     * @throws EmptyProductIdArrayException
      */
     public function deleteProduct(HttpRequest $request): JsonResponse
     {
         $productIds = $request->getParsedBody()['ids'] ?? [];
+
+        $this->validateProductIds($productIds);
 
         foreach ($productIds as $productId) {
             $this->productService->deleteProduct($productId);
@@ -146,8 +157,8 @@ readonly class ProductController
      *
      * @param array $image The uploaded image file information from the $_FILES array.
      * @return string|null The name of the saved image file or null if no image was processed.
-     * @throws InvalidArgumentException If there is an error with the uploaded file.
      * @throws RuntimeException If the file cannot be moved to the destination directory.
+     * @throws ImageProcessingException
      */
     private function processImage(array $image): ?string
     {
@@ -155,7 +166,7 @@ readonly class ProductController
         $error = $image['error'];
 
         if ($error !== UPLOAD_ERR_OK) {
-            throw new InvalidArgumentException('Error uploading image.');
+            throw new ImageProcessingException('Error uploading image.');
         }
 
         $uploadDir = realpath(__DIR__ . '/../../Public/uploads/');
@@ -189,5 +200,19 @@ readonly class ProductController
         $products = $this->productService->getFilteredAndPaginatedProducts($page, $sort, $filter, $search);
 
         return new JsonResponse($products);
+    }
+
+    /**
+     * Validates if the product IDs array is empty.
+     *
+     * @param array $productIds The array of product IDs.
+     * @return void
+     * @throws EmptyProductIdArrayException If the product IDs array is empty.
+     */
+    private function validateProductIds(array $productIds): void
+    {
+        if (empty($productIds)) {
+            throw new EmptyProductIdArrayException();
+        }
     }
 }

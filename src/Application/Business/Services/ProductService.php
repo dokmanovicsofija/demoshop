@@ -7,7 +7,7 @@ use Application\Business\Interfaces\RepositoryInterface\ProductRepositoryInterfa
 use Application\Business\Interfaces\ServiceInterface\ProductServiceInterface;
 use Application\Data\Entities\Product;
 use Application\Business\Domain\DomainProduct;
-use InvalidArgumentException;
+use Application\Presentation\Exceptions\DuplicateSkuException;
 
 readonly class ProductService implements ProductServiceInterface
 {
@@ -111,12 +111,12 @@ readonly class ProductService implements ProductServiceInterface
      *
      * @param DomainProduct $product The domain model representing the product to be created.
      * @return int The unique identifier of the newly created product.
-     * @throws InvalidArgumentException If a product with the same SKU already exists.
+     * @throws DuplicateSkuException
      */
     public function createProduct(DomainProduct $product): int
     {
         if ($this->productRepository->findBySku($product->getSku())) {
-            throw new InvalidArgumentException('A product with the same SKU already exists.');
+            throw new DuplicateSkuException();
         }
 
         return $this->productRepository->save($product);
