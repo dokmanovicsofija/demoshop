@@ -7,15 +7,15 @@ use Exception;
 /**
  * Class CategoryValidationException
  *
- * Ovaj izuzetak se baca kada validacija kategorije ne uspe.
+ * This exception is thrown when category validation fails.
  */
 class CategoryValidationException extends Exception
 {
     /**
-     * Konstruktor za CategoryValidationException.
+     * Constructor for CategoryValidationException.
      *
-     * @param string $message Poruka koja opisuje razlog za izuzetak.
-     * @param int $code Kod izuzetka (opciono).
+     * @param string $message The message that describes the reason for the exception.
+     * @param int $code The exception code (optional).
      */
     public function __construct(string $message = "Category validation failed", int $code = 0)
     {
