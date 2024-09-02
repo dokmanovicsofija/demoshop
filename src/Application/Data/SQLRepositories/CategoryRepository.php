@@ -5,6 +5,7 @@ namespace Application\Data\SQLRepositories;
 use Application\Business\Domain\DomainCategory;
 use Application\Business\Interfaces\RepositoryInterface\CategoryRepositoryInterface;
 use Application\Data\Entities\Category;
+use Application\Presentation\Exceptions\CategoryValidationException;
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
@@ -87,12 +88,13 @@ class CategoryRepository implements CategoryRepositoryInterface
      * @param int $categoryId The ID of the category to update.
      * @param int|null $newParentId The ID of the new parent category, or null if the category should be a root category.
      * @return void
+     * @throws CategoryValidationException
      */
     public function updateParent(int $categoryId, ?int $newParentId): void
     {
         $category = Category::find($categoryId);
         if (!$category) {
-            throw new \InvalidArgumentException('Category not found');
+            throw new CategoryValidationException('Category not found');
         }
         $category->parent_id = $newParentId;
         $category->save();

@@ -4,6 +4,7 @@ namespace Application\Presentation\Controller\AdminController;
 
 use Application\Business\Domain\DomainCategory;
 use Application\Business\Interfaces\ServiceInterface\CategoryServiceInterface;
+use Application\Presentation\Exceptions\CategoryValidationException;
 use Infrastructure\Request\HttpRequest;
 use Infrastructure\Response\JsonResponse;
 
@@ -35,6 +36,7 @@ readonly class CategoryController
      *
      * @param HttpRequest $request The incoming HTTP request containing the category data.
      * @return JsonResponse The JSON response with the ID of the newly created category or an error message.
+     * @throws CategoryValidationException
      */
     public function addCategory(HttpRequest $request): JsonResponse
     {
@@ -45,7 +47,7 @@ readonly class CategoryController
         $parentId = isset($data['parent']) && $data['parent'] !== 'root' ? (int)$data['parent'] : null;
 
         if (empty($title) || empty($code)) {
-            throw new \InvalidArgumentException('Title and code are required.');
+            throw new CategoryValidationException('Title and code are required.');
         }
 
         $category = new DomainCategory(0, $parentId, $code, $title, $description);
@@ -101,7 +103,7 @@ readonly class CategoryController
      */
     public function getAllCategories(): JsonResponse
     {
-        $categories = $this->categoryService->getAllCategories2();
+        $categories = $this->categoryService->fetchAllCategories();
         return new JsonResponse($categories);
     }
 }

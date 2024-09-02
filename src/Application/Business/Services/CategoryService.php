@@ -5,9 +5,10 @@ namespace Application\Business\Services;
 use Application\Business\Domain\DomainCategory;
 use Application\Business\Interfaces\RepositoryInterface\CategoryRepositoryInterface;
 use Application\Business\Interfaces\ServiceInterface\CategoryServiceInterface;
+use Application\Presentation\Exceptions\CategoryValidationException;
 use InvalidArgumentException;
 
-class CategoryService implements CategoryServiceInterface
+readonly class CategoryService implements CategoryServiceInterface
 {
     public function __construct(private CategoryRepositoryInterface $categoryRepository)
     {
@@ -38,11 +39,12 @@ class CategoryService implements CategoryServiceInterface
      *
      * @param DomainCategory $category The domain category object containing category details.
      * @return int The ID of the newly created category.
+     * @throws CategoryValidationException
      */
     public function createRootCategory(DomainCategory $category): int
     {
         if ($this->categoryRepository->findByCode($category->getCode())) {
-            throw new \InvalidArgumentException('Category code must be unique.');
+            throw new CategoryValidationException('Category code must be unique.');
         }
 
         return $this->categoryRepository->addRootCategory($category);
@@ -57,13 +59,13 @@ class CategoryService implements CategoryServiceInterface
      * @param int $categoryId The ID of the category to update.
      * @param int|null $parentId The ID of the new parent category, or null to make it a root category.
      * @return void
-     * @throws InvalidArgumentException If the category to be updated does not exist.
+     * @throws CategoryValidationException
      */
     public function updateCategoryParent(int $categoryId, ?int $parentId): void
     {
         $category = $this->categoryRepository->findById($categoryId);
         if (!$category) {
-            throw new InvalidArgumentException("Category not found.");
+            throw new CategoryValidationException('Category not found.');
         }
 
         $subcategories = $this->categoryRepository->findSubcategories($categoryId);
@@ -90,12 +92,12 @@ class CategoryService implements CategoryServiceInterface
      *
      * @param int $categoryId The ID of the category to be deleted.
      * @return void
-     * @throws InvalidArgumentException If the category has associated products and cannot be deleted.
+     * @throws CategoryValidationException
      */
     public function deleteCategory(int $categoryId): void
     {
         if ($this->categoryRepository->categoryHasProducts($categoryId)) {
-            throw new InvalidArgumentException('Category having products can’t be deleted.');
+            throw new CategoryValidationException('Category having products can’t be deleted.');
         }
 
         $this->categoryRepository->deleteCategory($categoryId);
@@ -106,7 +108,7 @@ class CategoryService implements CategoryServiceInterface
      *
      * @return array
      */
-    public function getAllCategories2(): array
+    public function fetchAllCategories(): array
     {
         return $this->categoryRepository->findAllCategories();
     }

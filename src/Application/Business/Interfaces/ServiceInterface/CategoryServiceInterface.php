@@ -58,5 +58,5 @@ interface CategoryServiceInterface
      *
      * @return array
      */
-    public function getAllCategories2(): array;
+    public function fetchAllCategories(): array;
 }

@@ -2,6 +2,7 @@
 
 namespace Application\Integration\Exceptions;
 
+use Application\Presentation\Exceptions\CategoryValidationException;
 use Infrastructure\Exceptions\HttpNotFoundException;
 use Infrastructure\Response\HtmlResponse;
 use Application\Integration\Utility\PathHelper;
@@ -53,6 +54,15 @@ class ExceptionHandler
             return;
         }
 
+        if ($exception instanceof CategoryValidationException) {
+            $response = new JsonResponse(
+                ['error-message' => $exception->getMessage()],
+                400
+            );
+            $response->send();
+            return;
+        }
+
         if ($exception instanceof HttpNotFoundException) {
             $response = HtmlResponse::fromView(
                 PathHelper::view('errors/404.php'),
@@ -93,14 +103,14 @@ class ExceptionHandler
             return;
         }
 
-        if ($exception instanceof \InvalidArgumentException) {
-            $response = new JsonResponse(
-                ['error-message' => $exception->getMessage()],
-                400
-            );
-            $response->send();
-            return;
-        }
+//        if ($exception instanceof \InvalidArgumentException) {
+//            $response = new JsonResponse(
+//                ['error-message' => $exception->getMessage()],
+//                400
+//            );
+//            $response->send();
+//            return;
+//        }
 
         if ($exception instanceof \RuntimeException) {
             $response = HtmlResponse::fromView(
